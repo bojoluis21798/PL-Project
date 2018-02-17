@@ -16,9 +16,12 @@ public class Tokenizer {
        this.tokDatas = new ArrayList<TokenData>();
        this.str = str;
        
+       strreg = "''"; //this'll do for now (word fin is 'fish')
+        
        tokDatas.add(new TokenData(Pattern.compile("[a-zA-Z][a-zA-Z0-9]*"),TokenType.IDENTIFIER));
        tokDatas.add(new TokenData(Pattern.compile("^-?\\d+$"),TokenType.INTEGER_LITERAL)); //^\\d+$ or //^-?\d+$
        tokDatas.add(new TokenData(Pattern.compile("\".*\""),TokenType.INTEGER_LITERAL));
+       tokDatas.add(new TokenData(Pattern.compile(Pattern.quote(strreg)),TokenType.STRING_LITERAL));
        tokDatas.add(new TokenData(Pattern.compile("[+-]?([0-9]*[.])?[0-9]+"),TokenType.FLOAT_LITERAL)); //^([+-]?\d*\.?\d*)$
        
        for(String t:new String[]{"\\=","\\)","\\,","\\:"}){
