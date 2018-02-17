@@ -17,7 +17,7 @@ import readfile.tokenizer.Tokenizer;
  * @author User
  */
 public class ReadFile {
-   
+    private static ArrayList<Token> tkStream = new ArrayList<Token>();
     /**
      * @param args the command line arguments
      */
@@ -33,7 +33,7 @@ public class ReadFile {
                 ArrayList<Token> tokGroup = new ArrayList<Token>();
                 try {
 
-			//br = new BufferedReader(new FileReader(FILENAME));
+			br = new BufferedReader(new FileReader(FILENAME));
 			fr = new FileReader(FILENAME);
 			br = new BufferedReader(fr);
                         
@@ -44,11 +44,12 @@ public class ReadFile {
 				System.out.println("\n Line"+ctr+":");
                                 while(tknObj.hasNextToken()){
                                    Token retVal = tknObj.nextToken();
+                                   tkStream.add(new Token(retVal.getToken(),retVal.getTokenType()));
                                    tokGroup.add(new Token(retVal.getToken(),retVal.getTokenType()));
-                                   //Parser parser =new Parser(tokGroup);
-                                   //parser.Start();
-                                   //System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());
+                                   
+                                   System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());
                                 }
+                                Parser p = new Parser(tkStream);
                                 ctr++;
 			}
 
