@@ -23,6 +23,7 @@ public class Parser {
     
     public Parser(ArrayList<Token> tkStream){
       this.tkStream = tkStream;
+      Start();
     }
     
     public void Start(){
