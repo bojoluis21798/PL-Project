@@ -75,7 +75,7 @@ public class Parser {
     public void word(){
         if(tkStream.get(1).getTokenType() == TokenType.IDENTIFIER){
             if(tkStream.get(2).getTokenType() == TokenType.KEYWORD && tkStream.get(2).getToken().equals("is")){
-                if(tkStream.get(3).getTokenType() == TokenType.IDENTIFIER){
+                if(tkStream.get(4).getTokenType() == TokenType.STRING_LITERAL){
                     System.out.println("This is a word declaration");
                 }else{
                     System.out.println("Invalid Syntax: not a word value");
