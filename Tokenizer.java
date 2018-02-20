@@ -30,7 +30,7 @@ public class Tokenizer {
         tokDatas.add(new TokenData(Pattern.compile("[a-zA-Z][a-zA-Z0-9]*"),TokenType.IDENTIFIER));
         tokDatas.add(new TokenData(Pattern.compile("[\\+|\\*|-|/]"),TokenType.OPERATION));
         tokDatas.add(new TokenData(Pattern.compile("^-?\\d+$"),TokenType.INTEGER_LITERAL));
-        tokDatas.add(new TokenData(Pattern.compile("\"[a-zA-Z]*\""),TokenType.STRING_LITERAL));
+        tokDatas.add(new TokenData(Pattern.compile("^\".+\"$"),TokenType.STRING_LITERAL)); //"\"[a-zA-Z]*\""  PREVIOUS
         tokDatas.add(new TokenData(Pattern.compile("^([-]?\\d*\\.?\\d*)$"),TokenType.FLOAT_LITERAL));
 
         for(String t:new String[]{"=","\\)",",",":"}){
