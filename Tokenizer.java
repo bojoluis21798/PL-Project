@@ -1,12 +1,21 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package readfile.tokenizer;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 /**
  *
  * @author User
  */
 public class Tokenizer {
     private ArrayList<TokenData> tokDatas;
+    
     
     private String str;
     private Token lastToken;
@@ -16,48 +25,53 @@ public class Tokenizer {
        this.tokDatas = new ArrayList<TokenData>();
        this.str = str;
        
-       strreg = "''"; //this'll do for now (word fin is 'fish')
-        
+            
        tokDatas.add(new TokenData(Pattern.compile("[a-zA-Z][a-zA-Z0-9]*"),TokenType.IDENTIFIER));
-       tokDatas.add(new TokenData(Pattern.compile("^-?\\d+$"),TokenType.INTEGER_LITERAL)); //^\\d+$ or //^-?\d+$
-       tokDatas.add(new TokenData(Pattern.compile("\".*\""),TokenType.INTEGER_LITERAL));
-       tokDatas.add(new TokenData(Pattern.compile(Pattern.quote(strreg)),TokenType.STRING_LITERAL));
-       tokDatas.add(new TokenData(Pattern.compile("[+-]?([0-9]*[.])?[0-9]+"),TokenType.FLOAT_LITERAL)); //^([+-]?\d*\.?\d*)$
-       
-       for(String t:new String[]{"\\=","\\)","\\,","\\:"}){
+       tokDatas.add(new TokenData(Pattern.compile("[\\+|\\*|-|/]"),TokenType.OPERATION));
+       tokDatas.add(new TokenData(Pattern.compile("^-?\\d+$"),TokenType.INTEGER_LITERAL));
+       tokDatas.add(new TokenData(Pattern.compile("\"[a-zA-Z]*\""),TokenType.STRING_LITERAL));
+       tokDatas.add(new TokenData(Pattern.compile("^([-]?\\d*\\.?\\d*)$"),TokenType.FLOAT_LITERAL));
+  
+       for(String t:new String[]{"=","\\)",",",":"}){
          tokDatas.add(new TokenData(Pattern.compile(t),TokenType.TOKEN));
        }
     }
-    
+   
     public Token nextToken(){
+        
         str = str.trim();
-        if(pushBack){
+        if(pushBack) {
           pushBack = false;
           return lastToken;
         }
+        
         if(str.isEmpty()){
            return (lastToken = new Token("",TokenType.EMPTY));
         }
         
-        for(TokenData data: tokDatas){
+        for(TokenData data: tokDatas) {
             Matcher matcher = data.getPattern().matcher(str);
             
-            if(matcher.find()){
+            if(matcher.find()) {
                 String token = matcher.group().trim();
                 str = matcher.replaceFirst("");
                 
-                 if(data.getType() == TokenType.STRING_LITERAL){
+                 if(data.getType() == TokenType.STRING_LITERAL) {
                      return (lastToken = new Token(token.substring(1,token.length()-1),TokenType.STRING_LITERAL));
-                 }else {
-                     if (token.equals("if") || token.equals("then") || token.equals("end") || token.equals("while") || token.equals("is")) {
-                         return (lastToken = new Token(token, TokenType.KEYWORD));
-                     } else if (token.equals("number") || token.equals("flag") || token.equals("word") || token.equals("numbers") || token.equals("flags") || token.equals("words")) {
-                         return (lastToken = new Token(token, TokenType.DATA_TYPE));
-                     } else {
-                         return (lastToken = new Token(token,data.getType()));
-                     }
+                  } else {
+                     if( token.equals("if") || token.equals("then") || token.equals("end") || token.equals("while")||token.equals("is")){
+                          return (lastToken = new Token(token,TokenType.KEYWORD));
+                      }else if(token.equals("number") || token.equals("word") || token.equals("flag")){
+                          return (lastToken = new Token(token,TokenType.DATA_TYPE));
+                      }else if(data.getType()==TokenType.OPERATION){
+                        return (lastToken = new Token(token,TokenType.OPERATION));
+                      }else if(data.getType()==TokenType.IDENTIFIER){
+                         return (lastToken = new Token(token,TokenType.IDENTIFIER));
+                      }else{
+                          return (lastToken = new Token(token,data.getType()));
+                      }
                       
-                 }
+                  }
                 
             }
         }
