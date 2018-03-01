@@ -66,10 +66,17 @@ public class Tokenizer {
                      
                      return (lastToken = new Token(token.substring(1,token.length()-1),TokenType.STRING_LITERAL));
                   } else {
-                     if( token.equals("if") || token.equals("then") || token.equals("end") || token.equals("while")||token.equals("is")||token.equals("AND")){
-                         if(token.equals("AND")){
+                     if( token.equals("orif") || token.equals("if") || token.equals("then") || token.equals("end") || token.equals("while")||token.equals("is")||token.equals("and")){
+                         if(token.equals("and")){
                           return (lastToken = new Token("&&",TokenType.KEYWORD));
+                         }else if(token.equals("or")){
+                             return (lastToken = new Token("||",TokenType.KEYWORD));
+                         }else if(token.equals("not")){
+                             return (lastToken = new Token("!",TokenType.KEYWORD));
+                         }else if(token.equals("notequal")){
+                             return (lastToken = new Token("!=",TokenType.KEYWORD));
                          }
+
                           return (lastToken = new Token(token,TokenType.KEYWORD));
                       }else if(token.equals("number") || token.equals("word") || token.equals("flag")){
                           return (lastToken = new Token(token,TokenType.DATA_TYPE));
