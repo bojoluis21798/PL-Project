@@ -1,0 +1,98 @@
+number x
+
+job square outputs number using: number x
+    output x * x
+end
+
+x is square using 5 // assignment
+
+do square using x // square(5)
+
+if x = "Hello" and y < 0 then
+		
+end
+
+//assignment
+
+x is 5
+x is 5+5
+x is square using 2 //assign with function 
+
+//selection
+
+if expr then //if statement
+	body
+end
+
+if expr then //if-else statement
+	body
+else then
+	body
+end
+
+if expr then //if-else if-else statement 
+	body
+orif expr then
+	body
+else then
+	body
+end
+
+//iteration
+
+//pre test
+
+repeat while expr //while statement 
+	body
+end
+
+repeat until expr //until statement
+	body
+end
+
+for each item in collection // for each
+	body
+end
+
+// post test
+
+do this //do until
+	body
+until expr
+
+do this //do while
+	body
+while expr
+
+// data types
+
+number // int, float, double 
+word // string, char is length 1 string
+flag // boolean
+
+// arrays (all array types are dynamic)
+
+numbers // array of int, float, double
+words // array of strings
+flags //array of boolean
+
+numbers x is (1,2,3,4,5)
+numbers x
+
+3rd of x is 5
+
+insert 6 into x // push
+remove 3rd of x // pop
+
+x + y // array concat
+
+//records
+
+object shape contains // structure definition
+	word color
+	word type
+end
+
+shape group x // define array of structures
+
+color of x //accessing structures
