@@ -62,7 +62,7 @@ public class Parser {
                     }
                   }
             }else{
-                for(Token tok:tkStream){
+                for(Token tok:tkStream){ 
                 if(tkStream.get(ctr).getToken().equals("is")){
                    break;
                     }
