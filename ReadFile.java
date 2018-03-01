@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import javax.script.ScriptException;
 import parser.Parser;
 import readfile.tokenizer.Token;
 import readfile.tokenizer.Tokenizer;
@@ -18,6 +20,7 @@ import readfile.tokenizer.Tokenizer;
  */
 public class ReadFile {
     private static ArrayList<Token> tkStream = new ArrayList<Token>();
+    private static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
     /**
      * @param args the command line arguments
      */
@@ -25,7 +28,7 @@ public class ReadFile {
          
     }
     private static final String FILENAME = "C:\\Users\\User\\source.txt";
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ScriptException {
         // TODO code application logic here
         
         BufferedReader br = null;
@@ -40,17 +43,25 @@ public class ReadFile {
 			String sCurrentLine;
                         int ctr=0;
 			while ((sCurrentLine = br.readLine()) != null) {
-                                Tokenizer tknObj = new Tokenizer(sCurrentLine);
+                                String[] result = sCurrentLine.split("\\s");
+                                for(int x=0;x<result.length;x++){
+                                     Tokenizer tknObj = new Tokenizer(result[x]);
+                                
 				System.out.println("\n Line"+ctr+":");
                                 while(tknObj.hasNextToken()){
                                    Token retVal = tknObj.nextToken();
+                                   
                                    tkStream.add(new Token(retVal.getToken(),retVal.getTokenType()));
                                    tokGroup.add(new Token(retVal.getToken(),retVal.getTokenType()));
-                                   
                                    System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());
                                 }
-                                Parser p = new Parser(tkStream);
+                                
+                                
+                                }
+                                Parser p = new Parser(tkStream,varList);
+                                tkStream.clear();
                                 ctr++;
+                               
 			}
 
 		} catch (IOException e) {
