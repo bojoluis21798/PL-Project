@@ -18,6 +18,11 @@ import readfile.tokenizer.TokenType;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+
+import static readfile.ReadFile.IFctr;
+import static readfile.ReadFile.IFstack;
+import static readfile.ReadFile.bigBoard;
+
 /**
  *
  * @author User
@@ -26,29 +31,21 @@ public class Parser {
     
  
     ArrayList<Token> tkStream;
-     Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
-    
-    public Parser(ArrayList<Token> tkStream,Hashtable<Object,Object> varList) throws ScriptException{
+     public static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
+     
+     
+    public Parser(ArrayList<Token> tkStream) throws ScriptException{
       this.tkStream = tkStream;
-      this.varList = varList;
+     
       Start();
     }
     
      public void Start() throws ScriptException{
-         
-        if(tkStream.get(0).getTokenType() == TokenType.DATA_TYPE){
-            declare();
-        }else{
-            System.out.println("Not a Declaration/Initialization");
-        }
-        
-        
-        
-      
-        if(tkStream.size() > 4){//expression
-            int ctr=0;
-            
-            if(tkStream.get(0).getTokenType() == TokenType.KEYWORD && tkStream.get(0).getToken().equals("if")){
+           Object result = null;
+           
+          if(tkStream.get(0).getTokenType() == TokenType.KEYWORD && tkStream.get(0).getToken().equals("if")){
+                IFctr++;
+                
                 List <Token> boolE = tkStream.subList(1, tkStream.size());
                 for(Token tok:boolE){
                    if(tok.getToken().equals("then")){
@@ -59,27 +56,151 @@ public class Parser {
                         }
                         ScriptEngineManager manager = new ScriptEngineManager();
                         ScriptEngine engine = manager.getEngineByName("JavaScript");
-                        Object result = null;
                         result = engine.eval(st);
-                        System.out.println(result);
+                        //System.out.println(result);
+                        if(result.equals(true)){
+                            //System.out.println(IFctr);
+                           IFstack.push(new selection( true,IFctr));
+                        }else{
+                           IFstack.push(new selection(false,IFctr));
+                        }
+                        
                     }
                   }
-            }else{
-                for(Token tok:tkStream){
-                if(tkStream.get(ctr).getToken().equals("is")){
-                   break;
-                    }
-                    ctr++;
-                }
-                List<Token> expressions=tkStream.subList(ctr+1, tkStream.size());
+                
+            }else if(tkStream.get(0).getTokenType() == TokenType.KEYWORD && tkStream.get(0).getToken().equals("orif")  ){
+               
+                if(IFstack.peek().getBool() == false){
+                    IFstack.pop();
+                    
 
-                expr(expressions);
-            }
-            
-            
-        }
-        
-        
+                     List <Token> boolE = tkStream.subList(1, tkStream.size());
+                     for(Token tok:boolE){
+                        if(tok.getToken().equals("then")){
+                            List<Token> boolE2 = boolE.subList(0, boolE.size()-1);
+                            String st = "";
+                            for(Token token:boolE2){
+                               st+=" "+token.getToken();
+                             }
+                             ScriptEngineManager manager = new ScriptEngineManager();
+                             ScriptEngine engine = manager.getEngineByName("JavaScript");
+                             result = engine.eval(st);
+                             //System.out.println(result);
+                             if(result.equals(true)){
+                                 //System.out.println(IFctr);
+                                IFstack.push(new selection( true,IFctr));
+                             }else{
+                                IFstack.push(new selection(false,IFctr));
+                             }
+                         }
+                       }
+                }else{
+                    IFstack.pop();
+                    
+
+                     List <Token> boolE = tkStream.subList(1, tkStream.size());
+                     for(Token tok:boolE){
+                        if(tok.getToken().equals("then")){
+                            List<Token> boolE2 = boolE.subList(0, boolE.size()-1);
+                            String st = "";
+                            for(Token token:boolE2){
+                               st+=" "+token.getToken();
+                             }
+                             ScriptEngineManager manager = new ScriptEngineManager();
+                             ScriptEngine engine = manager.getEngineByName("JavaScript");
+                             result = engine.eval(st);
+                             //System.out.println(result);
+                             if(result.equals(true)){
+                                 //System.out.println(IFctr);
+                                IFstack.push(new selection( true,IFctr));
+                             }else{
+                                IFstack.push(new selection(false,IFctr));
+                             }
+                         }
+                       }
+                }
+               
+            }else if(tkStream.get(0).getToken().equals("else")){//do else statement
+                if(IFstack.peek().getBool() == false){
+                    System.out.println("GOT IN");
+                    IFstack.pop();
+                    IFctr++;
+                        IFstack.push(new selection(true,IFctr));
+                         if(tkStream.get(0).getTokenType() == TokenType.DATA_TYPE){
+                             declare();
+                         }else{
+                             System.out.println("Not a Declaration/Initialization");
+                         }
+
+                        if(tkStream.size() > 4){//expression
+                             int ctr=0;
+
+                             for(Token tok:tkStream){
+                             if(tok.getToken().equals("is")){
+                                break;
+                             }
+                                 ctr++;
+                             }
+                             List<Token> expressions=tkStream.subList(ctr, tkStream.size());
+
+                             expr(expressions);
+                         }
+                }
+                if(IFstack.peek().getBool() == true){
+                   IFstack.pop();
+                   IFstack.push(new selection(false,IFctr));
+                }
+               
+            }else if(tkStream.get(0).getToken().equals("end") ){  //check if end 
+             
+                  IFstack.pop();
+               
+          }else if(IFstack.peek().getLevel() > 0 && IFstack.peek().getBool() == true){//do this statement if if-condition is true
+              System.out.println("GOT IN");
+              if(tkStream.get(0).getTokenType() == TokenType.DATA_TYPE){
+                    declare();
+              }else{
+                    System.out.println("Not a Declaration/Initialization");
+               }
+               
+               if(tkStream.size() > 4){//expression
+                    int ctr=0;
+
+                    for(Token tok:tkStream){
+                    if(tok.getToken().equals("is")){
+                       break;
+                    }
+                        ctr++;
+                    }
+                    List<Token> expressions=tkStream.subList(ctr, tkStream.size());
+
+                    expr(expressions);
+                }
+               
+          }
+           
+           if(IFstack.peek().getLevel()==0 && IFstack.peek().getBool() == true){//checks if in main
+             System.out.println("got in");
+              if(tkStream.get(0).getTokenType() == TokenType.DATA_TYPE){
+                    declare();
+              }else{
+                    System.out.println("Not a Declaration/Initialization");
+              }
+               
+               if(tkStream.size() > 4){//expression
+                    int ctr=0;
+
+                    for(Token tok:tkStream){
+                        if(tok.getToken().equals("is")){
+                           break;
+                        }
+                            ctr++;
+                    }
+                    List<Token> expressions=tkStream.subList(ctr+1, tkStream.size());
+
+                    expr(expressions);
+                }
+           }
     }
     public void declare(){
         switch(tkStream.get(0).getToken()){
@@ -115,7 +236,8 @@ public class Parser {
                     if(isDeclared(tkStream.get(1).getToken())){
                         System.out.println("UNACCEPTABLE number declaration");
                     }else{
-                       varList.put(tkStream.get(1).getToken(),Integer.parseInt(tkStream.get(3).getToken()));
+                       bigBoard.put(IFstack.peek().getLevel(),tkStream.get(1).getToken(),Integer.parseInt(tkStream.get(3).getToken()));
+                       System.out.println(bigBoard.get(IFstack.peek().getLevel(),"y"));
                        System.out.println("This is a number declaration");
                     }
                     
@@ -177,7 +299,7 @@ public class Parser {
        Matcher matcher = expr2.getPattern().matcher(st);
        Matcher matcher2 = expr.getPattern().matcher(st);
        
-       if(matcher.find()){
+       if(matcher.find()){  
             TokenData expr3 = new TokenData(Pattern.compile("(\\s*\\w+\\s*[+|\\*|\\-|/]\\s*\\w+\\s*[+|\\*|\\-|/]\\s*\\w+\\s*[+|\\*|\\-|/]\\s*\\w+\\s*)|(\\s*\\w+\\s*[+|\\*|\\-|/]\\s*\\w+)*"),TokenType.EXPRESSION);
             Matcher matcher3 = expr3.getPattern().matcher(st);
           if(matcher3.find()){
@@ -213,5 +335,21 @@ public class Parser {
      
      return val;
   }
+  
+  public boolean isAccessible(String token){
+     boolean val = false;
+     
+     
+     
+     for(int ctr=0;ctr<=IFstack.peek().getLevel();ctr++){
+         
+         if( bigBoard.containsKeys(ctr, token)){
+            val=true;
+            break;
+         }
+     }
+     
+     return val;
+  } 
     
 }
