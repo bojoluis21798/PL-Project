@@ -84,8 +84,6 @@ numbers x
 insert 6 into x // push
 remove 3rd of x // pop
 
-x + y // array concat
-
 //records
 
 object shape contains // structure definition
