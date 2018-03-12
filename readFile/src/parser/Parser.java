@@ -18,6 +18,7 @@ import readfile.tokenizer.TokenType;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.util.regex;
 /**
  *
  * @author User
@@ -61,7 +62,7 @@ public class Parser {
                         System.out.println(result);
                     }
                   }
-            }else{
+            }else{ 
                 for(Token tok:tkStream){ 
                 if(tkStream.get(ctr).getToken().equals("is")){
                    break;
@@ -105,10 +106,9 @@ public class Parser {
     
     public void number(){
         if(tkStream.get(1).getTokenType() == TokenType.IDENTIFIER){
-            
             if(tkStream.get(2).getTokenType() == TokenType.KEYWORD && tkStream.get(2).getToken().equals("is")){
                
-                if(tkStream.get(3).getTokenType() == TokenType.INTEGER_LITERAL || tkStream.get(3).getTokenType() == TokenType.FLOAT_LITERAL ){
+                if(tkStream.get(3).getTokenType() == TokenType.INTEGER_LITERAL || tkStream.get(3).getTokenType() == TokenType.FLOAT_LITERAL){
                     if(isDeclared(tkStream.get(1).getToken())){
                         System.out.println("UNACCEPTABLE number declaration");
                     }else{
@@ -161,8 +161,23 @@ public class Parser {
         }
     }
     
+    private boolean isLogical(String s){
+        return matches("");
+    }
+    
     public void expr(List<Token> exp){
-       TokenData expr = new TokenData(Pattern.compile("((\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+\\s*)|(\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+))*"),TokenType.EXPRESSION);
+       
+        String st = new String();
+          st="";
+       for(Token tok:exp){
+          st+=tok.getToken();
+       }
+       
+       if(isLogical(st)){
+           
+       }
+        
+       /*TokenData expr = new TokenData(Pattern.compile("((\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+\\s*)|(\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+))*"),TokenType.EXPRESSION);
        TokenData expr2 = new TokenData(Pattern.compile("[a-zA-Z][a-zA-Z0-9]*"),TokenType.IDENTIFIER);
        
        String st = new String();
@@ -197,7 +212,10 @@ public class Parser {
           System.out.println("THIS IS AN ACCEPTABLE MATHEMATICAL EXPRESSION ");
        }else{
            System.out.println("Invalid Mathematical Expression");
-       }
+       }*/
+       
+       
+       
     }
   
   public boolean isDeclared(String token){
