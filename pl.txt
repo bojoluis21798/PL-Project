@@ -1,12 +1,12 @@
 number x
 
-job square outputs number using: number x
+job square outputs number using number x
     output x * x
 end
 
-x is square using 5 // assignment
+x is square using (5) // assignment
 
-do square using x // square(5)
+square using (x) // square(5)
 
 if x = "Hello" and y < 0 then
 		
@@ -16,7 +16,7 @@ end
 
 x is 5
 x is 5+5
-x is square using 2 //assign with function 
+x is square using (2) //assign with function 
 
 //selection
 
@@ -46,19 +46,11 @@ repeat while expr //while statement
 	body
 end
 
-repeat until expr //until statement
-	body
-end
-
-for each item in collection // for each
+foreach item in collection // for each
 	body
 end
 
 // post test
-
-do this //do until
-	body
-until expr
 
 do this //do while
 	body
@@ -81,18 +73,32 @@ numbers x
 
 3rd of x is 5
 
-insert 6 into x // push
+insert 5 into 3rd of x // push
+attach 4 into x // push
 remove 3rd of x // pop
-
-x + y // array concat
 
 //records
 
-object shape contains // structure definition
+group shape contains // structure definition
 	word color
 	word type
 end
 
-shape group x // define array of structures
+shape x
+
+shape groups x // define array of structures
 
 color of x //accessing structures
+
+//operators
+
+//relational
+	>, <, =
+
+//logical
+	not, or, and
+
+//pre-defined function
+
+print "Hello World"
+lengthof using (arr)
