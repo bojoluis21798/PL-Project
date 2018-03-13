@@ -12,14 +12,14 @@ import java.util.regex.Pattern;
  * @author User
  */
 public class TokenData {
-    private Pattern patt;
+    private String patt;
     private TokenType type;
     
-    public TokenData(Pattern patt,TokenType type){
+    public TokenData(String patt,TokenType type){
        this.patt = patt;
        this.type=type;
     }
-    public Pattern getPattern(){
+    public String getPattern(){
         return patt;
     }
     

@@ -25,19 +25,20 @@ public class Tokenizer {
        this.tokDatas = new ArrayList<TokenData>();
        this.str = str;
         
-       tokDatas.add(new TokenData(Pattern.compile("\"[a-zA-Z0-9\\s]*\""),TokenType.STRING_LITERAL));
-       tokDatas.add(new TokenData(Pattern.compile("[a-zA-Z][a-zA-Z0-9]*"),TokenType.IDENTIFIER));
-       tokDatas.add(new TokenData(Pattern.compile("[\\+|\\*|-|/]|[<>=]"),TokenType.OPERATION));
-       tokDatas.add(new TokenData(Pattern.compile("^-?\\d+$"),TokenType.INTEGER_LITERAL));
-       tokDatas.add(new TokenData(Pattern.compile("^([-]?\\d*\\.?\\d*)$"),TokenType.FLOAT_LITERAL));
-  
+       tokDatas.add(new TokenData("\"[a-zA-Z0-9\\s]*\"",TokenType.STRING_LITERAL));
+       tokDatas.add(new TokenData("[a-zA-Z][a-zA-Z0-9]*",TokenType.IDENTIFIER));
+       tokDatas.add(new TokenData("[\\+|\\*|-|/]|[<>=]",TokenType.OPERATION));
+       tokDatas.add(new TokenData("^-?\\d+$",TokenType.INTEGER_LITERAL));
+       tokDatas.add(new TokenData("^([-]?\\d*\\.?\\d*)$",TokenType.FLOAT_LITERAL));
+       tokDatas.add(new TokenData("(true)",TokenType.BOOLEAN_LITERAL));
+       tokDatas.add(new TokenData("(false)",TokenType.BOOLEAN_LITERAL));
+       
        for(String t:new String[]{"=","\\)","\\(",",",":"}){
-         tokDatas.add(new TokenData(Pattern.compile(t),TokenType.TOKEN));
+         tokDatas.add(new TokenData(t,TokenType.TOKEN));
        }
     }
    
     public Token nextToken(){
-        
         str = str.trim();
         if(pushBack) {
           pushBack = false;
@@ -50,34 +51,27 @@ public class Tokenizer {
         //tokenize(str)
         //while{}
         
-       
+        
           for(TokenData data: tokDatas) {
-            Matcher matcher = data.getPattern().matcher(str);
             
-            if(matcher.find()) {
-                 
-                String token = matcher.group().trim();
-                str = matcher.replaceFirst("");
-               
-                
+            if(str.matches(data.getPattern())){
                  if(data.getType() == TokenType.STRING_LITERAL) {
-                     
-                     return (lastToken = new Token(token.substring(1,token.length()-1),TokenType.STRING_LITERAL));
+                     return (lastToken = new Token(str.substring(1,str.length()-1),TokenType.STRING_LITERAL));
                   } else {
-                     if( token.equals("if") || token.equals("then") || token.equals("end") || token.equals("while")||token.equals("is")||token.equals("AND")){
-                         if(token.equals("AND")){
+                     if( str.equals("if") || str.equals("then") || str.equals("end") || str.equals("while")||str.equals("is")||str.equals("AND")){
+                         if(str.equals("AND")){
                           return (lastToken = new Token("&&",TokenType.KEYWORD));
                          }
-                          return (lastToken = new Token(token,TokenType.KEYWORD));
-                      }else if(token.equals("number") || token.equals("word") || token.equals("flag")){
-                          return (lastToken = new Token(token,TokenType.DATA_TYPE));
+                          return (lastToken = new Token(str,TokenType.KEYWORD));
+                      }else if(str.equals("number") || str.equals("word") || str.equals("flag")){
+                          return (lastToken = new Token(str,TokenType.DATA_TYPE));
                       }else if(data.getType()==TokenType.OPERATION){
-                        return (lastToken = new Token(token,TokenType.OPERATION));
+                        return (lastToken = new Token(str,TokenType.OPERATION));
                       }else if(data.getType()==TokenType.IDENTIFIER){
                           
-                         return (lastToken = new Token(token,TokenType.IDENTIFIER));
+                         return (lastToken = new Token(str,TokenType.IDENTIFIER));
                       }else{
-                          return (lastToken = new Token(token,data.getType()));
+                          return (lastToken = new Token(str,data.getType()));
                       }
                       
                   }

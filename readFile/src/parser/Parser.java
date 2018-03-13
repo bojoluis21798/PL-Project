@@ -70,7 +70,7 @@ public class Parser {
                 }
                 List<Token> expressions=tkStream.subList(ctr+1, tkStream.size());
 
-                expr(expressions);
+                //expr(expressions);
             }
             
             
@@ -177,21 +177,8 @@ public class Parser {
         }
     }
     
-    /*private boolean isLogical(String s){
-    //    return matches("");
-    }*/
-    
-    public void expr(List<Token> exp){
-       /*
-       String st = new String();
-          st="";
-       for(Token tok:exp){
-          st+=tok.getToken();
-       }
+    /*public void expr(List<Token> exp){
        
-       if(isLogical(st)){
-           
-       }*/
         
        TokenData expr = new TokenData(Pattern.compile("((\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+\\s*)|(\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+))*"),TokenType.EXPRESSION);
        TokenData expr2 = new TokenData(Pattern.compile("[a-zA-Z][a-zA-Z0-9]*"),TokenType.IDENTIFIER);
@@ -232,7 +219,7 @@ public class Parser {
        
        
        
-    }
+    }*/
   
   public boolean isDeclared(String token){
       boolean val=false;

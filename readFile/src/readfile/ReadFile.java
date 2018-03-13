@@ -76,18 +76,18 @@ public class ReadFile {
                             
                             
                                 for(int i = 0; tokens[i] != null; i++){
-                                    System.out.println(i+" "+tokens[i]);
+                                    System.out.println("Token->"+i+" "+tokens[i]);
 
                                     Tokenizer tknObj = new Tokenizer(tokens[i]);
 
                                         System.out.println("\n Line"+ctr+":");
-                                        while(tknObj.hasNextToken()){
-                                           Token retVal = tknObj.nextToken();
+                                        
+                                        Token retVal = tknObj.nextToken();
 
-                                           tkStream.add(new Token(retVal.getToken(),retVal.getTokenType()));
-                                           tokGroup.add(new Token(retVal.getToken(),retVal.getTokenType()));
-                                           System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());
-                                        }
+                                        tkStream.add(new Token(retVal.getToken(),retVal.getTokenType()));
+                                        tokGroup.add(new Token(retVal.getToken(),retVal.getTokenType()));
+                                        System.out.println(retVal.getToken()+"=>"+retVal.getTokenType()+"\n---------------------");
+                                      
                                     }
                                 Parser p = new Parser(tkStream,varList);
                                 tkStream.clear();
