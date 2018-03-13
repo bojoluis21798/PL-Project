@@ -1,1 +1,1 @@
-number x is 6.0
+word x is " H e ll o W o rl d" 

@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 public class Tokenizer {
     private ArrayList<TokenData> tokDatas;
     
-    
     private String str;
     private Token lastToken=null;
     private boolean pushBack;
@@ -25,12 +24,11 @@ public class Tokenizer {
     public Tokenizer(String str){
        this.tokDatas = new ArrayList<TokenData>();
        this.str = str;
-       
         
+       tokDatas.add(new TokenData(Pattern.compile("\"[a-zA-Z0-9\\s]*\""),TokenType.STRING_LITERAL));
        tokDatas.add(new TokenData(Pattern.compile("[a-zA-Z][a-zA-Z0-9]*"),TokenType.IDENTIFIER));
        tokDatas.add(new TokenData(Pattern.compile("[\\+|\\*|-|/]|[<>=]"),TokenType.OPERATION));
        tokDatas.add(new TokenData(Pattern.compile("^-?\\d+$"),TokenType.INTEGER_LITERAL));
-       tokDatas.add(new TokenData(Pattern.compile("\"[a-zA-Z]*\""),TokenType.STRING_LITERAL));
        tokDatas.add(new TokenData(Pattern.compile("^([-]?\\d*\\.?\\d*)$"),TokenType.FLOAT_LITERAL));
   
        for(String t:new String[]{"=","\\)","\\(",",",":"}){
