@@ -11,8 +11,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
+import java.util.Stack;
 import javax.script.ScriptException;
+import parser.BiHashMap;
 import parser.Parser;
+import parser.selection;
 import readfile.tokenizer.Token;
 import readfile.tokenizer.Tokenizer;
 /**
@@ -21,7 +24,10 @@ import readfile.tokenizer.Tokenizer;
  */
 public class ReadFile {
     private static ArrayList<Token> tkStream = new ArrayList<Token>();
-    private static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
+   
+    public static BiHashMap bigBoard = new BiHashMap();
+    public static int IFctr=0;
+    public static Stack<selection> IFstack = new Stack();
     /**
      * @param args the command line arguments
      */
@@ -40,6 +46,9 @@ public class ReadFile {
 			br = new BufferedReader(new FileReader(FILENAME));
 			fr = new FileReader(FILENAME);
 			br = new BufferedReader(fr);
+                        
+                        
+                        IFstack.push(new selection(true,IFctr));
                         
 			String sCurrentLine;
                         int ctr=0;
@@ -89,12 +98,14 @@ public class ReadFile {
                                         System.out.println(retVal.getToken()+"=>"+retVal.getTokenType()+"\n---------------------");
                                       
                                     }
-                                Parser p = new Parser(tkStream,varList);
+                                Parser p = new Parser(tkStream);
                                 tkStream.clear();
                                 ctr++;
                                
 			}
-
+                        System.out.println("MAIN=>"+bigBoard.get(0,"x")+"\n");
+                        System.out.println("FIRST IF=>"+bigBoard.get(1,"y"));
+                        System.out.println("SECOND IF=>"+bigBoard.get(2,"a"));
 		} catch (IOException e) {
 
 			e.printStackTrace();

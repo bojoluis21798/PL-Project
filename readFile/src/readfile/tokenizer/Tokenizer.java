@@ -52,25 +52,31 @@ public class Tokenizer {
         
         
           for(TokenData data: tokDatas) {
-            
+            String token = str;
             if(str.matches(data.getPattern())){
                  if(data.getType() == TokenType.STRING_LITERAL) {
-                     return (lastToken = new Token(str.substring(1,str.length()-1),TokenType.STRING_LITERAL));
+                     return (lastToken = new Token(token.substring(1,token.length()-1),TokenType.STRING_LITERAL));
                   } else {
-                     if( str.equals("if") || str.equals("then") || str.equals("end") || str.equals("while")||str.equals("is")||str.equals("AND")){
-                         if(str.equals("AND")){
+                     if( token.equals("orif") || token.equals("if") || token.equals("then") || token.equals("end") || token.equals("while")||token.equals("is")||token.equals("and")){
+                         if(token.equals("and")){
                           return (lastToken = new Token("&&",TokenType.KEYWORD));
+                         }else if(token.equals("or")){
+                             return (lastToken = new Token("||",TokenType.KEYWORD));
+                         }else if(token.equals("not")){
+                             return (lastToken = new Token("!",TokenType.KEYWORD));
+                         }else if(token.equals("notequal")){
+                             return (lastToken = new Token("!=",TokenType.KEYWORD));
                          }
-                          return (lastToken = new Token(str,TokenType.KEYWORD));
-                      }else if(str.equals("number") || str.equals("word") || str.equals("flag")){
-                          return (lastToken = new Token(str,TokenType.DATA_TYPE));
+                          return (lastToken = new Token(token,TokenType.KEYWORD));
+                      }else if(token.equals("number") || token.equals("word") || token.equals("flag")){
+                          return (lastToken = new Token(token,TokenType.DATA_TYPE));
                       }else if(data.getType()==TokenType.OPERATION){
-                        return (lastToken = new Token(str,TokenType.OPERATION));
+                        return (lastToken = new Token(token,TokenType.OPERATION));
                       }else if(data.getType()==TokenType.IDENTIFIER){
                           
-                         return (lastToken = new Token(str,TokenType.IDENTIFIER));
+                         return (lastToken = new Token(token,TokenType.IDENTIFIER));
                       }else{
-                          return (lastToken = new Token(str,data.getType()));
+                          return (lastToken = new Token(token,data.getType()));
                       }
                       
                   }
