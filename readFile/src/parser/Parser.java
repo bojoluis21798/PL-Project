@@ -10,10 +10,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import readfile.tokenizer.Token;
 import readfile.tokenizer.TokenData;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import readfile.tokenizer.TokenType;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -45,7 +45,6 @@ public class Parser {
            
           if(tkStream.get(0).getTokenType() == TokenType.KEYWORD && tkStream.get(0).getToken().equals("if")){
                 IFctr++;
-                
                 List <Token> boolE = tkStream.subList(1, tkStream.size());
                 for(Token tok:boolE){
                    if(tok.getToken().equals("then")){
@@ -190,6 +189,15 @@ public class Parser {
                if(tkStream.size() > 4){//expression
                     int ctr=0;
 
+<<<<<<< mathE
+                //expr(expressions);
+            }
+            
+            
+        }
+        
+        
+=======
                     for(Token tok:tkStream){
                         if(tok.getToken().equals("is")){
                            break;
@@ -201,6 +209,7 @@ public class Parser {
                     expr(expressions);
                 }
            }
+>>>>>>> master
     }
     public void declare(){
         switch(tkStream.get(0).getToken()){
@@ -227,12 +236,27 @@ public class Parser {
         }
     }
     
+    public String stringify(){
+        String s = "";
+        
+        for(int i=1; i<tkStream.size(); i++){
+            s +=tkStream.get(i);
+        }
+        return s;
+    }
+    
     public void number(){
-        if(tkStream.get(1).getTokenType() == TokenType.IDENTIFIER){
+        String s = stringify();
+        
+        if(s.matches("")){
             
+        }else{
+            System.out.println("Invalid Syntax");
+        }
+        /*if(tkStream.get(1).getTokenType() == TokenType.IDENTIFIER){
             if(tkStream.get(2).getTokenType() == TokenType.KEYWORD && tkStream.get(2).getToken().equals("is")){
                
-                if(tkStream.get(3).getTokenType() == TokenType.INTEGER_LITERAL || tkStream.get(3).getTokenType() == TokenType.FLOAT_LITERAL ){
+                if(tkStream.get(3).getTokenType() == TokenType.INTEGER_LITERAL || tkStream.get(3).getTokenType() == TokenType.FLOAT_LITERAL){
                     if(isDeclared(tkStream.get(1).getToken())){
                         System.out.println("UNACCEPTABLE number declaration");
                     }else{
@@ -249,7 +273,8 @@ public class Parser {
             }
         }else{
             System.out.println("Invalid Syntax: no variable name");
-        }
+        }*/
+        
     }
 
     public void word(){
@@ -286,7 +311,9 @@ public class Parser {
         }
     }
     
-    public void expr(List<Token> exp){
+    /*public void expr(List<Token> exp){
+       
+        
        TokenData expr = new TokenData(Pattern.compile("((\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+\\s*)|(\\s*\\d+\\s*[+|\\*|\\-|/]\\s*\\d+))*"),TokenType.EXPRESSION);
        TokenData expr2 = new TokenData(Pattern.compile("[a-zA-Z][a-zA-Z0-9]*"),TokenType.IDENTIFIER);
        
@@ -323,7 +350,10 @@ public class Parser {
        }else{
            System.out.println("Invalid Mathematical Expression");
        }
-    }
+       
+       
+       
+    }*/
   
   public boolean isDeclared(String token){
       boolean val=false;

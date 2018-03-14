@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 public class Tokenizer {
     private ArrayList<TokenData> tokDatas;
     
-    
     private String str;
     private Token lastToken=null;
     private boolean pushBack;
@@ -26,20 +25,19 @@ public class Tokenizer {
        this.tokDatas = new ArrayList<TokenData>();
        this.str = str;
        
-        
-       tokDatas.add(new TokenData(Pattern.compile("[a-zA-Z][a-zA-Z0-9]*"),TokenType.IDENTIFIER));
-       tokDatas.add(new TokenData(Pattern.compile("[\\+|\\*|-|/]|[<>=]"),TokenType.OPERATION));
-       tokDatas.add(new TokenData(Pattern.compile("^-?\\d+$"),TokenType.INTEGER_LITERAL));
-       tokDatas.add(new TokenData(Pattern.compile("\"[a-zA-Z]*\""),TokenType.STRING_LITERAL));
-       tokDatas.add(new TokenData(Pattern.compile("^([-]?\\d*\\.?\\d*)$"),TokenType.FLOAT_LITERAL));
-  
+       tokDatas.add(new TokenData("(false)|(true)",TokenType.BOOLEAN_LITERAL));
+       tokDatas.add(new TokenData("\"[a-zA-Z0-9\\s]*\"",TokenType.STRING_LITERAL));
+       tokDatas.add(new TokenData("[a-zA-Z][a-zA-Z0-9]*",TokenType.IDENTIFIER));
+       tokDatas.add(new TokenData("[\\+|\\*|-|/]|[<>=]",TokenType.OPERATION));
+       tokDatas.add(new TokenData("^-?\\d+$",TokenType.INTEGER_LITERAL));
+       tokDatas.add(new TokenData("^([-]?\\d*\\.?\\d*)$",TokenType.FLOAT_LITERAL));
+       
        for(String t:new String[]{"=","\\)","\\(",",",":"}){
-         tokDatas.add(new TokenData(Pattern.compile(t),TokenType.TOKEN));
+         tokDatas.add(new TokenData(t,TokenType.TOKEN));
        }
     }
    
     public Token nextToken(){
-        
         str = str.trim();
         if(pushBack) {
           pushBack = false;
@@ -52,18 +50,11 @@ public class Tokenizer {
         //tokenize(str)
         //while{}
         
-       
+        
           for(TokenData data: tokDatas) {
-            Matcher matcher = data.getPattern().matcher(str);
-            
-            if(matcher.find()) {
-                 
-                String token = matcher.group().trim();
-                str = matcher.replaceFirst("");
-               
-                
+            String token = str;
+            if(str.matches(data.getPattern())){
                  if(data.getType() == TokenType.STRING_LITERAL) {
-                     
                      return (lastToken = new Token(token.substring(1,token.length()-1),TokenType.STRING_LITERAL));
                   } else {
                      if( token.equals("orif") || token.equals("if") || token.equals("then") || token.equals("end") || token.equals("while")||token.equals("is")||token.equals("and")){
@@ -76,7 +67,6 @@ public class Tokenizer {
                          }else if(token.equals("notequal")){
                              return (lastToken = new Token("!=",TokenType.KEYWORD));
                          }
-
                           return (lastToken = new Token(token,TokenType.KEYWORD));
                       }else if(token.equals("number") || token.equals("word") || token.equals("flag")){
                           return (lastToken = new Token(token,TokenType.DATA_TYPE));
