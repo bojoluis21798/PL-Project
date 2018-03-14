@@ -24,14 +24,13 @@ public class Tokenizer {
     public Tokenizer(String str){
        this.tokDatas = new ArrayList<TokenData>();
        this.str = str;
-        
+       
+       tokDatas.add(new TokenData("(false)|(true)",TokenType.BOOLEAN_LITERAL));
        tokDatas.add(new TokenData("\"[a-zA-Z0-9\\s]*\"",TokenType.STRING_LITERAL));
        tokDatas.add(new TokenData("[a-zA-Z][a-zA-Z0-9]*",TokenType.IDENTIFIER));
        tokDatas.add(new TokenData("[\\+|\\*|-|/]|[<>=]",TokenType.OPERATION));
        tokDatas.add(new TokenData("^-?\\d+$",TokenType.INTEGER_LITERAL));
        tokDatas.add(new TokenData("^([-]?\\d*\\.?\\d*)$",TokenType.FLOAT_LITERAL));
-       tokDatas.add(new TokenData("(true)",TokenType.BOOLEAN_LITERAL));
-       tokDatas.add(new TokenData("(false)",TokenType.BOOLEAN_LITERAL));
        
        for(String t:new String[]{"=","\\)","\\(",",",":"}){
          tokDatas.add(new TokenData(t,TokenType.TOKEN));
