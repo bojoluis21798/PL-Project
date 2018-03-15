@@ -142,7 +142,7 @@ public class Parser {
                              }
                              List<Token> expressions=tkStream.subList(ctr, tkStream.size());
 
-                             expr(expressions);
+                             //expr(expressions);
                          }
                 }
                 if(IFstack.peek().getBool() == true){
@@ -173,7 +173,7 @@ public class Parser {
                     }
                     List<Token> expressions=tkStream.subList(ctr, tkStream.size());
 
-                    expr(expressions);
+                    //expr(expressions);
                 }
                
           }
@@ -189,15 +189,6 @@ public class Parser {
                if(tkStream.size() > 4){//expression
                     int ctr=0;
 
-<<<<<<< mathE
-                //expr(expressions);
-            }
-            
-            
-        }
-        
-        
-=======
                     for(Token tok:tkStream){
                         if(tok.getToken().equals("is")){
                            break;
@@ -206,10 +197,9 @@ public class Parser {
                     }
                     List<Token> expressions=tkStream.subList(ctr+1, tkStream.size());
 
-                    expr(expressions);
+                    //expr(expressions);
                 }
            }
->>>>>>> master
     }
     public void declare(){
         switch(tkStream.get(0).getToken()){
