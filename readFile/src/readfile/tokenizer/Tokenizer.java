@@ -57,7 +57,7 @@ public class Tokenizer {
                  if(data.getType() == TokenType.STRING_LITERAL) {
                      return (lastToken = new Token(token.substring(1,token.length()-1),TokenType.STRING_LITERAL));
                   } else {
-                     if( token.equals("orif") || token.equals("if") || token.equals("then") || token.equals("end") || token.equals("while")||token.equals("is")||token.equals("and")){
+                     if(token.equals("else") || token.equals("orif") || token.equals("if") || token.equals("then") || token.equals("end") || token.equals("while")||token.equals("is")||token.equals("and")){
                          if(token.equals("and")){
                           return (lastToken = new Token("&&",TokenType.KEYWORD));
                          }else if(token.equals("or")){
@@ -68,7 +68,7 @@ public class Tokenizer {
                              return (lastToken = new Token("!=",TokenType.KEYWORD));
                          }
                           return (lastToken = new Token(token,TokenType.KEYWORD));
-                      }else if(token.equals("number") || token.equals("word") || token.equals("flag")){
+                      }else if(token.equals("number") || token.equals("word") || token.equals("truth")){
                           return (lastToken = new Token(token,TokenType.DATA_TYPE));
                       }else if(data.getType()==TokenType.OPERATION){
                         return (lastToken = new Token(token,TokenType.OPERATION));

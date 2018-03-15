@@ -54,7 +54,7 @@ public class ReadFile {
                         int ctr=0;
 			while ((sCurrentLine = br.readLine()) != null) {
                             //System.out.println(sCurrentLine);
-                            StringTokenizer st = new StringTokenizer(sCurrentLine, "+-*/ (),=", true);
+                            StringTokenizer st = new StringTokenizer(sCurrentLine, "+-*/ (),=<>:", true);
                             String[] tokens = new String[st.countTokens()];
                             
                             boolean group = false;
