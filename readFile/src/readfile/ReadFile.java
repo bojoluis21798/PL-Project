@@ -72,10 +72,10 @@ public class ReadFile {
                                     tokens[k] = token;
                                 }
                                 
-                                if(token.charAt(0) == '"'){
-                                    group = true;
-                                }else if(token.charAt(token.length()-1) == '"'){
+                                if(token.charAt(token.length()-1) == '"'){
                                     group = false;
+                                }else if(token.charAt(0) == '"'){
+                                    group = true;
                                 }
                                 
                                 if(!group){

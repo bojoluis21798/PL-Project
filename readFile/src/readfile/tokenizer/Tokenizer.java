@@ -26,7 +26,7 @@ public class Tokenizer {
        this.str = str;
        
        tokDatas.add(new TokenData("(false)|(true)",TokenType.BOOLEAN_LITERAL));
-       tokDatas.add(new TokenData("\"[a-zA-Z0-9\\s]*\"",TokenType.STRING_LITERAL));
+       tokDatas.add(new TokenData("\"[^\"]*\"",TokenType.STRING_LITERAL));
        tokDatas.add(new TokenData("[a-zA-Z][a-zA-Z0-9]*",TokenType.IDENTIFIER));
        tokDatas.add(new TokenData("[\\+|\\*|-|/]|[<>=]",TokenType.OPERATION));
        tokDatas.add(new TokenData("^-?\\d+$",TokenType.INTEGER_LITERAL));
