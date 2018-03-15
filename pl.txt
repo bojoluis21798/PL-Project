@@ -1,67 +1,95 @@
-number x
+//LEGEND
 
-job square outputs number using number x
-    output x * x
-end
+//LIMITATIONS
 
-x is square using (5) // assignment
+	Recursion cannot be allowed
+	selection and iteration condition can only allow boolean expressions 
 
-square using (x) // square(5)
+//DATA TYPES
 
-if x = "Hello" and y < 0 then
+	number 
+		// any number within the Java Long and Double Limitation
+		// Long		-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
+		// Double 	4.9 E-324 to 1.7976931348623157 E308
 		
-end
+			// initialization
+				// number <variable identifier> is <LITERAL> | <number variable> | <expression>
+			// declaration
+				// <variable identifier> is <LITERAL> | <number variable> | <expression>
 
-//assignment
+	word 
+		// any string that follows this regular <expression>ession:
+		// \"[^\"]*\"
+		// A String of length 1 can act as a char
+		
+			// initialization
+				// word <variable identifier> is <LITERAL> | <word variable> | <<expression>ession> 
+			// declaration
+				// <variable identifier> is <LITERAL> | <number variable> | <<expression>ession>
+	
+	truth 
+		// boolean
+		// values can be true of false
 
-x is 5
-x is 5+5
-x is square using (2) //assign with function 
+			// initialization
+				// truth <variable identifier> is <LITERAL> | <truth variable> | <<expression>ession> 
+			// declaration
+				// <variable identifier> is <LITERAL> | <number variable> | <<expression>ession>
 
-//selection
 
-if expr then //if statement
-	body
-end
+//OPERATORS
+	
+	// all operators are left associative
+	// with the hierarchy being:
+		1. ()
+		2. *,%,/
+		3. +,-
+		4. =, >, <, not
+		5. and
+		6. or
+		7. is
 
-if expr then //if-else statement
-	body
-else then
-	body
-end
+	arithmetic
+		// no exponent operator
+		// +, -, *, /, %, ()
 
-if expr then //if-else if-else statement 
-	body
-orif expr then
-	body
-else then
-	body
-end
+	relational
+		// =, >, <, not =
 
-//iteration
+	logical
+		// and, or, not
 
-//pre test
+	assignment
+		<variable identifier> is <LITERAL> | <expression> | <variable identifier>
+		<variable identifier> is <job identifier> using (<LITERAL> | <expression> | <variable identifier>,...)
+		x is 5
+		x is 5+5
+		x is y
+		x is square using (2) //assign with function
 
-repeat while expr //while statement 
-	body
-end
+//VECTOR
+	
+	// Java Array Implementation
 
-foreach item in collection // for each
-	body
-end
+	numbers
+		// vector of numbers
+	words
+		// vector of words
+	truths
+		// vector of truths
 
-// post test
+	// Accessing Vectors
 
-do this //do while
-	body
-while expr
+	<ordinal number> of <vector variable identifier>
 
-// data types
+	// Inserting and Removing of List Component
 
-number // int, float, double 
-word // string, char is length 1 string
-flag // boolean
+	add <variable identifier> to <vector variable identifier>
+		//adds it to the end of the list
+	remove <ordinal number> of <vector variable identifier>
+		//removes the ith member of the list
 
+/*
 // arrays (all array types are dynamic)
 
 numbers // array of int, float, double
@@ -76,29 +104,123 @@ numbers x
 insert 5 into 3rd of x // push
 attach 4 into x // push
 remove 3rd of x // pop
+*/
 
-//records
+//GROUP
+	
+	// Similar to structures from C
+	// Can contain any number of any data type but cannot contain other groups
 
-group shape contains // structure definition
-	word color
-	word type
-end
+	// INITIALIZATION
+	// data inside groups are called members
+		group <variable identifier> contains 
+			<data type> <member identifier>
+			...
+		end
 
-shape x
+		group shape contains 
+			word color
+			word type
+		end
 
-shape groups x // define array of structures
+	// DECLARATION
+		<group variable identifier> <variable identifier>
 
-color of x //accessing structures
+		shape x
 
-//operators
+	// define vector of groups
+		<group variable identifier> groups <variable identifier> 
+ 
+		shape groups x
 
-//relational
-	>, <, =
+	// accessing structures
+		<member variable identifier> of <group variable identifier> is <LITERAL> | <variable identifier>
+		color of x is "blue"
 
-//logical
-	not, or, and
+//SELECTION
 
-//pre-defined function
+	// if statement
 
-print "Hello World"
-lengthof using (arr)
+		if (<expression>) then 
+			...
+		end
+
+	// if-else statement
+
+		if (<expression>) then 
+			...
+		else then
+			...
+		end
+
+	// if-else else statement
+
+		if (<expression>) then  
+			...
+		orif (<expression>) then
+			...
+		else then
+			...
+		end
+
+//ITERATION
+
+	// pre test
+		// while statement
+
+			repeat while (<expression>)
+				...
+			end
+
+		// for each
+			foreach item in collection 
+				...
+			end
+
+	// post test
+		// do-while statement  
+			do this 
+				...
+			while (<expression>)
+
+//PRE-DEFINED FUNCTIONS
+	
+	// input
+		input <variable identifier> 
+		input x  
+	// output
+		print <LITERAL> | <variable identifier> 
+		print "Hello World"
+
+	// lengthof using (<vector>)
+
+//JOBS
+	
+	// functions
+		job <job identifier> {outputs <data type> using (<parameter>,...)}
+			...
+		end
+
+		// with output and parameter
+			job square outputs number using (x)
+				x*x
+			end
+
+		// with output and without parameter
+			job squareNine outputs number
+				return 9*9
+			end
+
+		// without output and with parameter
+			job helloName using (name)
+				print name
+			end
+
+		// without output and without parameter
+			job printHello 
+				print "Hello"
+			end		
+
+	// passing a parameter
+		//pass by value
+			<job name> using (<LITERAL>,<variable identifier>)
