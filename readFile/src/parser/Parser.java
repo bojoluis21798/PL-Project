@@ -84,8 +84,9 @@ public class Parser {
         System.out.println(line);
         
         String[] declaration = line.split(" ");
+        //System.out.println(declaration.length+": "+(declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]));
         
-        if(declaration.length >= 2 && (declaration[0]+" "+declaration[1]).matches("<type>\\s<identifier>")){
+        if(declaration.length >= 2 && (declaration[0]+" "+declaration[1]).matches("<type>\\s<identifier>")){ //declaration
             //declare the variable
             System.out.println("DECLARATION!");
             if(declaration.length > 3 && declaration[2].matches("is")){
@@ -93,19 +94,20 @@ public class Parser {
                 System.out.println("Expression!");
                 //add necessary execution for expression; use the expression string
             }
-        }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("if (<expr>) then")){
+        }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("if\\s\\(<expr>\\)\\sthen")){ //if statement
             //necessary if exectution
             System.out.println("IF STATEMENT!");
             String expression = parseExpression(declaration, 2,declaration.length-2);
+            System.out.println(expression);
             //add necessary execution for expression; use the expression string
-        }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("orif (<expr>) then")){
+        }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("orif\\s\\(<expr>\\)\\sthen")){ //orif statement
             //necessary if exectution
             System.out.println("ORIF STATEMENT!");
             String expression = parseExpression(declaration, 2,declaration.length-2);
             //add necessary execution for expression; use the expression string
-        }else if(line.matches("else then")){
+        }else if(line.matches("else then")){ //else statement
             System.out.println("ELSE STATEMENT!");
-        }else if(declaration.length > 2 && (declaration[0]+" "+declaration[1]).matches("<identifier> is")){
+        }else if(declaration.length > 2 && (declaration[0]+" "+declaration[1]).matches("<identifier>\\sis")){ //assignment
             String expression = parseExpression(declaration, 2, declaration.length);
             System.out.println("ASSIGNMENT!");
         }else{
