@@ -28,8 +28,6 @@ public enum TokenType {
     /*a reserved word you gotta check for this*/
     KEYWORD,
     
-    EXPRESSION,
-    
     OPERATION,
     
     BOOLEAN_LITERAL,

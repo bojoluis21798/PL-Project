@@ -75,8 +75,18 @@ public class Parser {
         String line = stringify(); 
         System.out.println(line);
         
-        if(line.matches("<type>\\s<identifier>\\s(is\\s(<number>)|(<identifier>)\\s(<operation>\\s(<number>)|(<identifier>))*)?")){
+        String[] declaration = line.split(" ");
+        
+        if(declaration.length >= 2 && (declaration[0]+" "+declaration[1]).matches("<type>\\s<identifier>")){
+            //declare the variable
             System.out.println("DECLARATION!");
+            if(declaration.length > 3 && declaration[2].matches("is")){
+                String expression = "";
+                for(int i=3; i<declaration.length; i++){
+                    expression+=declaration[i];
+                }
+                //add necessary execution for expression; use the expression string
+            }
         }else if(line.matches("(if)\\s\\(\\s((<bool>)|(((<number>)|(<identifier>))\\s(<operation>\\s((<number>)|(<identifier>)))*))\\s\\)\\s(then)")){
             System.out.println("IF STATEMENT!");
         }else if(line.matches("(orif)\\s\\(\\s((<bool>)|(((<number>)|(<identifier>))\\s(<operation>\\s((<number>)|(<identifier>)))*))\\s\\)\\s(then)")){
