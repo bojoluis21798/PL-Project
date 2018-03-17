@@ -71,6 +71,14 @@ public class Parser {
         return s;
     }
     
+    private String parseExpression(String[] line, int start, int end){
+        String expression = "";
+                for(int i=start; i<end; i++){
+                    expression+=line[i];
+        }
+        return expression;
+    }
+    
      public void Start() throws ScriptException{
         String line = stringify(); 
         System.out.println(line);
@@ -81,19 +89,24 @@ public class Parser {
             //declare the variable
             System.out.println("DECLARATION!");
             if(declaration.length > 3 && declaration[2].matches("is")){
-                String expression = "";
-                for(int i=3; i<declaration.length; i++){
-                    expression+=declaration[i];
-                }
+                String expression = parseExpression(declaration, 3, declaration.length);
+                System.out.println("Expression!");
                 //add necessary execution for expression; use the expression string
             }
-        }else if(line.matches("(if)\\s\\(\\s((<bool>)|(((<number>)|(<identifier>))\\s(<operation>\\s((<number>)|(<identifier>)))*))\\s\\)\\s(then)")){
+        }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("if (<expr>) then")){
+            //necessary if exectution
             System.out.println("IF STATEMENT!");
-        }else if(line.matches("(orif)\\s\\(\\s((<bool>)|(((<number>)|(<identifier>))\\s(<operation>\\s((<number>)|(<identifier>)))*))\\s\\)\\s(then)")){
-            System.out.println("OR IF STATEMENT!");
+            String expression = parseExpression(declaration, 2,declaration.length-2);
+            //add necessary execution for expression; use the expression string
+        }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("orif (<expr>) then")){
+            //necessary if exectution
+            System.out.println("ORIF STATEMENT!");
+            String expression = parseExpression(declaration, 2,declaration.length-2);
+            //add necessary execution for expression; use the expression string
         }else if(line.matches("else then")){
             System.out.println("ELSE STATEMENT!");
-        }else if(line.matches("<identifier>\\s(is)\\s((<identifier>)|(<number>)|(<string>)|(<bool>))")){
+        }else if(declaration.length > 2 && (declaration[0]+" "+declaration[1]).matches("<identifier> is")){
+            String expression = parseExpression(declaration, 2, declaration.length);
             System.out.println("ASSIGNMENT!");
         }else{
             System.out.println("Wrong Syntax");
