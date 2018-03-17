@@ -70,7 +70,7 @@ public class ReadFile {
                                     continue;
                                 }
                                 
-                                if(token.charAt(token.length()-1) == '"' || !token.matches("[]")){
+                                if(token.charAt(token.length()-1) == '"'){
                                     group = false;
                                 }else if(token.charAt(0) == '"'){
                                     group = true;
