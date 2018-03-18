@@ -1,1 +1,1 @@
-orif (x>-2) then
+truth x i true
