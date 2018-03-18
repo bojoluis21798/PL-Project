@@ -111,7 +111,7 @@ public class Parser {
             String expression = parseExpression(declaration, 2, declaration.length);
             System.out.println("ASSIGNMENT!");
         }else{
-            System.out.println("Wrong Syntax");
+            throw new IllegalStateException("Wrong Syntax");
         }
     }
     
