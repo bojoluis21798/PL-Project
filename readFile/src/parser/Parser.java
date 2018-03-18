@@ -87,13 +87,16 @@ public class Parser {
         //System.out.println(declaration.length+": "+(declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]));
         
         if(declaration.length >= 2 && (declaration[0]+" "+declaration[1]).matches("<type>\\s<identifier>")){ //declaration
+            if((declaration.length > 3 && !declaration[2].matches("is")) || declaration.length == 3){
+                throw new IllegalStateException("Wrong Syntax");
+            }
             //declare the variable
-            System.out.println("DECLARATION!");
             if(declaration.length > 3 && declaration[2].matches("is")){
                 String expression = parseExpression(declaration, 3, declaration.length);
                 System.out.println("Expression!");
                 //add necessary execution for expression; use the expression string
             }
+            System.out.println("DECLARATION!");
         }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("if\\s\\(<expr>\\)\\sthen")){ //if statement
             //necessary if exectution
             System.out.println("IF STATEMENT!");
