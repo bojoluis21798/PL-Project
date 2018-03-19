@@ -40,7 +40,7 @@ public class ReadFile {
     /**
      * @param args the command line arguments
      */
-    private static final String FILENAME = "C:\\Users\\Ethan Ray Mosqueda\\Desktop\\EdCode\\PL-Project\\source.txt";
+    private static final String FILENAME = "../source.txt";
     public static void main(String[] args) throws ScriptException {
         // TODO code application logic here
         
