@@ -89,24 +89,24 @@ public class ReadFile {
                             }
                             
                             
-                                for(int i = 0; i<tokens.length && tokens[i]!=""; i++){
-                                    System.out.println("Token->"+i+" "+tokens[i]);
+                            for(int i = 0; i<tokens.length && tokens[i]!=""; i++){
+                                System.out.println("Token->"+i+" "+tokens[i]);
 
-                                    Tokenizer tknObj = new Tokenizer(tokens[i]);
+                                Tokenizer tknObj = new Tokenizer(tokens[i]);
 
-                                        System.out.println("\n Line"+ctr+":");
-                                        
-                                        Token retVal = tknObj.nextToken();
+                                    System.out.println("\n Line"+ctr+":");
 
-                                        tkStream.add(new Token(retVal.getToken(),retVal.getTokenType()));
-                                        tokGroup.add(new Token(retVal.getToken(),retVal.getTokenType()));
-                                        System.out.println(retVal.getToken()+"=>"+retVal.getTokenType()+"\n---------------------");
-                                      
-                                    }
-                                Parser p = new Parser(tkStream);
+                                    Token retVal = tknObj.nextToken();
 
-                                tkStream.clear();
-                                ctr++;
+                                    tkStream.add(new Token(retVal.getToken(),retVal.getTokenType()));
+                                    tokGroup.add(new Token(retVal.getToken(),retVal.getTokenType()));
+                                    System.out.println(retVal.getToken()+"=>"+retVal.getTokenType()+"\n---------------------");
+
+                                }
+                            Parser p = new Parser(tkStream);
+                            //LINE EXECUTION
+                            tkStream.clear();
+                            ctr++;
                                
 			}
 			//For Loop to go through all token streams
