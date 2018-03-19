@@ -3,38 +3,144 @@
 //LIMITATIONS
 
 	Recursion cannot be allowed
-	selection and iteration condition can only allow boolean expressions 
+	selection and iteration condition can only allow boolean expressions
+	groups can contain any number of primitive data types but cannot contain other groups 
 
 //DATA TYPES
 
-	number 
+	NUMBER 
 		// any number within the Java Long and Double Limitation
 		// Long		-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
 		// Double 	4.9 E-324 to 1.7976931348623157 E308
 		
-			// initialization
-				// number <variable identifier> is <LITERAL> | <number variable> | <expression>
-			// declaration
-				// <variable identifier> is <LITERAL> | <number variable> | <expression>
+		// DECLARATION AND INITIALIZATION
+			// when declared without an identifier, a default value of 0 is given
 
-	word 
+			number <identifier> [is <number literal> | <number variable> | <expression>]
+
+		// ASSIGNMENT
+
+			<number variable> is <number literal> | <number variable> | <expression>
+
+		// EXAMPLES
+
+			// declaration
+			number x
+
+			// with a number literal
+			number x is 5
+			x is 5
+
+			// with number variable
+			number y is 5
+			number x is y
+			x is y
+
+			// with element of number vector
+			numbers y is (1, 2, 3)
+			number x is 1st of y
+			x is 1st of y
+
+			// with member of group
+			group cirle contains 
+				number radius
+				word color
+			end
+
+			circle c 
+			number x is radius of c
+			x is radius of c
+
+			// with a job
+			job square outputs number using (number x)
+				return x * x
+			end
+
+			number x is square using (5)
+			x is square using (x)
+
+			// initialization with an expression
+			number x is 5 + 10
+			x is 5 - 2
+
+	WORD 
 		// any string that follows this regular <expression>ession:
 		// \"[^\"]*\"
 		// A String of length 1 can act as a char
 		
-			// initialization
-				// word <variable identifier> is <LITERAL> | <word variable> | <<expression>ession> 
-			// declaration
-				// <variable identifier> is <LITERAL> | <number variable> | <<expression>ession>
-	
-	truth 
-		// boolean
-		// values can be true of false
+			//DECLARATION AND INITIALIZATION
+				// when declared without initialization, default value of "" (empty string)
 
-			// initialization
-				// truth <variable identifier> is <LITERAL> | <truth variable> | <<expression>ession> 
-			// declaration
-				// <variable identifier> is <LITERAL> | <number variable> | <<expression>ession>
+				word <identifier> [is <word literal> | <word variable> | <expression>]
+
+			// ASSIGNMENT
+
+				<word variable> is <word literal> | <word variable> | <expression>
+
+			// EXAMPLE
+
+				// declaration
+				word x
+
+				// initialization
+				word x is "Hello"
+				x is "World"
+
+				// initialization with word variable
+				word y is "Hello"
+				word x is y
+				x is y
+
+				// intialization with member of word vector 
+				words y is ("hello", "world", "!")
+				word x is 3rd of y
+				x is 1st of y
+
+				// initialization with member of group
+				group circle contains
+					number radius
+					word color
+				end
+
+				circle c
+				word x is color of c
+				x is color of c
+
+				// with a job 
+				job helloWorld outputs word 
+
+				//initialization with string expression
+				word x is "Hello " + "World!"
+
+	TRUTH 
+		// boolean
+		// values can only be true or false
+
+			// DECLARATION AND INTIALIZATION
+				// when declared without initialaztion, given default value of false
+
+				truth <identifier> [is <truth literal> | <truth variable> | <expression>]
+
+			// ASSIGNEMENT
+
+				<truth variable> is <truth literal> | <truth variable> | <expression>
+
+			// EXAMPLES
+
+				// declaration
+				truth x
+
+				// with a truth literal
+				truth x is true
+				x is true
+
+				// with a truth variable
+				truth y is true
+				truth x is y
+				x is y
+
+				// with a
+				
 
 
 //OPERATORS
@@ -67,49 +173,24 @@
 		x is y
 		x is square using (2) //assign with function
 
-//VECTOR
-	
-	// Java Array Implementation
+	overloaded operators
+		'+' can be used for string concatination
+		<string literal> | <string variable> + <string literal> 
+							| <number literal> 
+							| <truth literal>
+							| <primitive type variable>
 
-	numbers
-		// vector of numbers
-	words
-		// vector of words
-	truths
-		// vector of truths
+		print using ("Hello World" + "!")
+		print using ("Number " + 5)
+		print using ("the statement is" + false)
 
-	// Accessing Vectors
-
-	<ordinal number> of <vector variable identifier>
-
-	// Inserting and Removing of List Component
-
-	add <variable identifier> to <vector variable identifier>
-		//adds it to the end of the list
-	remove <ordinal number> of <vector variable identifier>
-		//removes the ith member of the list
-
-/*
-// arrays (all array types are dynamic)
-
-numbers // array of int, float, double
-words // array of strings
-flags //array of boolean
-
-numbers x is (1,2,3,4,5)
-numbers x
-
-3rd of x is 5
-
-insert 5 into 3rd of x // push
-attach 4 into x // push
-remove 3rd of x // pop
-*/
+		word x is "John"
+		print using ("Hello, " + x)
+		print using (x + " is my name")
 
 //GROUP
 	
 	// Similar to structures from C
-	// Can contain any number of any data type but cannot contain other groups
 
 	// INITIALIZATION
 	// data inside groups are called members
@@ -124,18 +205,59 @@ remove 3rd of x // pop
 		end
 
 	// DECLARATION
-		<group variable identifier> <variable identifier>
+		<group name> <identifier>
 
 		shape x
-
-	// define vector of groups
-		<group variable identifier> groups <variable identifier> 
- 
-		shape groups x
 
 	// accessing structures
 		<member variable identifier> of <group variable identifier> is <LITERAL> | <variable identifier>
 		color of x is "blue"
+
+		color of 3rd of x
+
+//VECTOR
+	numbers // vector of numbers
+	words // vector of words
+	truths // vector of truths
+	
+	// DECLARATION AND INITIALIZATION
+
+		numbers <vector identifier> [is (<number literal>, ...)]
+		numbers x
+		numbers x is (1, 2, 3, 4, 5)
+		
+		// if declared without initialization, a default value of "" is given
+		words <vector identifier> [is (<word literal>, ...)]
+		words x
+		words x is ("hello", "world", "!")
+
+		// if declared without initialization, a default value of false is given
+		truths <vector identifier> [is (<truth literal>, ...)]
+		truths x
+		truths x is (true, false, false)
+
+		// we do not allow initialization of a vector of groups
+		// the default values of the members are given
+		<group name> groups <identifier> 
+		shape groups x	
+
+	// ACCESSING
+
+	<ordinal number> of <vector identifier>
+	3rd of x
+
+	// OPERATIONS
+
+	add <variable identifier> to <vector variable identifier>
+		// adds it to the end of the list
+
+	remove <ordinal number> of <vector variable identifier>
+		// removes the ith member of the list
+		// shinks the vector thereby moving elements to the right of the deleted element to the left by one
+
+	// Java List Implementation
+	// it is possible to assign a vector to another vector
+	// there will be no vector operations (such as concatenation)
 
 //SELECTION
 
@@ -224,3 +346,9 @@ remove 3rd of x // pop
 	// passing a parameter
 		//pass by value
 			<job name> using (<LITERAL>,<variable identifier>)
+
+//DEFINE KEYWORDS
+//END KEYWORD
+	// cannot have any other statements after it in the same line
+	// example: end print using ("Hi")
+				end x is x + 5
