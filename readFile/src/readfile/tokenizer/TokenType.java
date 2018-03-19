@@ -21,7 +21,8 @@ public enum TokenType {
     STRING_LITERAL,
     /*A number*/
     NUMBER_LITERAL,
-    
+    /*either word,words,number,flag* you gotta check for this*/
+
     DATA_TYPE,
     /*a reserved word you gotta check for this*/
     KEYWORD,
