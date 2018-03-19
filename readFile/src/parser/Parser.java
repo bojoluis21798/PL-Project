@@ -56,7 +56,7 @@ public class Parser {
                 case STRING_LITERAL:
                     s+="<string>";
                     break;
-                case INTEGER_LITERAL: case FLOAT_LITERAL:
+                case NUMBER_LITERAL:
                     s+="<number>";
                     break;
                 case OPERATION:
@@ -71,10 +71,10 @@ public class Parser {
         return s;
     }
     
-    private String parseExpression(String[] line, int start, int end){
+    private String parseExpression(int start, int end){
         String expression = "";
                 for(int i=start; i<end; i++){
-                    expression+=line[i];
+                    expression+=tkStream.get(i).getToken();
         }
         return expression;
     }
@@ -92,7 +92,8 @@ public class Parser {
             }
             //declare the variable
             if(declaration.length > 3 && declaration[2].matches("is")){
-                String expression = parseExpression(declaration, 3, declaration.length);
+                String expression = parseExpression(3, declaration.length);
+                System.out.println(expression);
                 System.out.println("Expression!");
                 //add necessary execution for expression; use the expression string
             }
@@ -100,19 +101,22 @@ public class Parser {
         }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("if\\s\\(<expr>\\)\\sthen")){ //if statement
             //necessary if exectution
             System.out.println("IF STATEMENT!");
-            String expression = parseExpression(declaration, 2,declaration.length-2);
+            String expression = parseExpression(2,declaration.length-2);
             System.out.println(expression);
             //add necessary execution for expression; use the expression string
         }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("orif\\s\\(<expr>\\)\\sthen")){ //orif statement
             //necessary if exectution
             System.out.println("ORIF STATEMENT!");
-            String expression = parseExpression(declaration, 2,declaration.length-2);
+            String expression = parseExpression(2,declaration.length-2);
             //add necessary execution for expression; use the expression string
         }else if(line.matches("else then")){ //else statement
             System.out.println("ELSE STATEMENT!");
         }else if(declaration.length > 2 && (declaration[0]+" "+declaration[1]).matches("<identifier>\\sis")){ //assignment
-            String expression = parseExpression(declaration, 2, declaration.length);
+            String expression = parseExpression(2, declaration.length);
+            System.out.println(expression);
             System.out.println("ASSIGNMENT!");
+        }else if(declaration.length == 1 && (declaration[0].matches("end"))){
+            System.out.println("END!");
         }else{
             throw new IllegalStateException("Wrong Syntax");
         }
