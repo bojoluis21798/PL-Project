@@ -20,9 +20,7 @@ public enum TokenType {
     /*A word enclose with "" */
     STRING_LITERAL,
     /*A number*/
-    INTEGER_LITERAL,
-    /*A number with a decimal point*/
-    FLOAT_LITERAL,
+    NUMBER_LITERAL,
     /*either word,words,number,flag* you gotta check for this*/
     DATA_TYPE,
     /*a reserved word you gotta check for this*/

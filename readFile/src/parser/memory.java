@@ -5,14 +5,18 @@
  */
 package parser;
 
+import tokenizer.TokenType;
+
 /**
  *
  * @author User
  */
-public class selection extends subprogram{
-
-    public selection(boolean bool, int level) {
-        super(bool, level);
+public class memory {
+    Object var;
+    TokenType tok;
+    
+    public memory(Object var,TokenType tok){
+        this.var = var;
+        this.tok = tok;
     }
-
 }

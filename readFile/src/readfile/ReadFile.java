@@ -8,14 +8,13 @@ package readfile;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
-import java.util.Stack;
+import java.util.*;
 import javax.script.ScriptException;
 import parser.BiHashMap;
 import parser.Parser;
 import parser.selection;
+import parser.subprogram;
+import readfile.pointers;
 import readfile.tokenizer.Token;
 import readfile.tokenizer.Tokenizer;
 /**
@@ -23,11 +22,13 @@ import readfile.tokenizer.Tokenizer;
  * @author User
  */
 public class ReadFile {
+    public static ArrayDeque<Integer> q = new ArrayDeque<Integer>();
     private static ArrayList<Token> tkStream = new ArrayList<Token>();
+    public static List<pointers> program = new ArrayList<pointers>();
    
     public static BiHashMap bigBoard = new BiHashMap();
     public static int IFctr=0;
-    public static Stack<selection> IFstack = new Stack();
+    public static Stack<subprogram> IFstack = new Stack();
     /**
      * @param args the command line arguments
      */
@@ -103,6 +104,7 @@ public class ReadFile {
                                       
                                     }
                                 Parser p = new Parser(tkStream);
+
                                 tkStream.clear();
                                 ctr++;
                                
