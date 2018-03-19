@@ -54,7 +54,7 @@
 		// +, -, *, /, %, ()
 
 	relational
-		// =, >, <, not =
+		// =, >, <, not=
 
 	logical
 		// and, or, not
