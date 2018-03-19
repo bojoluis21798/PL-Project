@@ -1,3 +1,6 @@
-if(2)then
-x is 2
+number x is 5
+word y is "123"
+if (x > 4) then
+	x is 1
+	y is "meep"
 end

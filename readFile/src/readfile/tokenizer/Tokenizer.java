@@ -64,8 +64,8 @@ public class Tokenizer {
                              return (lastToken = new Token("||",TokenType.KEYWORD));
                          }else if(token.equals("not")){
                              return (lastToken = new Token("!",TokenType.KEYWORD));
-                         }else if(token.equals("notequal")){
-                             return (lastToken = new Token("!=",TokenType.KEYWORD));
+                         }else if(token.equals("not=")){
+                             return (lastToken = new Token("!=",TokenType.KEYWORD)); //5+5
                          }
                           return (lastToken = new Token(token,TokenType.KEYWORD));
                       }else if(token.equals("number") || token.equals("word") || token.equals("truth")){
