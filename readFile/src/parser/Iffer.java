@@ -69,7 +69,7 @@ public class Iffer {
         List<Token> boolE = code.subList(2, code.size());
         for(Token tok:boolE){
             if(tok.getToken().equals(")")){
-                List<Token> boolE2 = boolE.subList(0, boolE.size()-1);
+                List<Token> boolE2 = boolE.subList(0, boolE.size()-2);
 
                 int ctr = 0;
                 for(Token token:boolE2){
