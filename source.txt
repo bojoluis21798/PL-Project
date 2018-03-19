@@ -1,1 +1,3 @@
-truth
+if(2)then
+x is 2
+end
