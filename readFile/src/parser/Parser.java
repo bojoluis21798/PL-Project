@@ -22,6 +22,8 @@ import javax.script.ScriptException;
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
+import static readfile.ReadFile.program;
+import static readfile.ReadFile.q;
 
 /**
  *
@@ -99,7 +101,7 @@ public class Parser {
             }
             System.out.println("DECLARATION!");
         }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("if\\s\\(<expr>\\)\\sthen")){ //if statement
-            //necessary if exectution
+            //necessary if execution
             System.out.println("IF STATEMENT!");
             String expression = parseExpression(2,declaration.length-2);
             System.out.println(expression);

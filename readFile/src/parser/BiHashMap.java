@@ -7,6 +7,7 @@ package parser;
 
 import java.util.HashMap;
 import java.util.Map;
+import parser.memory;
 
 /**
  *
@@ -16,10 +17,10 @@ import java.util.Map;
  */
 public class BiHashMap{
 
-private final Map<Integer, Map<String, Integer>> mMap;
+private final Map<Integer, Map<String, memory>> mMap;
 
 public BiHashMap() {
-    mMap = new HashMap<Integer, Map<String, Integer>>();
+    mMap = new HashMap<Integer, Map<String, memory>>();
 }
 
 /**
@@ -35,12 +36,12 @@ public BiHashMap() {
  * @return the value previously associated with (key1,key2), or <code>null</code> if none
  * @see Map#put(Object, Object)
  */
-public Integer put(Integer key1, String key2, Integer value) {
-    Map<String, Integer> map;
+public Object put(Integer key1, String key2, memory value) {
+    Map<String, memory> map;
     if (mMap.containsKey(key1)) {
         map = mMap.get(key1);
     } else {
-        map = new HashMap<String, Integer>();
+        map = new HashMap<String, memory>();
         mMap.put(key1, map);
     }
 
@@ -59,14 +60,31 @@ public Integer put(Integer key1, String key2, Integer value) {
  *         the key
  * @see Map#get(Object)
  */
-public Integer get(int key1, String key2) {
+public Object get(int key1, String key2) {
     if (mMap.containsKey(key1)) {
-        return mMap.get(key1).get(key2);
+        return mMap.get(key1).get(key2).var;
     } else {
         return null;
     }
 }
 
+public Object getTokenType(int key1, String key2){
+    if (mMap.containsKey(key1)) {
+        return mMap.get(key1).get(key2).tok;
+    } else {
+        return null;
+    }
+}
+public boolean removeKey(int key1){
+
+    boolean retval = false;
+    if(mMap.containsKey(key1)){
+        mMap.remove(key1);
+        retval = true;
+    }
+
+    return retval;
+}
 /**
  * Returns <code>true</code> if this map contains a mapping for the specified key
  * 

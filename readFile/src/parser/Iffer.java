@@ -1,7 +1,7 @@
 package parser;
 
-import tokenizer.Token;
-import tokenizer.TokenType;
+import readfile.tokenizer.Token;
+import readfile.tokenizer.TokenType;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -9,9 +9,9 @@ import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static readFile.readFile.IFctr;
-import static readFile.readFile.IFstack;
-import static readFile.readFile.bigBoard;
+import static readfile.ReadFile.IFctr;
+import static readfile.ReadFile.IFstack;
+import static readfile.ReadFile.bigBoard;
 
 public class Iffer {
     public static boolean ifSTMT(ArrayList<Token> code) throws ScriptException {
@@ -66,9 +66,9 @@ public class Iffer {
         String st = "";
         Object result = null;
         boolean retval = false;
-        List<Token> boolE = code.subList(1, code.size());
+        List<Token> boolE = code.subList(2, code.size());
         for(Token tok:boolE){
-            if(tok.getToken().equals("then")){
+            if(tok.getToken().equals(")")){
                 List<Token> boolE2 = boolE.subList(0, boolE.size()-1);
 
                 int ctr = 0;
@@ -111,5 +111,37 @@ public class Iffer {
             }
         }
         return retval;
+    }
+
+    public static void execute(ArrayList<Token> code){
+
+
+        if(code.get(0).getTokenType() == TokenType.DATA_TYPE || code.get(0).getTokenType() == TokenType.IDENTIFIER){
+            if(code.size() == 4){//expression
+//                        int ctr=0;
+//
+//                        for(Token tok:tkStream){
+//                        if(tok.getToken().equals("is")){
+//                           break;
+//                        }
+//                            ctr++;
+//                        }
+//                        List<Token> expressions=tkStream.subList(ctr+1, tkStream.size());
+//
+//                        expr(expressions);
+                InitAssign.initialize(code);
+                //System.out.println("initialization");
+            }else if(code.size() == 3){
+                InitAssign.assign(code);
+                //System.out.println("declaration");
+            }else{
+                //System.out.println("Error");
+            }
+
+        }else{
+            System.out.println("Not a Declaration/Initialization");
+        }
+
+
     }
 }

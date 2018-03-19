@@ -5,7 +5,7 @@
  */
 package parser;
 
-import tokenizer.TokenType;
+import readfile.tokenizer.TokenType;
 
 /**
  *

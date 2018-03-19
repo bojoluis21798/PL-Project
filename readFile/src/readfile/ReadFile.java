@@ -109,6 +109,7 @@ public class ReadFile {
                                 ctr++;
                                
 			}
+			//For Loop to go through all token streams
                         System.out.println("MAIN=>"+bigBoard.get(0,"x")+"\n");
                         System.out.println("FIRST IF=>"+bigBoard.get(1,"y"));
                         System.out.println("SECOND IF=>"+bigBoard.get(2,"a"));
