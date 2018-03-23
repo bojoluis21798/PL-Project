@@ -126,8 +126,15 @@ public class ReadFile {
             LineExecution lineExec = new LineExecution(tkStream);
 
 			//For Loop to go through all token streams
-            System.out.println("Value of x(level 0): "+bigBoard.get(0,"x"));
-            System.out.println("Value of y(level 0): "+bigBoard.get(0,"y"));
+            System.out.println("Value of number a(level 0): "+bigBoard.get(0,"a"));
+            System.out.println("Value of word b(level 0): "+bigBoard.get(0,"b"));
+            System.out.println("Value of truth c(level 0): "+bigBoard.get(0,"c"));
+            System.out.println("Value of num1(level 0): "+bigBoard.get(0,"num1"));
+            System.out.println("Value of num2(level 0): "+bigBoard.get(0,"num2"));
+            System.out.println("Value of num3(level 0): "+bigBoard.get(0,"num3"));
+            System.out.println("Value of num4(level 0): "+bigBoard.get(0,"num4"));
+//            System.out.println("Value of x(level 0): "+bigBoard.get(0,"x"));
+//            System.out.println("Value of y(level 0): "+bigBoard.get(0,"y"));
 		} catch (IOException e) {
 
 			e.printStackTrace();

@@ -1,6 +1,11 @@
-number x is 5
-word y is "123"
-if (x > 4) then
-	x is 1
-	y is "meep"
-end
+number a
+word b
+truth c
+number num1 is 5
+number num2 is 12
+number num3 is num2
+number num4 is num1 * 4 + ((num2 + 8) / 4)
+a is num1 + 10
+a is true
+b is false
+a is b

@@ -2,6 +2,7 @@ package parser;
 
 import readfile.tokenizer.Token;
 import readfile.tokenizer.TokenType;
+import readfile.tokenizer.Tokenizer;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -43,9 +44,12 @@ public class Iffer {
 
                 IFstack.push(new selection(true,IFctr));
                 retval = true;
+
             }else{
+
                 IFstack.push(new selection(true,IFctr));
                 retval = false;
+
             }
 
 
@@ -113,29 +117,102 @@ public class Iffer {
         return retval;
     }
 
+    public static Token checkExpression(ArrayList<Token> code) throws ScriptException{
+        String st = "";
+        Object result;
+        List<Token> arithmeticExpression;
+        if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+
+            arithmeticExpression = code.subList(3, code.size());
+
+        }else{
+
+            arithmeticExpression = code.subList(2, code.size());
+
+        }
+        for(Token token:arithmeticExpression){
+            if (token.getTokenType().equals(TokenType.IDENTIFIER)){
+                String variable = token.getToken();
+                if (InitAssign.isInitialized(variable) && InitAssign.isAccessible(variable)){
+                    int levelOfVariable = InitAssign.accessLevelOf(variable);
+                    String value = bigBoard.get(levelOfVariable,variable).toString();
+                    st+=" "+value;
+                }else{
+                    System.out.println("Error: Variable not in HashMap");
+                }
+            }else{
+                st+=" "+token.getToken();
+            }
+        }
+
+        int origCodeSize = code.size();
+        for(int i=0; i < origCodeSize; i++){
+            if (code.size() != 3 && code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+                code.remove(3);
+            }else if(code.size() != 2 && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
+                code.remove(2);
+            }
+        }
+
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("JavaScript");
+        result = engine.eval(st);
+
+        try {
+            result = engine.eval(st);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+        Tokenizer tknObj = new Tokenizer(result.toString());
+        Token literal = tknObj.nextToken();
+        System.out.println(literal.getToken());
+        System.out.println(literal.getTokenType());
+        return literal;
+    }
+
     public static void execute(ArrayList<Token> code){
 
 
         if(code.get(0).getTokenType() == TokenType.DATA_TYPE || code.get(0).getTokenType() == TokenType.IDENTIFIER){
-            if(code.size() == 4){//expression
-//                        int ctr=0;
-//
-//                        for(Token tok:tkStream){
-//                        if(tok.getToken().equals("is")){
-//                           break;
-//                        }
-//                            ctr++;
-//                        }
-//                        List<Token> expressions=tkStream.subList(ctr+1, tkStream.size());
-//
-//                        expr(expressions);
+            if(code.size() == 4){//NORMAL INITIALIZATION
+
                 InitAssign.initialize(code);
                 //System.out.println("initialization");
-            }else if(code.size() == 3){
+
+            }else if(code.size() == 3){//NORMAL ASSIGNMENT
+
                 InitAssign.assign(code);
                 //System.out.println("declaration");
-            }else{
-                //System.out.println("Error");
+
+            }else if(code.size() == 2){//NULL INITIALIZATION
+
+                InitAssign.initialize(code);
+                //System.out.println("null init");
+
+            }else if(code.size() > 4){//INITIALIZATION AND ASSIGNMENT WITH EXPRESSION
+
+                Token literal = null;
+                try {
+                    literal = checkExpression(code);
+                } catch (ScriptException e) {
+                    e.printStackTrace();
+                }
+                code.add(literal);
+                if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+                    InitAssign.initialize(code);
+                }else{
+//                    if (code.size() == 3) {
+//                        System.out.println(code.get(0).getToken() + " " + code.get(1).getToken() + " " + code.get(2).getToken());
+//                    }else {
+//                        System.out.println("Unexpected number of tokens");
+//                        for(int i=0; i < code.size();i++){
+//                            System.out.print(code.get(i).getToken() + " ");
+//                        }
+//                        System.out.println();
+//                    }
+                    InitAssign.assign(code);
+                }
+                //System.out.println("expression init");
             }
 
         }else{
