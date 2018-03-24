@@ -398,7 +398,12 @@ public class InitAssign {
             e.printStackTrace();
         }
         Tokenizer tknObj = new Tokenizer(result.toString());
-        Token literal = tknObj.nextToken();
+        Token literal = null;
+        try {
+            literal = tknObj.nextToken();
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
         return literal;
     }
 

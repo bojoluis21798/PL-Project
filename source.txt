@@ -1,2 +1,0 @@
-truth c
-truth t1 is false
