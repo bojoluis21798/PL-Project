@@ -145,6 +145,8 @@ public class Iffer {
                 }else{
                     System.out.println("Error: Variable "+variable+" not in HashMap");
                 }
+            }else if(token.getTokenType().equals(TokenType.STRING_LITERAL)){
+                st+=" "+"\""+token.getToken()+"\"";
             }else{
                 st+=" "+token.getToken();
             }
@@ -169,8 +171,8 @@ public class Iffer {
         } catch (ScriptException e) {
             e.printStackTrace();
         }
-        if(result == "true" || result == "false" || result instanceof Number){
-            //Do Nothing
+        if(result.equals(true) || result.equals(false) || result instanceof Number){
+            //proceed to tokenizing
         }else{
             result = "\""+result+"\"";
         }
