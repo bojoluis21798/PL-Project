@@ -1,0 +1,15 @@
+number a
+number n1 is 5
+number n2 is 12
+number n3 is n2
+number n4 is n1 * 4 + ((n2 + 8) / 4)
+word b
+word w1 is "Hello"
+word w2 is "World"
+word w3 is w1
+word w4 is w1+" "+w2
+truth c
+truth t1 is true
+truth t2 is false and true
+truth t3 is t1 and t2
+truth t4 is (t1 or false) or (n3 > n1)
