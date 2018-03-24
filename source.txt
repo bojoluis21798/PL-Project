@@ -1,11 +1,11 @@
 number a
 word b
 truth c
-number num1 is 5
-number num2 is 12
-number num3 is num2
-number num4 is num1 * 4 + ((num2 + 8) / 4)
-a is num1 + 10
-a is true
-b is false
-a is b
+number n1 is 5
+number n2 is 12
+number n3 is n2
+number n4 is n1 * 4 + ((n2 + 8) / 4)
+word w1 is "Hello"
+word w2 is "World"
+word w3 is w1
+word w4 is w1+w2

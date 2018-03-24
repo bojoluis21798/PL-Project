@@ -120,7 +120,7 @@ public class Parser {
         }else if(declaration.length == 1 && (declaration[0].matches("end"))){
             System.out.println("END!");
         }else{
-            throw new IllegalStateException("Wrong Syntax");
+            //throw new IllegalStateException("Wrong Syntax");
         }
     }
     

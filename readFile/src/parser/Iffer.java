@@ -135,7 +135,12 @@ public class Iffer {
                 String variable = token.getToken();
                 if (InitAssign.isInitialized(variable) && InitAssign.isAccessible(variable)){
                     int levelOfVariable = InitAssign.accessLevelOf(variable);
-                    String value = bigBoard.get(levelOfVariable,variable).toString();
+                    String value;
+                    if(bigBoard.getTokenType(levelOfVariable,variable) == TokenType.STRING_LITERAL){
+                        value = "\""+bigBoard.get(levelOfVariable,variable).toString()+"\"";
+                    }else{
+                        value = bigBoard.get(levelOfVariable,variable).toString();
+                    }
                     st+=" "+value;
                 }else{
                     System.out.println("Error: Variable not in HashMap");
@@ -156,12 +161,18 @@ public class Iffer {
 
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
+        System.out.println(st);
         result = engine.eval(st);
 
         try {
             result = engine.eval(st);
         } catch (ScriptException e) {
             e.printStackTrace();
+        }
+        if(result == "true" || result == "false" || result instanceof Number){
+            //Do Nothing
+        }else{
+            result = "\""+result+"\"";
         }
         Tokenizer tknObj = new Tokenizer(result.toString());
         Token literal = tknObj.nextToken();
@@ -193,6 +204,11 @@ public class Iffer {
 
                 Token literal = null;
                 try {
+                    System.out.println("Unexpected number of tokens");
+                    for(int i=0; i < code.size();i++){
+                        System.out.print(code.get(i).getToken() + " ");
+                    }
+                    System.out.println();
                     literal = checkExpression(code);
                 } catch (ScriptException e) {
                     e.printStackTrace();

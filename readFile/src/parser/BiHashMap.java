@@ -8,6 +8,7 @@ package parser;
 import java.util.HashMap;
 import java.util.Map;
 import parser.memory;
+import readfile.tokenizer.TokenType;
 
 /**
  *
@@ -68,7 +69,7 @@ public Object get(int key1, String key2) {
     }
 }
 
-public Object getTokenType(int key1, String key2){
+public TokenType getTokenType(int key1, String key2){
     if (mMap.containsKey(key1)) {
         return mMap.get(key1).get(key2).tok;
     } else {
