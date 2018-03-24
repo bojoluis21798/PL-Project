@@ -60,7 +60,7 @@ public class ReadFile {
 			int ctr=0;
 			while ((sCurrentLine = br.readLine()) != null) {
                 //System.out.println(sCurrentLine);
-                StringTokenizer st = new StringTokenizer(sCurrentLine, "+-/*<>= (),:", true);
+                StringTokenizer st = new StringTokenizer(sCurrentLine, "\"+-/*<>= (),:", true);
                 String[] tokens = new String[st.countTokens()];
 
                 for(int i=0; i<tokens.length; i++){
@@ -76,18 +76,16 @@ public class ReadFile {
                         continue;
                     }
 
-                    if(token.charAt(token.length()-1) == '"'){
-                        group = false;
-                    }else if(token.charAt(0) == '"'){
-                        group = true;
-                    }
-
                     if(group){
                         tokens[k] += token;
                     }else{
                         tokens[k] = token;
                     }
 
+                    if(token.equals("\"")){
+                        group = !group;
+                    }
+                    
                     if(!group){
                         k++;
                     }

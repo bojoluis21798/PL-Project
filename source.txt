@@ -1,11 +1,2 @@
-number a
-word b
-truth c
-number num1 is 5
-number num2 is 12
-number num3 is num2
-number num4 is num1 * 4 + ((num2 + 8) / 4)
-a is num1 + 10
-a is true
-b is false
-a is b
+w+" "+w2
+"Hello World"
