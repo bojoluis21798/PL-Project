@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.script.ScriptException;
 
 /**
  *
@@ -37,7 +38,7 @@ public class Tokenizer {
        }
     }
    
-    public Token nextToken(){
+    public Token nextToken() throws ScriptException{
         str = str.trim();
         if(pushBack) {
           pushBack = false;
