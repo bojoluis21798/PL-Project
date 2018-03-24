@@ -143,7 +143,7 @@ public class Iffer {
                     }
                     st+=" "+value;
                 }else{
-                    System.out.println("Error: Variable not in HashMap");
+                    System.out.println("Error: Variable "+variable+" not in HashMap");
                 }
             }else{
                 st+=" "+token.getToken();
@@ -204,7 +204,7 @@ public class Iffer {
 
                 Token literal = null;
                 try {
-                    System.out.println("Unexpected number of tokens");
+                    System.out.println("number of tokens");
                     for(int i=0; i < code.size();i++){
                         System.out.print(code.get(i).getToken() + " ");
                     }

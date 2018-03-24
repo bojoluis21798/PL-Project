@@ -127,19 +127,21 @@ public class ReadFile {
             //LINE EXECUTION
             LineExecution lineExec = new LineExecution(tkStream);
 			//For Loop to go through all token streams
-            System.out.println("Value of number a(level 0): "+bigBoard.get(0,"a"));
-            System.out.println("Value of word b(level 0): "+bigBoard.get(0,"b"));
+//            System.out.println("Value of number a(level 0): "+bigBoard.get(0,"a"));
+//            System.out.println("Value of word b(level 0): "+bigBoard.get(0,"b"));
             System.out.println("Value of truth c(level 0): "+bigBoard.get(0,"c"));
-            System.out.println("Value of w1(level 0): "+bigBoard.get(0,"w1"));
-            System.out.println("Value of w2(level 0): "+bigBoard.get(0,"w2"));
-            System.out.println("Value of w3(level 0): "+bigBoard.get(0,"w3"));
-            System.out.println("Value of w4(level 0): "+bigBoard.get(0,"w4"));
-            System.out.println("Value of num1(level 0): "+bigBoard.get(0,"n1"));
-            System.out.println("Value of num2(level 0): "+bigBoard.get(0,"n2"));
-            System.out.println("Value of num3(level 0): "+bigBoard.get(0,"n3"));
-            System.out.println("Value of num4(level 0): "+bigBoard.get(0,"n4"));
-//            System.out.println("Value of x(level 0): "+bigBoard.get(0,"x"));
-//            System.out.println("Value of y(level 0): "+bigBoard.get(0,"y"));
+//            System.out.println("Value of n1(level 0): "+bigBoard.get(0,"n1"));
+//            System.out.println("Value of n2(level 0): "+bigBoard.get(0,"n2"));
+//            System.out.println("Value of n3(level 0): "+bigBoard.get(0,"n3"));
+//            System.out.println("Value of n4(level 0): "+bigBoard.get(0,"n4"));
+//            System.out.println("Value of w1(level 0): "+bigBoard.get(0,"w1"));
+//            System.out.println("Value of w2(level 0): "+bigBoard.get(0,"w2"));
+//            System.out.println("Value of w3(level 0): "+bigBoard.get(0,"w3"));
+//            System.out.println("Value of w4(level 0): "+bigBoard.get(0,"w4"));
+//            System.out.println("Value of t1(level 0): "+bigBoard.get(0,"t1"));
+//            System.out.println("Value of t2(level 0): "+bigBoard.get(0,"t2"));
+//            System.out.println("Value of t3(level 0): "+bigBoard.get(0,"t3"));
+//            System.out.println("Value of t4(level 0): "+bigBoard.get(0,"t4"));
 		} catch (IOException e) {
 
 			e.printStackTrace();
