@@ -73,16 +73,29 @@ public class Parser {
         return s;
     }
     
-    private String parseExpression(int start, int end){
-        String expression = "";
-                for(int i=start; i<end; i++){
-                    expression+=tkStream.get(i).getToken();
-        }
-        return expression;
-    }
-    
     private boolean isExpression(int start){
+        String expr = "";
         
+        for(int i=start; i<tkStream.size(); i++){
+            expr+=tkStream.get(i).getToken();
+        }
+        
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("JavaScript");
+        
+        Object result = null;
+        try{
+            result = engine.eval(expr);
+        }catch(ScriptException e){
+            return false;
+        }
+        String res = result.toString();
+        
+        if(res.matches("([-]?\\d*(\\.\\d+)?)|(true)|(false)|(\"\\\"[^\\\"]*\\\"\")")){
+            return true;
+        }else{
+            return false;
+        }
     }
     
      public void Start() throws ScriptException{
@@ -99,13 +112,12 @@ public class Parser {
             }
             code.add(tkStream.get(0));
             code.add(tkStream.get(1));
+            System.out.println("DECLARATION!");
             if(lexeme.length > 3 && lexeme[2].matches("is") && isExpression(3)){
-                String expression = parseExpression(3, lexeme.length);
-                System.out.println(expression);
-                System.out.println("Expression!");
+               
+                System.out.println("INITIALIZATION!");
                 //add necessary execution for expression; use the expression string
             }
-            System.out.println("DECLARATION!");
         }else if(lexeme.length >= 5 && (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("if\\s\\(<expr>\\)\\sthen")){ //if statement
             //necessary if execution
             System.out.println("IF STATEMENT!");
