@@ -30,7 +30,7 @@ import static readfile.ReadFile.q;
  * @author User
  */
 public class Parser {
-    
+    ArrayList<Token> code = new ArrayList<>();
     List<pointers> program;
     ArrayList<Token> tkStream;
      public static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
@@ -73,10 +73,10 @@ public class Parser {
         return s;
     }
     
-    private boolean isExpression(int start){
+    private boolean isExpression(int start, int end){
         String expr = "";
         
-        for(int i=start; i<tkStream.size(); i++){
+        for(int i=start; i<=end; i++){
             expr+=tkStream.get(i).getToken();
         }
         
@@ -98,45 +98,46 @@ public class Parser {
         }
     }
     
+    private void addToCode(){
+        for(int i=0; i<tkStream.size(); i++){
+            code.add(tkStream.get(i));
+        }
+    }
+    
+    
      public void Start() throws ScriptException{
-        ArrayList<Token> code = new ArrayList<>();
+        
         String line = stringify(); 
         System.out.println(line);
         
         String[] lexeme = line.split(" ");
         //System.out.println(lexeme.length+": "+(lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]));
         
-        if(lexeme.length >= 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){ //lexeme
-            if((lexeme.length > 3 && !lexeme[2].matches("is")) || lexeme.length == 3){
-                throw new IllegalStateException("Wrong Syntax");
-            }
-            code.add(tkStream.get(0));
-            code.add(tkStream.get(1));
+        if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
             System.out.println("DECLARATION!");
-            if(lexeme.length > 3 && lexeme[2].matches("is") && isExpression(3)){
-               
-                System.out.println("INITIALIZATION!");
-                //add necessary execution for expression; use the expression string
-            }
-        }else if(lexeme.length >= 5 && (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("if\\s\\(<expr>\\)\\sthen")){ //if statement
-            //necessary if execution
+            addToCode();
+        }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis") && isExpression(3,lexeme.length-1)){
+            System.out.println("Initialization!");
+            addToCode();
+        }else if(
+            lexeme.length >= 5 && 
+            (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("if\\s\\(<expr>\\)\\sthen") &&
+            isExpression(2,lexeme.length-3)
+        ){ 
             System.out.println("IF STATEMENT!");
-            String expression = parseExpression(2,lexeme.length-2);
-            System.out.println(expression);
-            //add necessary execution for expression; use the expression string
+            addToCode();
         }else if(lexeme.length >= 5 && (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("orif\\s\\(<expr>\\)\\sthen")){ //orif statement
-            //necessary if exectution
             System.out.println("ORIF STATEMENT!");
-            String expression = parseExpression(2,lexeme.length-2);
-            //add necessary execution for expression; use the expression string
+            addToCode();
         }else if(line.matches("else then")){ //else statement
             System.out.println("ELSE STATEMENT!");
+            addToCode();
         }else if(lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis")){ //assignment
-            String expression = parseExpression(2, lexeme.length);
-            System.out.println(expression);
             System.out.println("ASSIGNMENT!");
+            addToCode();
         }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){
             System.out.println("END!");
+            addToCode();
         }else{
             throw new IllegalStateException("Wrong Syntax");
         }
