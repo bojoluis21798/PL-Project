@@ -18,7 +18,7 @@ import readfile.tokenizer.TokenType;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-
+import readfile.pointers;
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
@@ -31,7 +31,7 @@ import static readfile.ReadFile.q;
  */
 public class Parser {
     
- 
+    List<pointers> program;
     ArrayList<Token> tkStream;
      public static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
      
@@ -81,7 +81,12 @@ public class Parser {
         return expression;
     }
     
+    private boolean isExpression(int start){
+        
+    }
+    
      public void Start() throws ScriptException{
+        ArrayList<Token> code = new ArrayList<>();
         String line = stringify(); 
         System.out.println(line);
         
@@ -92,8 +97,9 @@ public class Parser {
             if((lexeme.length > 3 && !lexeme[2].matches("is")) || lexeme.length == 3){
                 throw new IllegalStateException("Wrong Syntax");
             }
-            //declare the variable
-            if(lexeme.length > 3 && lexeme[2].matches("is")){
+            code.add(tkStream.get(0));
+            code.add(tkStream.get(1));
+            if(lexeme.length > 3 && lexeme[2].matches("is") && isExpression(3)){
                 String expression = parseExpression(3, lexeme.length);
                 System.out.println(expression);
                 System.out.println("Expression!");
