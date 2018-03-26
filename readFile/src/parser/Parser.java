@@ -85,39 +85,39 @@ public class Parser {
         String line = stringify(); 
         System.out.println(line);
         
-        String[] declaration = line.split(" ");
-        //System.out.println(declaration.length+": "+(declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]));
+        String[] lexeme = line.split(" ");
+        //System.out.println(lexeme.length+": "+(lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]));
         
-        if(declaration.length >= 2 && (declaration[0]+" "+declaration[1]).matches("<type>\\s<identifier>")){ //declaration
-            if((declaration.length > 3 && !declaration[2].matches("is")) || declaration.length == 3){
+        if(lexeme.length >= 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){ //lexeme
+            if((lexeme.length > 3 && !lexeme[2].matches("is")) || lexeme.length == 3){
                 throw new IllegalStateException("Wrong Syntax");
             }
             //declare the variable
-            if(declaration.length > 3 && declaration[2].matches("is")){
-                String expression = parseExpression(3, declaration.length);
+            if(lexeme.length > 3 && lexeme[2].matches("is")){
+                String expression = parseExpression(3, lexeme.length);
                 System.out.println(expression);
                 System.out.println("Expression!");
                 //add necessary execution for expression; use the expression string
             }
             System.out.println("DECLARATION!");
-        }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("if\\s\\(<expr>\\)\\sthen")){ //if statement
+        }else if(lexeme.length >= 5 && (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("if\\s\\(<expr>\\)\\sthen")){ //if statement
             //necessary if execution
             System.out.println("IF STATEMENT!");
-            String expression = parseExpression(2,declaration.length-2);
+            String expression = parseExpression(2,lexeme.length-2);
             System.out.println(expression);
             //add necessary execution for expression; use the expression string
-        }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("orif\\s\\(<expr>\\)\\sthen")){ //orif statement
+        }else if(lexeme.length >= 5 && (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("orif\\s\\(<expr>\\)\\sthen")){ //orif statement
             //necessary if exectution
             System.out.println("ORIF STATEMENT!");
-            String expression = parseExpression(2,declaration.length-2);
+            String expression = parseExpression(2,lexeme.length-2);
             //add necessary execution for expression; use the expression string
         }else if(line.matches("else then")){ //else statement
             System.out.println("ELSE STATEMENT!");
-        }else if(declaration.length > 2 && (declaration[0]+" "+declaration[1]).matches("<identifier>\\sis")){ //assignment
-            String expression = parseExpression(2, declaration.length);
+        }else if(lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis")){ //assignment
+            String expression = parseExpression(2, lexeme.length);
             System.out.println(expression);
             System.out.println("ASSIGNMENT!");
-        }else if(declaration.length == 1 && (declaration[0].matches("end"))){
+        }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){
             System.out.println("END!");
         }else{
             throw new IllegalStateException("Wrong Syntax");
