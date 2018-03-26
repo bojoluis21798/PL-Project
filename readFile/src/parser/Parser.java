@@ -98,13 +98,6 @@ public class Parser {
         }
     }
     
-    private void addToCode(){
-        for(int i=0; i<tkStream.size(); i++){
-            code.add(tkStream.get(i));
-        }
-    }
-    
-    
      public void Start() throws ScriptException{
         
         String line = stringify(); 
