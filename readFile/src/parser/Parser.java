@@ -77,6 +77,9 @@ public class Parser {
         String expr = "";
         
         for(int i=start; i<=end; i++){
+            if(tkStream.get(i).getToken().matches("\"[a-zA-Z][a-zA-Z0-9]*\"")){
+                expr+="0";
+            }
             expr+=tkStream.get(i).getToken();
         }
         
