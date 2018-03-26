@@ -112,35 +112,28 @@ public class Parser {
         
         String[] lexeme = line.split(" ");
         //System.out.println(lexeme.length+": "+(lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]));
-        
+
         if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
             System.out.println("DECLARATION!");
-            addToCode();
         }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis") && isExpression(3,lexeme.length-1)){
-            System.out.println("Initialization!");
-            addToCode();
+            System.out.println("INITIALIZATION!");
         }else if(
             lexeme.length >= 5 && 
             (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("if\\s\\(<expr>\\)\\sthen") &&
             isExpression(2,lexeme.length-3)
         ){ 
             System.out.println("IF STATEMENT!");
-            addToCode();
         }else if(lexeme.length >= 5 && (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("orif\\s\\(<expr>\\)\\sthen")){ //orif statement
             System.out.println("ORIF STATEMENT!");
-            addToCode();
         }else if(line.matches("else then")){ //else statement
             System.out.println("ELSE STATEMENT!");
-            addToCode();
         }else if(lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis")){ //assignment
             System.out.println("ASSIGNMENT!");
-            addToCode();
         }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){
             System.out.println("END!");
-            addToCode();
         }else{
             throw new IllegalStateException("Wrong Syntax");
-        }
+        }        
     }
     
   public boolean isDeclared(String token){
