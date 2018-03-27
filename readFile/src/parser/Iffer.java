@@ -211,6 +211,10 @@ public class Iffer {
                         System.out.print(code.get(i).getToken() + " ");
                     }
                     System.out.println();
+                    for(int i=0; i < code.size();i++){
+                        System.out.print(code.get(i).getTokenType() + " ");
+                    }
+                    System.out.println();
                     literal = checkExpression(code);
                 } catch (ScriptException e) {
                     e.printStackTrace();

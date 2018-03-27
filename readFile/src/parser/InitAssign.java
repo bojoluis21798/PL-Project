@@ -113,27 +113,41 @@ public class InitAssign {
             case "numbers":
             case "words":
             case "truths":
-                if(code.get(1).getTokenType() == TokenType.IDENTIFIER){
-
-                    if(code.get(2).getTokenType() == TokenType.KEYWORD && code.get(2).getToken().equals("is")){
-
-                        if(code.get(3).getToken().equals("(")){
-                            int lineSize = code.size();
-                            for (int i = 3; i < lineSize && !code.get(i).getToken().equals(")"); i++){
-                                switch(code.get(i).getToken()){
-                                    case "(":
-                                }
-                            }
+                if(code.size() == 2){
+                    if(code.get(1).getTokenType() == TokenType.IDENTIFIER){
+                        String alert = "null";
+                        Token is = new Token("is",TokenType.KEYWORD);
+                        Token defaultToken;
+                        code.add(is);
+                        switch (code.get(0).getToken()) {
+                            case "numbers":
+                                code.add(new Token("(",TokenType.TOKEN));
+                                defaultToken = new Token("0",TokenType.NUMBER_LITERAL);
+                                code.add(defaultToken);
+                                code.add(new Token(")",TokenType.TOKEN));
+                                break;
+                            case "words":
+                                code.add(new Token("(",TokenType.TOKEN));
+                                defaultToken = new Token("", STRING_LITERAL);
+                                code.add(defaultToken);
+                                code.add(new Token(")",TokenType.TOKEN));
+                                break;
+                            case "truths":
+                                code.add(new Token("(",TokenType.TOKEN));
+                                defaultToken = new Token("false",TokenType.BOOLEAN_LITERAL);
+                                code.add(defaultToken);
+                                code.add(new Token(")",TokenType.TOKEN));
+                                break;
                         }
-
-
+                        initPlaceIntoMemory(alert,code);
                     }else{
-                        System.out.println("Invalid Syntax: not a vector initialization");
+                        System.out.println("Cannot allow initialization! Not a valid Identifier");
                     }
-
                 }else{
-                    System.out.println("Invalid Syntax: no variable name");
+                    System.out.println("Vector init!!");
                 }
+
+                break;
 
             default:
                 System.out.println("Invalid Syntax: No such Data Type INIT");
@@ -210,6 +224,7 @@ public class InitAssign {
     	is used in the initialization:
 
     	number x is 5
+    	numbers x is (0)
 
 		NOTE: the code should have a value at
 		code.get(3).getToken(),code.get(3).getTokenType()
@@ -217,7 +232,27 @@ public class InitAssign {
     */
     public static void initPlaceIntoMemory (String alert, ArrayList<Token> code){
         System.out.println("This is a "+alert+" initialization");
-        bigBoard.put(IFstack.peek().getLevel(),code.get(1).getToken(),new memory(code.get(3).getToken(),code.get(3).getTokenType()));
+        switch (code.get(0).getToken()) {
+            case "numbers":
+            case "words":
+            case "truths":
+                ArrayList<Token> vectorTok = new ArrayList<Token>();
+                Token literal = null;
+                    System.out.println("values:");
+                    int i=0;
+                    while(i < code.size() && !code.get(i).getToken().equals("(")){ i++; }
+                    if(code.get(i).getToken().equals("(")){
+                        for (int x=i+1; x < code.size() && !code.get(x).getToken().equals(")"); x+=2){
+                            System.out.print(code.get(x).getToken()+" ");
+                        }
+                    }
+                    System.out.println();
+
+                //bigBoard.put(IFstack.peek().getLevel(), code.get(1).getToken(), new memory(vectorTok, code.get(3).getTokenType()));
+                break;
+            default:
+                bigBoard.put(IFstack.peek().getLevel(), code.get(1).getToken(), new memory(code.get(3).getToken(), code.get(3).getTokenType()));
+        }
     }
 
 
