@@ -76,6 +76,10 @@ public class Parser {
     private boolean isExpression(int start, int end){
         String expr = "";
         
+        if(start >= end){
+            return true;
+        }
+        
         for(int i=start; i<=end; i++){
             if(tkStream.get(i).getToken().matches("\"[a-zA-Z][a-zA-Z0-9]*\"")){
                 expr+="0";
@@ -119,7 +123,10 @@ public class Parser {
             isExpression(2,lexeme.length-3)
         ){ 
             System.out.println("IF STATEMENT!");
-        }else if(lexeme.length >= 5 && (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("orif\\s\\(<expr>\\)\\sthen")){ //orif statement
+        }else if(lexeme.length >= 5 && 
+            (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("orif\\s\\(<expr>\\)\\sthen") &&
+            isExpression(2,lexeme.length-3)
+        ){ //orif statement
             System.out.println("ORIF STATEMENT!");
         }else if(line.matches("else then")){ //else statement
             System.out.println("ELSE STATEMENT!");
@@ -127,6 +134,7 @@ public class Parser {
             System.out.println("ASSIGNMENT!");
         }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){
             System.out.println("END!");
+        }else if(lexeme.length ){
         }else{
             throw new IllegalStateException("Wrong Syntax");
         }        
