@@ -111,8 +111,7 @@ public class Parser {
         System.out.println(line);
         
         String[] lexeme = line.split(" ");
-        //System.out.println(lexeme.length+": "+(lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]));
-
+        
         if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
             System.out.println("DECLARATION!");
         }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis") && isExpression(3,lexeme.length-1)){
@@ -136,7 +135,7 @@ public class Parser {
             System.out.println("END!");
         }else if(
             lexeme.length >= 4 && 
-            (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("<identifier>\\susing\\s(<expr>)") &&
+            (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("<identifier>\\susing\\s\\(<expr>\\)") &&
             isExpression(3,lexeme.length-2)
         ){ 
             System.out.println("FUNCTION CALL!");

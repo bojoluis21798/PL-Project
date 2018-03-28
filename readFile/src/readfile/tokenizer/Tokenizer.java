@@ -58,7 +58,17 @@ public class Tokenizer {
                  if(data.getType() == TokenType.STRING_LITERAL) {
                      return (lastToken = new Token(token.substring(1,token.length()-1),TokenType.STRING_LITERAL));
                   } else {
-                     if(token.equals("else") || token.equals("orif") || token.equals("if") || token.equals("then") || token.equals("end") || token.equals("while")||token.equals("is")||token.equals("and")){
+                     if(
+                        token.equals("else") || 
+                        token.equals("orif") || 
+                        token.equals("if") || 
+                        token.equals("then") || 
+                        token.equals("end") || 
+                        token.equals("while")||
+                        token.equals("is")||
+                        token.equals("and") ||
+                        token.equals("using")
+                    ){
                          if(token.equals("and")){
                           return (lastToken = new Token("&&",TokenType.KEYWORD));
                          }else if(token.equals("or")){
