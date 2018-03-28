@@ -81,12 +81,16 @@ public class Parser {
         }
         
         for(int i=start; i<=end; i++){
-            if(tkStream.get(i).getToken().matches("\"[a-zA-Z][a-zA-Z0-9]*\"")){
-                expr+="0";
+            switch(tkStream.get(i).getTokenType()){
+                case IDENTIFIER:
+                    expr+="0";
+                    break;
+                default:
+                    expr+=tkStream.get(i).getToken();
             }
-            expr+=tkStream.get(i).getToken();
         }
-        
+            
+        System.out.println("Expression: "+expr);
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
         
@@ -129,7 +133,10 @@ public class Parser {
             System.out.println("ORIF STATEMENT!");
         }else if(line.matches("else then")){ //else statement
             System.out.println("ELSE STATEMENT!");
-        }else if(lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis")){ //assignment
+        }else if(
+            lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis") &&
+            isExpression(2,lexeme.length-1)    
+        ){ //assignment
             System.out.println("ASSIGNMENT!");
         }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){
             System.out.println("END!");
