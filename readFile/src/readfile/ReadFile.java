@@ -126,7 +126,7 @@ public class ReadFile {
             LineExecution lineExec = new LineExecution(tkStream);
 			//For Loop to go through all token streams
             ArrayList<Token> x = (ArrayList<Token>) bigBoard.get(0,"vn1");
-            System.out.print("Value of numbers n1(level 0): (");
+            System.out.print("Value of numbers vn1(level 0): (");
             for(int i=0; i  < x.size();i++){
                 System.out.print(" "+x.get(i).getToken());
                 if(i+1 < x.size()){
@@ -136,7 +136,7 @@ public class ReadFile {
             System.out.print(" )\n");
 
             x = (ArrayList<Token>) bigBoard.get(0,"vn2");
-            System.out.print("Value of numbers n1(level 0): (");
+            System.out.print("Value of numbers vn2(level 0): (");
             for(int i=0; i  < x.size();i++){
                 System.out.print(" "+x.get(i).getToken());
                 if(i+1 < x.size()){
@@ -146,7 +146,7 @@ public class ReadFile {
             System.out.print(" )\n");
 
             x = (ArrayList<Token>) bigBoard.get(0,"vn3");
-            System.out.print("Value of numbers n1(level 0): (");
+            System.out.print("Value of numbers vn3(level 0): (");
             for(int i=0; i  < x.size();i++){
                 System.out.print(" "+x.get(i).getToken());
                 if(i+1 < x.size()){
