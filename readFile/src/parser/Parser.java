@@ -134,7 +134,11 @@ public class Parser {
             System.out.println("ASSIGNMENT!");
         }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){
             System.out.println("END!");
-        }else if(lexeme.length >= 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[3]).matches("<identifier>\\susing\\s(<expr>)")){
+        }else if(
+            lexeme.length >= 4 && 
+            (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("<identifier>\\susing\\s(<expr>)") &&
+            isExpression(3,lexeme.length-2)
+        ){ 
             System.out.println("FUNCTION CALL!");
         }else{
             throw new IllegalStateException("Wrong Syntax");
