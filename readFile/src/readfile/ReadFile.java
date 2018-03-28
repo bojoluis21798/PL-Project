@@ -93,27 +93,29 @@ public class ReadFile {
 
 
                 for(int i = 0; i<tokens.length && tokens[i]!=""; i++){
-                    System.out.println("Token->"+i+" "+tokens[i]);
+                    System.out.println("\nToken->"+i+" "+tokens[i]); //added \n
 
                     Tokenizer tknObj = new Tokenizer(tokens[i]);
 
-                        System.out.println("\n Line"+ctr+":");
+                        System.out.println(" Line"+ctr+":"); //\n
 
                         Token retVal = tknObj.nextToken();
 
                         tkStream.add(new Token(retVal.getToken(),retVal.getTokenType()));
                         tokGroup.add(new Token(retVal.getToken(),retVal.getTokenType()));
-                        System.out.println(retVal.getToken()+"=>"+retVal.getTokenType()+"\n---------------------");
+                        System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());//+"\n---------------------"
 
                     }
                 Parser p = new Parser(tkStream);
 
                 program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
 
-                if(program.get(ctr).getCode().get(0).getToken().equals("if") || program.get(ctr).getCode().get(0).getToken().equals("else") || program.get(ctr).getCode().get(0).getToken().equals("orif") || program.get(ctr).getCode().get(0).getToken().equals("end")){//this  counts all ifs,else's,or's and end's then places them in a queue for tracking
-                    q.addLast(program.get(ctr).getIndex());
-                    //System.out.println("GOT IN");
-                    System.out.println(q.peekLast());
+                if (!program.get(ctr).getCode().isEmpty()){
+                    if(program.get(ctr).getCode().get(0).getToken().equals("if") || program.get(ctr).getCode().get(0).getToken().equals("else") || program.get(ctr).getCode().get(0).getToken().equals("orif") || program.get(ctr).getCode().get(0).getToken().equals("end")){//this  counts all ifs,else's,or's and end's then places them in a queue for tracking
+                        q.addLast(program.get(ctr).getIndex());
+                        //System.out.println("GOT IN");
+                        System.out.println(q.peekLast());
+                    }
                 }
 
                 tkStream.clear();
@@ -122,17 +124,22 @@ public class ReadFile {
 			}
             //LINE EXECUTION
             LineExecution lineExec = new LineExecution(tkStream);
-
 			//For Loop to go through all token streams
             System.out.println("Value of number a(level 0): "+bigBoard.get(0,"a"));
             System.out.println("Value of word b(level 0): "+bigBoard.get(0,"b"));
             System.out.println("Value of truth c(level 0): "+bigBoard.get(0,"c"));
-            System.out.println("Value of num1(level 0): "+bigBoard.get(0,"num1"));
-            System.out.println("Value of num2(level 0): "+bigBoard.get(0,"num2"));
-            System.out.println("Value of num3(level 0): "+bigBoard.get(0,"num3"));
-            System.out.println("Value of num4(level 0): "+bigBoard.get(0,"num4"));
-//            System.out.println("Value of x(level 0): "+bigBoard.get(0,"x"));
-//            System.out.println("Value of y(level 0): "+bigBoard.get(0,"y"));
+            System.out.println("Value of n1(level 0): "+bigBoard.get(0,"n1"));
+            System.out.println("Value of n2(level 0): "+bigBoard.get(0,"n2"));
+            System.out.println("Value of n3(level 0): "+bigBoard.get(0,"n3"));
+            System.out.println("Value of n4(level 0): "+bigBoard.get(0,"n4"));
+            System.out.println("Value of w1(level 0): "+bigBoard.get(0,"w1"));
+            System.out.println("Value of w2(level 0): "+bigBoard.get(0,"w2"));
+            System.out.println("Value of w3(level 0): "+bigBoard.get(0,"w3"));
+            System.out.println("Value of w4(level 0): "+bigBoard.get(0,"w4"));
+            System.out.println("Value of t1(level 0): "+bigBoard.get(0,"t1"));
+            System.out.println("Value of t2(level 0): "+bigBoard.get(0,"t2"));
+            System.out.println("Value of t3(level 0): "+bigBoard.get(0,"t3"));
+            System.out.println("Value of t4(level 0): "+bigBoard.get(0,"t4"));
 		} catch (IOException e) {
 
 			e.printStackTrace();

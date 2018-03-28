@@ -13,6 +13,7 @@ import java.util.List;
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
+import static readfile.tokenizer.TokenType.STRING_LITERAL;
 
 public class InitAssign {
     //INITIALIZATION
@@ -20,7 +21,6 @@ public class InitAssign {
     	initialize ()
     	this function will be called to initialize a variable
     	using the functions: initPlaceIntoMemory() and initWithVariable()
-
     	This function throws and error if:
     		-there is a datatype mismatch
 			-it is not an initialization
@@ -46,7 +46,7 @@ public class InitAssign {
                                 code.add(defaultToken);
                                 break;
                             case "word":
-                                defaultToken = new Token("",TokenType.STRING_LITERAL);
+                                defaultToken = new Token("", STRING_LITERAL);
                                 code.add(defaultToken);
                                 break;
                             case "truth":
@@ -147,11 +147,8 @@ public class InitAssign {
     	initWithVariable ()
     	this function will  be called to initialize a variable
     	using an existing variable in the hashmap:
-
     	number x is y
-
     	where y is already in the hashmap
-
     	This function throws and error if:
     		-the variable to be used as a value for the new variable is not in the hashmap
 			-the variable to be used as a value is not accessible by that specific code block
@@ -160,9 +157,36 @@ public class InitAssign {
     public static void initWithVariable (ArrayList<Token> code){
         String variable = code.get(3).getToken();
         int levelOfVariable = accessLevelOf(variable);
-        if(isInitialized(variable) && isAccessible(variable) && bigBoard.getTokenType(levelOfVariable,variable) == TokenType.NUMBER_LITERAL){
-            System.out.println("this is an initialization with a variable");
-            bigBoard.put(levelOfVariable,code.get(1).getToken(),new memory(bigBoard.get(levelOfVariable,variable), (TokenType) bigBoard.getTokenType(levelOfVariable,variable)));
+        String dataTypeofInit = code.get(0).getToken();
+        if(isInitialized(variable) && isAccessible(variable)){
+            switch (bigBoard.getTokenType(levelOfVariable,variable)){
+                case STRING_LITERAL:
+                    if (dataTypeofInit.equals("word")){
+                        System.out.println("this is an initialization with a variable");
+                        bigBoard.put(levelOfVariable,code.get(1).getToken(),new memory(bigBoard.get(levelOfVariable,variable), (TokenType) bigBoard.getTokenType(levelOfVariable,variable)));
+                    }else{
+                        System.out.println("Initialization Error: Data Type Mismatch. Not a Word");
+                    }
+                    break;
+                case NUMBER_LITERAL:
+                    if (dataTypeofInit.equals("number")){
+                        System.out.println("this is an initialization with a variable");
+                        bigBoard.put(levelOfVariable,code.get(1).getToken(),new memory(bigBoard.get(levelOfVariable,variable), (TokenType) bigBoard.getTokenType(levelOfVariable,variable)));
+                    }else{
+                        System.out.println("Initialization Error: Data Type Mismatch. Not a Number");
+                    }
+                    break;
+                case BOOLEAN_LITERAL:
+                    if (dataTypeofInit.equals("truth")){
+                        System.out.println("this is an initialization with a variable");
+                        bigBoard.put(levelOfVariable,code.get(1).getToken(),new memory(bigBoard.get(levelOfVariable,variable), (TokenType) bigBoard.getTokenType(levelOfVariable,variable)));
+                    }else{
+                        System.out.println("Initialization Error: Data Type Mismatch. Not a Truth");
+                    }
+                    break;
+                default:
+                    System.out.println("Error: Uknown Literal");
+            }
         }else{
             if (isInitialized(variable) == false)
                 System.out.println("Error: variable "+variable+" is not Initialized");
@@ -180,12 +204,9 @@ public class InitAssign {
     	this function will  be called to initialize a variable
     	using a literal and also alerts the programmer what datatype
     	is used in the initialization:
-
     	number x is 5
-
 		NOTE: the code should have a value at
 		code.get(3).getToken(),code.get(3).getTokenType()
-
     */
     public static void initPlaceIntoMemory (String alert, ArrayList<Token> code){
         System.out.println("This is a "+alert+" initialization");
@@ -200,17 +221,14 @@ public class InitAssign {
     	this function will  be called to assign a variable
     	using a literal and also alerts the programmer what datatype
     	is used in the initialization:
-
     	x is 5
     	x is y
-
 		This function throws and error if:
 			-the variable to be reassigned has yet to be initialized
 			-the variable to be reassigned cannot be accessed by the specific code block
     		-the variable to be used as a value for the new variable is not in the hashmap
 			-the variable to be used as a value is not accessible by that specific code block
 			-the tokenTypes of the variables do not match
-
     */
     public static void assign(ArrayList<Token> code){
         if(code.get(0).getTokenType() == TokenType.IDENTIFIER) {
@@ -370,7 +388,12 @@ public class InitAssign {
             e.printStackTrace();
         }
         Tokenizer tknObj = new Tokenizer(result.toString());
-        Token literal = tknObj.nextToken();
+        Token literal = null;
+        try {
+            literal = tknObj.nextToken();
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
         return literal;
     }
 

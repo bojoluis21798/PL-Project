@@ -1,6 +1,6 @@
-# PL PROJECT
-### Programming Language made for educating children on how to code.
+BUG REPORT
+------------------
 
-# Stuff to do:
-### Fix STRING_LITERAL problem (Find the regex for string)
-### Make Operation Tree (BNF Stuff) Currently don't know how
+IF STATEMENT:
+1 bug -> will not give correct output when u type smth after end of if statement when said if statement
+is inside a parent if statement
