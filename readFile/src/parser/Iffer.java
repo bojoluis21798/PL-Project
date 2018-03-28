@@ -203,26 +203,28 @@ public class Iffer {
                 //System.out.println("null init");
 
             }else if(code.size() > 4){//INITIALIZATION AND ASSIGNMENT WITH EXPRESSION
-
-                Token literal = null;
-                try {
-                    System.out.println("number of tokens");
-                    for(int i=0; i < code.size();i++){
-                        System.out.print(code.get(i).getToken() + " ");
+                int x = 0;
+                while(x < code.size() && !code.get(x).getToken().equals("(")){ x++; }
+                if(x==code.size()){
+                    Token literal = null;
+                    try {
+                        System.out.println("number of tokens");
+                        for(int i=0; i < code.size();i++){
+                            System.out.print(code.get(i).getToken() + " ");
+                        }
+                        System.out.println();
+                        for(int i=0; i < code.size();i++){
+                            System.out.print(code.get(i).getTokenType() + " ");
+                        }
+                        System.out.println();
+                        literal = checkExpression(code);
+                    } catch (ScriptException e) {
+                        e.printStackTrace();
                     }
-                    System.out.println();
-                    for(int i=0; i < code.size();i++){
-                        System.out.print(code.get(i).getTokenType() + " ");
-                    }
-                    System.out.println();
-                    literal = checkExpression(code);
-                } catch (ScriptException e) {
-                    e.printStackTrace();
-                }
-                code.add(literal);
-                if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
-                    InitAssign.initialize(code);
-                }else{
+                    code.add(literal);
+                    if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+                        InitAssign.initialize(code);
+                    }else{
 //                    if (code.size() == 3) {
 //                        System.out.println(code.get(0).getToken() + " " + code.get(1).getToken() + " " + code.get(2).getToken());
 //                    }else {
@@ -232,8 +234,21 @@ public class Iffer {
 //                        }
 //                        System.out.println();
 //                    }
-                    InitAssign.assign(code);
+                        InitAssign.assign(code);
+                    }
+                }else{
+                    System.out.println("Vector init with multiple values");
+                    for(int i=0; i < code.size();i++){
+                        System.out.print(code.get(i).getToken() + " ");
+                    }
+                    System.out.println();
+                    for(int i=0; i < code.size();i++){
+                        System.out.print(code.get(i).getTokenType() + " ");
+                    }
+                    System.out.println();
+                    InitAssign.initialize(code);
                 }
+
                 //System.out.println("expression init");
             }
 

@@ -125,8 +125,35 @@ public class ReadFile {
             //LINE EXECUTION
             LineExecution lineExec = new LineExecution(tkStream);
 			//For Loop to go through all token streams
-//            ArrayList<Token> x = (ArrayList<Token>) bigBoard.get(0,"x");
-            System.out.println("Value of numbers x(level 0): "+bigBoard.get(0,"x"));
+            ArrayList<Token> x = (ArrayList<Token>) bigBoard.get(0,"vn1");
+            System.out.print("Value of numbers n1(level 0): (");
+            for(int i=0; i  < x.size();i++){
+                System.out.print(" "+x.get(i).getToken());
+                if(i+1 < x.size()){
+                    System.out.print(",");
+                }
+            }
+            System.out.print(" )\n");
+
+            x = (ArrayList<Token>) bigBoard.get(0,"vn2");
+            System.out.print("Value of numbers n1(level 0): (");
+            for(int i=0; i  < x.size();i++){
+                System.out.print(" "+x.get(i).getToken());
+                if(i+1 < x.size()){
+                    System.out.print(",");
+                }
+            }
+            System.out.print(" )\n");
+
+            x = (ArrayList<Token>) bigBoard.get(0,"vn3");
+            System.out.print("Value of numbers n1(level 0): (");
+            for(int i=0; i  < x.size();i++){
+                System.out.print(" "+x.get(i).getToken());
+                if(i+1 < x.size()){
+                    System.out.print(",");
+                }
+            }
+            System.out.print(" )\n");
 //            System.out.println("Value of numbers x(level 0): "+bigBoard.get(0,"y"));
 //            System.out.println("Value of numbers x(level 0): "+bigBoard.get(0,"z"));
 //            System.out.println("Value of number a(level 0): "+bigBoard.get(0,"a"));

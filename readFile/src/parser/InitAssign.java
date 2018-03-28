@@ -90,7 +90,7 @@ public class InitAssign {
                             initWithVariable(code);
                             break;
                         default:
-                            System.out.println("Error: No such Data Type");
+                            System.out.println("Error: No such Data Type ");
 
                     }
 
@@ -101,6 +101,7 @@ public class InitAssign {
             case "numbers":
             case "words":
             case "truths":
+
                     if (code.size() == 2) {
                         Token is = new Token("is", TokenType.KEYWORD);
                         Token defaultToken;
@@ -127,50 +128,60 @@ public class InitAssign {
                         }
                         initPlaceIntoMemory(code);
                     } else {
+
                         String alert;
                         //loop through the values in between the parentheses
                         int x = 0;
+                        System.out.print("Tokens before parentheses: ");
                         while(x < code.size() && !code.get(x).getToken().equals("(")){
-                            System.out.println(code.get(x).getToken());
+                            System.out.print(code.get(x).getToken()+" ");
                             x++;
                         }
-                        System.out.println(x);
+                        System.out.println();
                         if(code.get(x).getToken().equals("(")){
+                            boolean error = false;
                             for(int i = x+1; i < code.size() && !code.get(x).getToken().equals(")"); i+=2){
-                                switch (code.get(x).getTokenType()) {
+                                switch (code.get(i).getTokenType()) {
                                     case NUMBER_LITERAL:
                                         alert = "numbers";
                                         if (code.get(0).getToken().equals(alert)) {
-                                            System.out.println(code.get(x).getToken()+"fits dataType");
+                                            System.out.println(code.get(i).getToken()+" fits dataType");
                                         } else {
-                                            System.out.println("Error: Data Type Mismatch (Number Value Required)");
+                                            error = true;
+                                            System.out.println("Error: Data Type Mismatch ("+code.get(0).getToken().substring(0,code.get(0).getToken().length()-1)+" Required)");
                                         }
                                         break;
                                     case STRING_LITERAL:
                                         alert = "words";
                                         if (code.get(0).getToken().equals(alert)) {
-                                            System.out.println(code.get(x).getToken()+"fits dataType");
+                                            System.out.println(code.get(i).getToken()+" fits dataType");
                                         } else {
-                                            System.out.println("Error: Data Type Mismatch (Word Value Required)");
+                                            error = true;
+                                            System.out.println("Error: Data Type Mismatch ("+code.get(0).getToken().substring(0,code.get(0).getToken().length()-1)+" Required)");
                                         }
                                         break;
                                     case BOOLEAN_LITERAL:
                                         alert = "truths";
                                         if (code.get(0).getToken().equals(alert)) {
-                                            System.out.println(code.get(x).getToken()+"fits dataType");
+                                            System.out.println(code.get(i).getToken()+" fits dataType");
                                         } else {
-                                            System.out.println("Error: Data Type Mismatch (Truth Value Required)");
+                                            error = true;
+                                            System.out.println("Error: Data Type Mismatch ("+code.get(0).getToken().substring(0,code.get(0).getToken().length()-1)+" Required)");
                                         }
                                         break;
                                     case IDENTIFIER:
                                         initWithVariable(code);
                                         break;
                                     default:
-                                        System.out.println("Error: No such Data Type");
+                                        error = true;
+                                        System.out.println(code.get(i).getToken()+" Error: No such Vector Data Type");
                                 }
                             }
+                            if (error == false){
+                                initPlaceIntoMemory(code);
+                            }
                         }else{
-                            
+
                         }
 
 
@@ -263,7 +274,7 @@ public class InitAssign {
             case "words":
             case "truths":
                 ArrayList<Token> vectorTok = new ArrayList<Token>();
-                System.out.println("values:");
+                //System.out.println("values:");
                 int i=0;
                 while(i < code.size() && !code.get(i).getToken().equals("(")){ i++; }
                 String values = "";
@@ -272,6 +283,7 @@ public class InitAssign {
                 if(code.get(i).getToken().equals("(")){
                     for (int x=i+1; x < code.size() && !code.get(x).getToken().equals(")"); x+=2){
                         values += code.get(x).getToken();
+                        vectorTok.add(code.get(x));
                         if(!code.get(x+1).getToken().equals(")")){
                             values += ",";
                         }
@@ -281,7 +293,7 @@ public class InitAssign {
                 }
                 if(!isInitialized(code.get(1).getToken())){
                     System.out.println(values);
-                    bigBoard.put(IFstack.peek().getLevel(), code.get(1).getToken(), new memory(values, code.get(3).getTokenType()));
+                    bigBoard.put(IFstack.peek().getLevel(), code.get(1).getToken(), new memory(vectorTok, code.get(3).getTokenType()));
                 }else{
                     System.out.println(code.get(1).getToken()+" has already been initialized");
                 }
