@@ -1,1 +1,1 @@
-numbers x is (0,1)
+number x is (0)
