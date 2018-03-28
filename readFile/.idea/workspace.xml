@@ -492,7 +492,14 @@
       <option name="project" value="LOCAL" />
       <updated>1522218162469</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="IDE workspace.xml">
+      <created>1522231814489</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1522231814489</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -584,7 +591,8 @@
     <MESSAGE value="idea stuff" />
     <MESSAGE value="initializing arrays" />
     <MESSAGE value="readFile printing vectors vn1,vn2,vn3" />
-    <option name="LAST_COMMIT_MESSAGE" value="readFile printing vectors vn1,vn2,vn3" />
+    <MESSAGE value="IDE workspace.xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="IDE workspace.xml" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
