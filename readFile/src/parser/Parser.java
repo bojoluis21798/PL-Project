@@ -37,13 +37,11 @@ public class Parser {
     String[] lexeme; 
      
     public Parser(ArrayList<Token> tkStream) throws ScriptException{
+        this.tkStream = tkStream;
         String line = stringify(); 
         System.out.println(line);
         
         this.lexeme = line.split(" ");
-        
-        this.tkStream = tkStream;
-     
         Start();
     }
     
@@ -87,17 +85,21 @@ public class Parser {
         
         for(int i=start; i<=end; i++){
             switch(tkStream.get(i).getTokenType()){
-                case IDENTIFIER:
-                    expr+=" ";
-                    break;
                 case STRING_LITERAL:
-                    expr+="\""+tkStream.get(i).getToken()+"\"";
+                    expr+="\"\"";
                     break;
                 default:
                     expr+=tkStream.get(i).getToken();
             }
-        }
-            
+            expr+=" ";
+       }
+        System.out.println("Expression: "+expr);
+        String identifier = "[a-zA-Z][a-zA-Z0-9]*";
+        String string = "\"[^\"]*\"";
+        expr=expr.replaceAll(string, "0");
+        expr=expr.replaceAll("([a-zA-Z][a-zA-Z0-9]*)\\s(using)", "");
+        expr=expr.replaceAll(identifier, "0");
+        
         System.out.println("Expression: "+expr);
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
