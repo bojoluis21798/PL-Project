@@ -95,7 +95,7 @@ public class ReadFile {
                 }
 
 
-                for(int i = 0; i<tokens.length && tokens[i]!=""; i++){
+                for(int i = 0; i<tokens.length && tokens[i].equals(""); i++){
                     System.out.println("\nToken->"+i+" "+tokens[i]); //added \n
 
                     Tokenizer tknObj = new Tokenizer(tokens[i]);
