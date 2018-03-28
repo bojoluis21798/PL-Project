@@ -34,12 +34,17 @@ public class Parser {
     List<pointers> program;
     ArrayList<Token> tkStream;
      public static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
-     
+    String[] lexeme; 
      
     public Parser(ArrayList<Token> tkStream) throws ScriptException{
-      this.tkStream = tkStream;
+        String line = stringify(); 
+        System.out.println(line);
+        
+        this.lexeme = line.split(" ");
+        
+        this.tkStream = tkStream;
      
-      Start();
+        Start();
     }
     
     public String stringify(){
@@ -83,7 +88,7 @@ public class Parser {
         for(int i=start; i<=end; i++){
             switch(tkStream.get(i).getTokenType()){
                 case IDENTIFIER:
-                    expr+="0";
+                    expr+=" ";
                     break;
                 case STRING_LITERAL:
                     expr+="\""+tkStream.get(i).getToken()+"\"";
@@ -113,10 +118,6 @@ public class Parser {
     }
     
      public void Start() throws ScriptException{
-        String line = stringify(); 
-        System.out.println(line);
-        
-        String[] lexeme = line.split(" ");
         
         if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
             System.out.println("DECLARATION!");
@@ -133,7 +134,7 @@ public class Parser {
             isExpression(2,lexeme.length-3)
         ){ //orif statement
             System.out.println("ORIF STATEMENT!");
-        }else if(line.matches("else then")){ //else statement
+        }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("else then")){ //else statement
             System.out.println("ELSE STATEMENT!");
         }else if(
             lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis") &&
