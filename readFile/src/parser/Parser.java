@@ -76,7 +76,7 @@ public class Parser {
     private boolean isExpression(int start, int end){
         String expr = "";
         
-        if(start >= end){
+        if(start > end){
             return true;
         }
         
@@ -84,6 +84,9 @@ public class Parser {
             switch(tkStream.get(i).getTokenType()){
                 case IDENTIFIER:
                     expr+="0";
+                    break;
+                case STRING_LITERAL:
+                    expr+="\""+tkStream.get(i).getToken()+"\"";
                     break;
                 default:
                     expr+=tkStream.get(i).getToken();
@@ -100,17 +103,16 @@ public class Parser {
         }catch(ScriptException e){
             return false;
         }
-        String res = result.toString();
+        String type = result.getClass().getTypeName();
+        System.out.println("Type: "+type);
         
-        if(res.matches("([-]?\\d*(\\.\\d+)?)|(true)|(false)|(\"\\\"[^\\\"]*\\\"\")")){
-            return true;
-        }else{
-            return false;
-        }
+        return type.equals("java.lang.String") || 
+               type.equals("java.lang.Integer") || 
+               type.equals("java.lang.Boolean") ||
+               type.equals("java.lang.Double");
     }
     
      public void Start() throws ScriptException{
-        
         String line = stringify(); 
         System.out.println(line);
         

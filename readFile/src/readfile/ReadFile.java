@@ -78,7 +78,7 @@ public class ReadFile {
                     if(token.equals(" ") && !group){
                         continue;
                     }
-
+                    
                     if(group){
                         tokens[k] += token;
                     }else{
