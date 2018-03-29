@@ -18,7 +18,7 @@ import readfile.tokenizer.TokenType;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-
+import readfile.pointers;
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
@@ -30,16 +30,19 @@ import static readfile.ReadFile.q;
  * @author User
  */
 public class Parser {
-    
- 
+    ArrayList<Token> code = new ArrayList<>();
+    List<pointers> program;
     ArrayList<Token> tkStream;
      public static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
-     
+    String[] lexeme; 
      
     public Parser(ArrayList<Token> tkStream) throws ScriptException{
-      this.tkStream = tkStream;
-     
-      Start();
+        this.tkStream = tkStream;
+        String line = stringify(); 
+        System.out.println(line);
+        
+        this.lexeme = line.split(" ");
+        Start();
     }
     
     public String stringify(){
@@ -73,55 +76,84 @@ public class Parser {
         return s;
     }
     
-    private String parseExpression(int start, int end){
-        String expression = "";
-                for(int i=start; i<end; i++){
-                    expression+=tkStream.get(i).getToken();
+    private boolean isExpression(int start, int end){
+        String expr = "";
+        
+        if(start > end){
+            return true;
         }
-        return expression;
+        
+        for(int i=start; i<=end; i++){
+            switch(tkStream.get(i).getTokenType()){
+                case STRING_LITERAL:
+                    expr+="\"\"";
+                    break;
+                default:
+                    expr+=tkStream.get(i).getToken();
+            }
+            expr+=" ";
+       }
+        System.out.println("Expression: "+expr);
+        String identifier = "[a-zA-Z][a-zA-Z0-9]*";
+        String string = "\"[^\"]*\"";
+        expr=expr.replaceAll(string, "0");
+        expr=expr.replaceAll("([a-zA-Z][a-zA-Z0-9]*)\\s(using)", "");
+        expr=expr.replaceAll(identifier, "0");
+        
+        System.out.println("Expression: "+expr);
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("JavaScript");
+        
+        Object result = null;
+        try{
+            result = engine.eval(expr);
+        }catch(ScriptException e){
+            return false;
+        }
+        String type = result.getClass().getTypeName();
+        System.out.println("Type: "+type);
+        
+        return type.equals("java.lang.String") || 
+               type.equals("java.lang.Integer") || 
+               type.equals("java.lang.Boolean") ||
+               type.equals("java.lang.Double");
     }
     
      public void Start() throws ScriptException{
-        String line = stringify(); 
-        System.out.println(line);
         
-        String[] declaration = line.split(" ");
-        //System.out.println(declaration.length+": "+(declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]));
-        
-        if(declaration.length >= 2 && (declaration[0]+" "+declaration[1]).matches("<type>\\s<identifier>")){ //declaration
-            if((declaration.length > 3 && !declaration[2].matches("is")) || declaration.length == 3){
-                throw new IllegalStateException("Wrong Syntax");
-            }
-            //declare the variable
-            if(declaration.length > 3 && declaration[2].matches("is")){
-                String expression = parseExpression(3, declaration.length);
-                System.out.println(expression);
-                System.out.println("Expression!");
-                //add necessary execution for expression; use the expression string
-            }
+        if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
             System.out.println("DECLARATION!");
-        }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("if\\s\\(<expr>\\)\\sthen")){ //if statement
-            //necessary if execution
+        }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis") && isExpression(3,lexeme.length-1)){
+            System.out.println("INITIALIZATION!");
+        }else if(
+            lexeme.length >= 5 && 
+            (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("if\\s\\(<expr>\\)\\sthen") &&
+            isExpression(2,lexeme.length-3)
+        ){ 
             System.out.println("IF STATEMENT!");
-            String expression = parseExpression(2,declaration.length-2);
-            System.out.println(expression);
-            //add necessary execution for expression; use the expression string
-        }else if(declaration.length >= 5 && (declaration[0]+" "+declaration[1]+"<expr>"+declaration[declaration.length-2]+" "+declaration[declaration.length-1]).matches("orif\\s\\(<expr>\\)\\sthen")){ //orif statement
-            //necessary if exectution
+        }else if(lexeme.length >= 5 && 
+            (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("orif\\s\\(<expr>\\)\\sthen") &&
+            isExpression(2,lexeme.length-3)
+        ){ //orif statement
             System.out.println("ORIF STATEMENT!");
-            String expression = parseExpression(2,declaration.length-2);
-            //add necessary execution for expression; use the expression string
-        }else if(line.matches("else then")){ //else statement
+        }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("else then")){ //else statement
             System.out.println("ELSE STATEMENT!");
-        }else if(declaration.length > 2 && (declaration[0]+" "+declaration[1]).matches("<identifier>\\sis")){ //assignment
-            String expression = parseExpression(2, declaration.length);
-            System.out.println(expression);
+        }else if(
+            lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis") &&
+            isExpression(2,lexeme.length-1)    
+        ){ //assignment
             System.out.println("ASSIGNMENT!");
-        }else if(declaration.length == 1 && (declaration[0].matches("end"))){
+        }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){
             System.out.println("END!");
+        }else if(
+            lexeme.length >= 4 && 
+            (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("<identifier>\\susing\\s\\(<expr>\\)") &&
+            isExpression(3,lexeme.length-2)
+        ){ 
+            System.out.println("FUNCTION CALL!");
         }else{
             throw new IllegalStateException("Wrong Syntax");
-        }
+        }        
     }
     
   public boolean isDeclared(String token){

@@ -21,7 +21,6 @@ public class InitAssign {
     	initialize ()
     	this function will be called to initialize a variable
     	using the functions: initPlaceIntoMemory() and initWithVariable()
-
     	This function throws and error if:
     		-there is a datatype mismatch
 			-it is not an initialization
@@ -148,11 +147,8 @@ public class InitAssign {
     	initWithVariable ()
     	this function will  be called to initialize a variable
     	using an existing variable in the hashmap:
-
     	number x is y
-
     	where y is already in the hashmap
-
     	This function throws and error if:
     		-the variable to be used as a value for the new variable is not in the hashmap
 			-the variable to be used as a value is not accessible by that specific code block
@@ -208,12 +204,9 @@ public class InitAssign {
     	this function will  be called to initialize a variable
     	using a literal and also alerts the programmer what datatype
     	is used in the initialization:
-
     	number x is 5
-
 		NOTE: the code should have a value at
 		code.get(3).getToken(),code.get(3).getTokenType()
-
     */
     public static void initPlaceIntoMemory (String alert, ArrayList<Token> code){
         System.out.println("This is a "+alert+" initialization");
@@ -228,17 +221,14 @@ public class InitAssign {
     	this function will  be called to assign a variable
     	using a literal and also alerts the programmer what datatype
     	is used in the initialization:
-
     	x is 5
     	x is y
-
 		This function throws and error if:
 			-the variable to be reassigned has yet to be initialized
 			-the variable to be reassigned cannot be accessed by the specific code block
     		-the variable to be used as a value for the new variable is not in the hashmap
 			-the variable to be used as a value is not accessible by that specific code block
 			-the tokenTypes of the variables do not match
-
     */
     public static void assign(ArrayList<Token> code){
         if(code.get(0).getTokenType() == TokenType.IDENTIFIER) {
