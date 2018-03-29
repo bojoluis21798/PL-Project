@@ -13,8 +13,6 @@ import java.util.List;
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
-import static readfile.tokenizer.TokenType.NUMBER_LITERAL;
-import static readfile.tokenizer.TokenType.STRING_LITERAL;
 
 public class InitAssign {
     //INITIALIZATION
@@ -47,7 +45,7 @@ public class InitAssign {
                             code.add(defaultToken);
                             break;
                         case "word":
-                            defaultToken = new Token("", STRING_LITERAL);
+                            defaultToken = new Token("", TokenType.STRING_LITERAL);
                             code.add(defaultToken);
                             break;
                         case "truth":
@@ -115,7 +113,7 @@ public class InitAssign {
                                 break;
                             case "words":
                                 code.add(new Token("(", TokenType.TOKEN));
-                                defaultToken = new Token("", STRING_LITERAL);
+                                defaultToken = new Token("", TokenType.STRING_LITERAL);
                                 code.add(defaultToken);
                                 code.add(new Token(")", TokenType.TOKEN));
                                 break;

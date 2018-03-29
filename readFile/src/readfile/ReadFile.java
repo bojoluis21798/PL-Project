@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
-import javax.script.ScriptException;
 /**
  *
  * @author User
  */
 public class ReadFile {
+
     public static ArrayDeque<Integer> q = new ArrayDeque<Integer>();
     private static ArrayList<Token> tkStream = new ArrayList<Token>();
     public static List<pointers> program = new ArrayList<pointers>();
@@ -37,9 +37,11 @@ public class ReadFile {
     public static BiHashMap bigBoard = new BiHashMap();
     public static int IFctr=0;
     public static Stack<subprogram> IFstack = new Stack();
+
     /**
      * @param args the command line arguments
      */
+
     private static final String FILENAME = "../source.txt";
     public static void main(String[] args) throws ScriptException {
         // TODO code application logic here
@@ -59,7 +61,10 @@ public class ReadFile {
 			String sCurrentLine;
 			int ctr=0;
 			while ((sCurrentLine = br.readLine()) != null) {
-                //System.out.println(sCurrentLine);
+                System.out.println(sCurrentLine);
+                if(sCurrentLine.equals("")){
+                    continue;
+                }
                 StringTokenizer st = new StringTokenizer(sCurrentLine, "\"+-/*<>= (),:", true);
                 String[] tokens = new String[st.countTokens()];
 
@@ -92,7 +97,7 @@ public class ReadFile {
                 }
 
 
-                for(int i = 0; i<tokens.length && tokens[i]!=""; i++){
+                for(int i = 0; i<tokens.length && !tokens[i].equals(""); i++){
                     System.out.println("\nToken->"+i+" "+tokens[i]); //added \n
 
                     Tokenizer tknObj = new Tokenizer(tokens[i]);
