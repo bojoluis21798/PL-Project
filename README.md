@@ -15,4 +15,3 @@ BUG REPORT
 ### IF STATEMENT:
 #### 1 bug -> will not give the correct output when you type something after 
 #### end of if-statement when said if-statement is inside a parent if-statement
->>>>>>> ec9f6d31b27326d0ce56692abd94cc0b2555f266
