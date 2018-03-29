@@ -52,12 +52,12 @@ public class Tokenizer {
         //while{}
         
         
-          for(TokenData data: tokDatas) {
+        for(TokenData data: tokDatas) {
             String token = str;
             if(str.matches(data.getPattern())){
                  if(data.getType() == TokenType.STRING_LITERAL) {
                      return (lastToken = new Token(token.substring(1,token.length()-1),TokenType.STRING_LITERAL));
-                  } else {
+                 } else {
                      if(token.equals("else") || token.equals("orif") || token.equals("if") || token.equals("then") ||
                              token.equals("end") || token.equals("while") || token.equals("is") || token.equals("and") || token.equals("or")){
                          if(token.equals("and")){
@@ -67,24 +67,32 @@ public class Tokenizer {
                          }else if(token.equals("not")){
                              return (lastToken = new Token("!",TokenType.KEYWORD));
                          }else if(token.equals("not=")){
-                             return (lastToken = new Token("!=",TokenType.KEYWORD)); //5+5
+                             return (lastToken = new Token("!=",TokenType.KEYWORD));
                          }
-                          return (lastToken = new Token(token,TokenType.KEYWORD));
-                      }else if(token.equals("number") || token.equals("word") || token.equals("truth")){
-                          return (lastToken = new Token(token,TokenType.DATA_TYPE));
-                      }else if(data.getType()==TokenType.OPERATION){
-                        return (lastToken = new Token(token,TokenType.OPERATION));
-                      }else if(data.getType()==TokenType.IDENTIFIER){
-                          
+                         return (lastToken = new Token(token,TokenType.KEYWORD));
+                     }else if(token.equals("number") || token.equals("word") || token.equals("truth") ||
+                                token.equals("numbers") || token.equals("words") || token.equals("truths")){
+
+                         return (lastToken = new Token(token,TokenType.DATA_TYPE));
+
+                     }else if(data.getType()==TokenType.OPERATION){
+
+                         return (lastToken = new Token(token,TokenType.OPERATION));
+
+                     }else if(data.getType()==TokenType.IDENTIFIER){
+
                          return (lastToken = new Token(token,TokenType.IDENTIFIER));
-                      }else{
-                          return (lastToken = new Token(token,data.getType()));
-                      }
-                      
-                  }
-                
+
+                     }else{
+
+                         return (lastToken = new Token(token,data.getType()));
+
+                     }
+
+                 }
+
             }
-         }
+        }
         throw new IllegalStateException("Could not parse!");
      
     }
