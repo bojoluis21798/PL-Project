@@ -30,4 +30,6 @@ public enum TokenType {
     OPERATION,
     
     BOOLEAN_LITERAL,
+    
+    ORDINAL,
 }
