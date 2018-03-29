@@ -9,10 +9,15 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
+import static parser.groups.allocateMemory;
+import static parser.grpInstance.assignMember;
+import static parser.grpInstance.isInstanceDefined;
 
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
+import static readfile.ReadFile.groupDefinitions;
+import static readfile.ReadFile.groupInstances;
 
 public class Iffer {
     public static boolean ifSTMT(ArrayList<Token> code) throws ScriptException {
@@ -183,10 +188,11 @@ public class Iffer {
         return literal;
     }
 
-    public static void execute(ArrayList<Token> code){
+    public static void execute(ArrayList<Token> code) throws ScriptException{
 
 
         if(code.get(0).getTokenType() == TokenType.DATA_TYPE || code.get(0).getTokenType() == TokenType.IDENTIFIER){
+            
             if(code.size() == 4){//NORMAL INITIALIZATION
 
                 InitAssign.initialize(code);
@@ -198,11 +204,37 @@ public class Iffer {
                 //System.out.println("declaration");
 
             }else if(code.size() == 2){//NULL INITIALIZATION
-
-                InitAssign.initialize(code);
+                
+                //if stmt to check data type if the data type is within the groups defined
+                System.out.println(groups.isDefined(code.get(0).getToken()));
+                System.out.println(groupDefinitions.get(0).getGrpName());
+                if(groups.isDefined(code.get(0).getToken())){
+                    
+                    List<member> temp =  allocateMemory(code.get(0).getToken());
+                    groupInstances.add(new grpInstance(code.get(0).getToken(),temp,code.get(1).getToken()));
+                    
+                }else{
+                  InitAssign.initialize(code);
+                }
+                
                 //System.out.println("null init");
 
             }else if(code.size() > 4){//INITIALIZATION AND ASSIGNMENT WITH EXPRESSION
+
+               if(code.get(1).getToken().equals("of") && code.size() == 5){//give value to one of the members
+                   System.out.println("FUCK YOU");
+                    if(isInstanceDefined(code.get(2).getToken())){
+                       assignMember(code);
+                    }else{
+                       System.out.println("Group variable undefined");
+                    }
+               }else{
+                Token literal = null;
+                try {
+                    System.out.println("number of tokens");
+                    for(int i=0; i < code.size();i++){
+                        System.out.print(code.get(i).getToken() + " ");
+
                 int x = 0;
                 while(x < code.size() && !code.get(x).getToken().equals("(")){ x++; }
                 if(x==code.size()){
@@ -220,6 +252,7 @@ public class Iffer {
                         literal = checkExpression(code);
                     } catch (ScriptException e) {
                         e.printStackTrace();
+
                     }
                     code.add(literal);
                     if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
@@ -250,8 +283,13 @@ public class Iffer {
                 }
 
                 //System.out.println("expression init");
+               }
+               
             }
 
+        }else if("print".equals(code.get(0).getToken())){
+            
+            print.printIt(code);
         }else{
             System.out.println("Not a Declaration/Initialization");
         }

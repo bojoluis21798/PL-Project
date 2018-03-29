@@ -25,22 +25,26 @@ import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 import javax.script.ScriptException;
+import parser.groups;
+import parser.grpInstance;
 /**
  *
  * @author User
  */
 public class ReadFile {
+    public static ArrayList<tuple> levelsAndLines = new ArrayList<tuple>();
     public static ArrayDeque<Integer> q = new ArrayDeque<Integer>();
     private static ArrayList<Token> tkStream = new ArrayList<Token>();
     public static List<pointers> program = new ArrayList<pointers>();
-   
+    public static List<groups> groupDefinitions = new ArrayList<groups>();
+    public static List<grpInstance> groupInstances = new ArrayList<grpInstance>();
     public static BiHashMap bigBoard = new BiHashMap();
     public static int IFctr=0;
     public static Stack<subprogram> IFstack = new Stack();
     /**
      * @param args the command line arguments
      */
-    private static final String FILENAME = "../source.txt";
+    private static final String FILENAME = "C:\\Users\\User\\print.txt";
     public static void main(String[] args) throws ScriptException {
         // TODO code application logic here
         
@@ -58,73 +62,81 @@ public class ReadFile {
                         
 			String sCurrentLine;
 			int ctr=0;
+                        int level=0;
 			while ((sCurrentLine = br.readLine()) != null) {
-                //System.out.println(sCurrentLine);
-                StringTokenizer st = new StringTokenizer(sCurrentLine, "\"+-/*<>= (),:", true);
-                String[] tokens = new String[st.countTokens()];
+                            //System.out.println(sCurrentLine);
+                            StringTokenizer st = new StringTokenizer(sCurrentLine, "\"+-/*<>= (),:", true);
+                            String[] tokens = new String[st.countTokens()];
 
-                for(int i=0; i<tokens.length; i++){
-                    tokens[i] = "";
-                }
+                            for(int i=0; i<tokens.length; i++){
+                                tokens[i] = "";
+                            }
 
-                boolean group = false;
-                int k=0;
-                while(st.hasMoreTokens()){
-                    String token = st.nextToken();
+                            boolean group = false;
+                            int k=0;
+                            while(st.hasMoreTokens()){
+                                String token = st.nextToken();
 
-                    if(token.equals(" ") && !group){
-                        continue;
-                    }
+                                if(token.equals(" ") && !group){
+                                    continue;
+                                }
 
-                    if(group){
-                        tokens[k] += token;
-                    }else{
-                        tokens[k] = token;
-                    }
+                                if(group){
+                                    tokens[k] += token;
+                                }else{
+                                    tokens[k] = token;
+                                }
 
-                    if(token.equals("\"")){
-                        group = !group;
-                    }
-                    
-                    if(!group){
-                        k++;
-                    }
-                }
+                                if(token.equals("\"")){
+                                    group = !group;
+                                }
+
+                                if(!group){
+                                    k++;
+                                }
+                            }
 
 
-                for(int i = 0; i<tokens.length && tokens[i]!=""; i++){
-                    System.out.println("\nToken->"+i+" "+tokens[i]); //added \n
+                            for(int i = 0; i<tokens.length && tokens[i]!=""; i++){
+                                //System.out.println("\nToken->"+i+" "+tokens[i]); //added \n
 
-                    Tokenizer tknObj = new Tokenizer(tokens[i]);
+                                Tokenizer tknObj = new Tokenizer(tokens[i]);
 
-                        System.out.println(" Line"+ctr+":"); //\n
+                                    //System.out.println(" Line"+ctr+":"); //\n
 
-                        Token retVal = tknObj.nextToken();
+                                    Token retVal = tknObj.nextToken();
 
-                        tkStream.add(new Token(retVal.getToken(),retVal.getTokenType()));
-                        tokGroup.add(new Token(retVal.getToken(),retVal.getTokenType()));
-                        System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());//+"\n---------------------"
+                                    tkStream.add(new Token(retVal.getToken(),retVal.getTokenType()));
+                                    tokGroup.add(new Token(retVal.getToken(),retVal.getTokenType()));
+                                    //System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());//+"\n---------------------"
 
-                    }
-                Parser p = new Parser(tkStream);
+                                }
+                           
+                                
+                                    program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
 
-                program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
+                                    if(program.get(ctr).getCode().get(0).getToken().equals("if") || program.get(ctr).getCode().get(0).getToken().equals("else") || program.get(ctr).getCode().get(0).getToken().equals("orif")){//this  counts all ifs,else's,or's and end's then places them in a queue for tracking
 
-                if (!program.get(ctr).getCode().isEmpty()){
-                    if(program.get(ctr).getCode().get(0).getToken().equals("if") || program.get(ctr).getCode().get(0).getToken().equals("else") || program.get(ctr).getCode().get(0).getToken().equals("orif") || program.get(ctr).getCode().get(0).getToken().equals("end")){//this  counts all ifs,else's,or's and end's then places them in a queue for tracking
-                        q.addLast(program.get(ctr).getIndex());
-                        //System.out.println("GOT IN");
-                        System.out.println(q.peekLast());
-                    }
-                }
+                                        if(program.get(ctr).getCode().get(0).getToken().equals("if")){
+                                            ++level;
+                                           levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
 
-                tkStream.clear();
-                ctr++;
+                                        }else if(program.get(ctr).getCode().get(0).getToken().equals("else") || program.get(ctr).getCode().get(0).getToken().equals("orif")){
+                                            levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
+                                        }
+
+                                    }else if(program.get(ctr).getCode().get(0).getToken().equals("end")){
+                                          levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
+                                          --level;
+                                    }
+                            tkStream.clear();
+                            ctr++;
                                
 			}
             //LINE EXECUTION
             LineExecution lineExec = new LineExecution(tkStream);
-			//For Loop to go through all token streams
+      
+            //CHECKING VALUES OF VECTORS vn1,vn2,vn3
             ArrayList<Token> x = (ArrayList<Token>) bigBoard.get(0,"vn1");
             System.out.print("Value of numbers vn1(level 0): (");
             for(int i=0; i  < x.size();i++){
@@ -154,6 +166,8 @@ public class ReadFile {
                 }
             }
             System.out.print(" )\n");
+      
+            //PREVIOUS CHECKS OF VALUES CURRENTLY NOT IN BIGBOARD UNLESS INITIALIZED IN SOURCE.TXT
 //            System.out.println("Value of numbers x(level 0): "+bigBoard.get(0,"y"));
 //            System.out.println("Value of numbers x(level 0): "+bigBoard.get(0,"z"));
 //            System.out.println("Value of number a(level 0): "+bigBoard.get(0,"a"));
