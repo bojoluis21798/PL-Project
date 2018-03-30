@@ -30,7 +30,7 @@ public class Tokenizer {
          tokDatas.add(new TokenData(t,TokenType.TOKEN));
        }
        
-       tokDatas.add(new TokenData("(1st)|(2nd)|(3rd)|(\\d+th)",TokenType.ORDINAL));
+       tokDatas.add(new TokenData("(1st)|(2nd)|(3rd)|([^123]th)|(\\d+\\dth)",TokenType.ORDINAL));
        tokDatas.add(new TokenData("(false)|(true)",TokenType.BOOLEAN_LITERAL));
        tokDatas.add(new TokenData("\"[^\"]*\"",TokenType.STRING_LITERAL));
        tokDatas.add(new TokenData("[a-zA-Z][a-zA-Z0-9]*",TokenType.IDENTIFIER));
