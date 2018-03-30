@@ -10,21 +10,25 @@ package readfile.tokenizer;
  * @author User
  */
 public enum TokenType {
-    
-    
+
     EMPTY,
+
     /*A token. For example:(,),:,*,+,-,,,*/
     TOKEN,
-    /*A name for a variable. First character is a letter and any procedding characters are letter or numbers*/
+
+    /*A name for a variable. First character is a letter and any proceeding characters are letter or numbers*/
     IDENTIFIER,
-    /*A word enclose with "" */
+
+    /*A word enclose with quotation marks ("") */
     STRING_LITERAL,
+
     /*A number*/
     NUMBER_LITERAL,
-    /*either word,words,number,flag* you gotta check for this*/
 
+    /*either word,words,number,numbers,flag,flags*/
     DATA_TYPE,
-    /*a reserved word you gotta check for this*/
+
+    /*a reserved word*/
     KEYWORD,
     
     OPERATION,
