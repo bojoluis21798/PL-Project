@@ -84,21 +84,16 @@ public class Parser {
         }
         
         for(int i=start; i<=end; i++){
-            switch(tkStream.get(i).getTokenType()){
-                case STRING_LITERAL:
-                    expr+="\"\"";
-                    break;
-                default:
-                    expr+=tkStream.get(i).getToken();
-            }
-            expr+=" ";
+            expr+=(lexeme[i].equals("<operation>"))?tkStream.get(i).getToken():lexeme[i];
        }
+        
         System.out.println("Expression: "+expr);
-        String identifier = "[a-zA-Z][a-zA-Z0-9]*";
-        String string = "\"[^\"]*\"";
-        expr=expr.replaceAll(string, "0");
-        expr=expr.replaceAll("([a-zA-Z][a-zA-Z0-9]*)\\s(using)", "");
-        expr=expr.replaceAll(identifier, "0");
+        
+        expr=expr.replaceAll("<string>", "0");
+        expr=expr.replaceAll("<number>","0");
+        expr=expr.replaceAll("<boolean>","0");
+        //expr=expr.replaceAll("(<identifier>)\\s(using)\\s\\())\\)", "");
+        expr=expr.replaceAll("<identifier>", "0");
         
         System.out.println("Expression: "+expr);
         ScriptEngineManager manager = new ScriptEngineManager();
