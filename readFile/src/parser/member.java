@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package parser;
-
+//unused imports
 import readfile.tokenizer.TokenType;
 
 /**
