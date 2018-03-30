@@ -25,4 +25,9 @@ public class Token {
     public TokenType getTokenType(){
         return type;
     }
+
+    public void setTokenType(TokenType t){
+        this.type = t;
+    }
 }
+

@@ -25,16 +25,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
+import javax.script.ScriptException;
+import parser.groups;
+import parser.grpInstance;
 /**
  *
  * @author User
  */
 public class ReadFile {
 
+    public static ArrayList<tuple> levelsAndLines = new ArrayList<tuple>();
     public static ArrayDeque<Integer> q = new ArrayDeque<Integer>();
     private static ArrayList<Token> tkStream = new ArrayList<Token>();
     public static List<pointers> program = new ArrayList<pointers>();
-   
+    public static List<groups> groupDefinitions = new ArrayList<groups>();
+    public static List<grpInstance> groupInstances = new ArrayList<grpInstance>();
     public static BiHashMap bigBoard = new BiHashMap();
     public static int IFctr=0;
     public static Stack<subprogram> IFstack = new Stack();
@@ -61,7 +66,9 @@ public class ReadFile {
                         
 			String sCurrentLine;
 			int ctr=0;
+                        int level=0;
 			while ((sCurrentLine = br.readLine()) != null) {
+
                 System.out.println(sCurrentLine);
                 if(sCurrentLine.equals("")){
                     continue;
@@ -91,7 +98,7 @@ public class ReadFile {
                     if(token.equals("\"")){
                         group = !group;
                     }
-                    
+
                     if(!group){
                         k++;
                     }
@@ -103,25 +110,33 @@ public class ReadFile {
 
                     Tokenizer tknObj = new Tokenizer(tokens[i]);
 
-                        System.out.println(" Line"+ctr+":"); //\n
+                    System.out.println(" Line"+ctr+":"); //\n
 
-                        Token retVal = tknObj.nextToken();
+                    Token retVal = tknObj.nextToken();
 
-                        tkStream.add(new Token(retVal.getToken(),retVal.getTokenType()));
-                        tokGroup.add(new Token(retVal.getToken(),retVal.getTokenType()));
-                        System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());//+"\n---------------------"
+                    tkStream.add(new Token(retVal.getToken(),retVal.getTokenType()));
+                    tokGroup.add(new Token(retVal.getToken(),retVal.getTokenType()));
+                    System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());//+"\n---------------------"
 
-                    }
+                }
                 //Parser p = new Parser(tkStream);
-
+                           
+                                
                 program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
 
-                if (!program.get(ctr).getCode().isEmpty()){
-                    if(program.get(ctr).getCode().get(0).getToken().equals("if") || program.get(ctr).getCode().get(0).getToken().equals("else") || program.get(ctr).getCode().get(0).getToken().equals("orif") || program.get(ctr).getCode().get(0).getToken().equals("end")){//this  counts all ifs,else's,or's and end's then places them in a queue for tracking
-                        q.addLast(program.get(ctr).getIndex());
-                        //System.out.println("GOT IN");
-                        System.out.println(q.peekLast());
+                if(program.get(ctr).getCode().get(0).getToken().equals("if") || program.get(ctr).getCode().get(0).getToken().equals("else") || program.get(ctr).getCode().get(0).getToken().equals("orif")){//this  counts all ifs,else's,or's and end's then places them in a queue for tracking
+
+                    if(program.get(ctr).getCode().get(0).getToken().equals("if")){
+                        ++level;
+                       levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
+
+                    }else if(program.get(ctr).getCode().get(0).getToken().equals("else") || program.get(ctr).getCode().get(0).getToken().equals("orif")){
+                        levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
                     }
+
+                }else if(program.get(ctr).getCode().get(0).getToken().equals("end")){
+                      levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
+                      --level;
                 }
 
                 tkStream.clear();

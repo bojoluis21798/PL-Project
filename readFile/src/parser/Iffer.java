@@ -9,10 +9,15 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
+import static parser.groups.allocateMemory;
+import static parser.grpInstance.assignMember;
+import static parser.grpInstance.isInstanceDefined;
 
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
+import static readfile.ReadFile.groupDefinitions;
+import static readfile.ReadFile.groupInstances;
 
 public class Iffer {
     public static boolean ifSTMT(ArrayList<Token> code) throws ScriptException {
@@ -220,7 +225,7 @@ public class Iffer {
         return literal;
     }
 
-    public static void execute(ArrayList<Token> code){
+    public static void execute(ArrayList<Token> code) throws ScriptException{
 
         switch(code.get(0).getTokenType()){
             case DATA_TYPE:
@@ -231,6 +236,7 @@ public class Iffer {
 
                     InitAssign.initialize(code);
                     //System.out.println("initialization");
+
 
                 //PRIMITIVE ASSIGNMENT
                 }else if(code.size() == 3 && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
@@ -271,6 +277,7 @@ public class Iffer {
                         }
                         code.add(literal);
                         System.out.println("showing you the tokens after adding the literal");
+
                         for(int i=0; i < code.size();i++){
                             System.out.print(code.get(i).getToken() + " ");
                         }
@@ -322,6 +329,7 @@ public class Iffer {
                         literal = checkExpression(code);
                     } catch (ScriptException e) {
                         e.printStackTrace();
+
                     }
                     while(!code.get(1).getToken().equals("to")){
                         code.remove(1);
@@ -345,6 +353,7 @@ public class Iffer {
                 break;
             default:
                 throw new IllegalStateException("Not a Declaration/Initialization");
+
 
         }
 
