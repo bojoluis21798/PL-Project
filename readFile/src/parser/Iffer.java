@@ -84,7 +84,7 @@ public class Iffer {
                             String value = bigBoard.get(levelOfVariable,variable).toString();
                             st+=" "+value;
                         }else{
-                            System.out.println("Error: Variable not in HashMap");
+                            throw new IllegalStateException("Error: Variable not in HashMap");
                         }
                     }else{
                         st+=" "+token.getToken();
@@ -125,14 +125,27 @@ public class Iffer {
 
             arithmeticExpression = code.subList(3, code.size());
 
+        }else if(code.get(0).getTokenType().equals(TokenType.ORDINAL)){
+
+            arithmeticExpression = code.subList(4, code.size());
+
+        }else if(code.get(0).getTokenType().equals(TokenType.KEYWORD) && (code.get(0).getToken().equals("add") || code.get(0).getToken().equals("remove"))){
+            int x = 1;
+
+            while(  x < code.size() &&
+                    !code.get(x).getToken().equals("to")
+                    ){ x++; }
+            arithmeticExpression = code.subList(1, x);
+
         }else{
 
             arithmeticExpression = code.subList(2, code.size());
 
         }
-        for(Token token:arithmeticExpression){
-            if (token.getTokenType().equals(TokenType.IDENTIFIER)){
-                String variable = token.getToken();
+        int indexOfVector = -1;
+        for(int x=0; x < arithmeticExpression.size(); x++){
+            if (arithmeticExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
+                String variable = arithmeticExpression.get(x).getToken();
                 if (InitAssign.isInitialized(variable) && InitAssign.isAccessible(variable)){
                     int levelOfVariable = InitAssign.accessLevelOf(variable);
                     String value;
@@ -143,21 +156,45 @@ public class Iffer {
                     }
                     st+=" "+value;
                 }else{
-                    System.out.println("Error: Variable "+variable+" not in HashMap");
+                    throw new IllegalStateException("Error: Variable "+variable+" not in HashMap");
                 }
-            }else if(token.getTokenType().equals(TokenType.STRING_LITERAL)){
-                st+=" "+"\""+token.getToken()+"\"";
+            }else if(arithmeticExpression.get(x).getTokenType().equals(TokenType.STRING_LITERAL)){
+                st+=" "+"\""+arithmeticExpression.get(x).getToken()+"\"";
+            }else if(arithmeticExpression.get(x).getTokenType().equals(TokenType.ORDINAL)){
+                indexOfVector = Integer.parseInt(arithmeticExpression.get(x).getToken().substring(0,1))-1;
+                String vectorVariable = arithmeticExpression.get(x+2).getToken();
+                if(     InitAssign.isInitialized(vectorVariable) &&
+                        InitAssign.isAccessible(vectorVariable) &&
+                        bigBoard.get(IFstack.peek().getLevel(),vectorVariable) instanceof ArrayList){
+                    ArrayList<Token> vector = (ArrayList<Token>)bigBoard.get(IFstack.peek().getLevel(),vectorVariable);
+                    if(indexOfVector < vector.size()){
+                        st+=" "+vector.get(indexOfVector).getToken();
+                        x += 2;
+                    }else{
+                        throw new IllegalStateException("Error: vector has no "+arithmeticExpression.get(x).getToken()+" ordinal");
+                    }
+                }else{
+                    if(!InitAssign.isInitialized(vectorVariable))
+                        throw new IllegalStateException("Error: variable not initialized");
+                    if(!InitAssign.isAccessible(vectorVariable))
+                        throw new IllegalStateException("Error: variable cannot be accessed in level");
+                    if(!(bigBoard.get(IFstack.peek().getLevel(),vectorVariable) instanceof ArrayList)){
+                        throw new IllegalStateException("Error: variable is not a vector");
+                    }
+                }
             }else{
-                st+=" "+token.getToken();
+                st+=" "+arithmeticExpression.get(x).getToken();
             }
         }
 
         int origCodeSize = code.size();
         for(int i=0; i < origCodeSize; i++){
-            if (code.size() != 3 && code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+            if (code.size() != 3 && code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){    //removing identifiers in Primitive initialization
                 code.remove(3);
-            }else if(code.size() != 2 && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
+            }else if(code.size() != 2 && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){  //removing identifiers in Primitive Assignment
                 code.remove(2);
+            }else if(code.size() != 4 && code.get(0).getTokenType().equals(TokenType.ORDINAL)){ //removing identifiers in Ordinal Assignment
+                code.remove(4);
             }
         }
 
@@ -185,58 +222,132 @@ public class Iffer {
 
     public static void execute(ArrayList<Token> code){
 
+        switch(code.get(0).getTokenType()){
+            case DATA_TYPE:
+            case IDENTIFIER:
+            case ORDINAL:
+                //PRIMITIVE INITIALIZATION
+                if(code.size() == 4 && code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
 
-        if(code.get(0).getTokenType() == TokenType.DATA_TYPE || code.get(0).getTokenType() == TokenType.IDENTIFIER){
-            if(code.size() == 4){//NORMAL INITIALIZATION
+                    InitAssign.initialize(code);
+                    //System.out.println("initialization");
 
-                InitAssign.initialize(code);
-                //System.out.println("initialization");
+                //PRIMITIVE ASSIGNMENT
+                }else if(code.size() == 3 && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
 
-            }else if(code.size() == 3){//NORMAL ASSIGNMENT
+                    InitAssign.assign(code);
+                    //System.out.println("declaration");
 
-                InitAssign.assign(code);
-                //System.out.println("declaration");
+                //NULL INITIALIZATION
+                }else if(code.size() == 2 && code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
 
-            }else if(code.size() == 2){//NULL INITIALIZATION
+                    InitAssign.initialize(code);
+                    //System.out.println("null init");
 
-                InitAssign.initialize(code);
-                //System.out.println("null init");
+                //INITIALIZATION AND ASSIGNMENT WITH EXPRESSION, VECTOR INITIALIZATION, VECTOR ADD AND REMOVE
+                }else if(code.size() >= 4){
+                    System.out.println("Complex Init,Assign,Op");
+                    int x = 0;
 
-            }else if(code.size() > 4){//INITIALIZATION AND ASSIGNMENT WITH EXPRESSION
+                    while(x < code.size() && !code.get(x).getToken().equals(",") &&
+                            !code.get(x).getTokenType().equals(TokenType.OPERATION) &&
+                            !code.get(x).getTokenType().equals(TokenType.ORDINAL)){ x++; }
 
-                Token literal = null;
-                try {
-                    System.out.println("number of tokens");
+                    if(x < code.size() && (code.get(x).getTokenType().equals(TokenType.OPERATION) || code.get(x).getTokenType().equals(TokenType.ORDINAL))){ //OPERATOR FOUND IN LINE
+                        Token literal = null;
+                        try {
+                            System.out.println("showing you the tokens");
+                            for(int i=0; i < code.size();i++){
+                                System.out.print(code.get(i).getToken() + " ");
+                            }
+                            System.out.println();
+                            for(int i=0; i < code.size();i++){
+                                System.out.print(code.get(i).getTokenType() + " ");
+                            }
+                            System.out.println();
+                            literal = checkExpression(code);
+                        } catch (ScriptException e) {
+                            e.printStackTrace();
+                        }
+                        code.add(literal);
+                        System.out.println("showing you the tokens after adding the literal");
+                        for(int i=0; i < code.size();i++){
+                            System.out.print(code.get(i).getToken() + " ");
+                        }
+                        System.out.println();
+                        for(int i=0; i < code.size();i++){
+                            System.out.print(code.get(i).getTokenType() + " ");
+                        }
+                        System.out.println();
+                        //  AFTER EVALUATING EXPRESSION AND LITERAL IS ADDED TO CODE
+                        if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+                            InitAssign.initialize(code);
+                        }else{
+                            //                    if (code.size() == 3) {
+                            //                        System.out.println(code.get(0).getToken() + " " + code.get(1).getToken() + " " + code.get(2).getToken());
+                            //                    }else {
+                            //                        System.out.println("Unexpected number of tokens");
+                            //                        for(int i=0; i < code.size();i++){
+                            //                            System.out.print(code.get(i).getToken() + " ");
+                            //                        }
+                            //                        System.out.println();
+                            //                    }
+                            InitAssign.assign(code);
+                        }
+                    }else if(x < code.size() && code.get(x).getToken().equals(",")){  //THERE IS A COMMA ENCOUNTERED IN THE LINE
+                        System.out.println("Vector init with multiple values");
+                        for(int i=0; i < code.size();i++){
+                            System.out.print(code.get(i).getToken() + " ");
+                        }
+                        System.out.println();
+                        for(int i=0; i < code.size();i++){
+                            System.out.print(code.get(i).getTokenType() + " ");
+                        }
+                        System.out.println();
+                        InitAssign.initialize(code);
+                    }else{
+
+                        System.out.println("New Init or Assign!");
+
+                    }
+
+
+                }
+                break;
+
+            case KEYWORD:
+                if(code.get(0).getToken().equals("add")){
+                    Token literal = null;
+                    try {
+                        literal = checkExpression(code);
+                    } catch (ScriptException e) {
+                        e.printStackTrace();
+                    }
+                    while(!code.get(1).getToken().equals("to")){
+                        code.remove(1);
+                    }
+                    code.add(1,literal);
+                    System.out.println("showing you the tokens after adding the literal (add)");
                     for(int i=0; i < code.size();i++){
                         System.out.print(code.get(i).getToken() + " ");
                     }
                     System.out.println();
-                    literal = checkExpression(code);
-                } catch (ScriptException e) {
-                    e.printStackTrace();
-                }
-                code.add(literal);
-                if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
-                    InitAssign.initialize(code);
-                }else{
-//                    if (code.size() == 3) {
-//                        System.out.println(code.get(0).getToken() + " " + code.get(1).getToken() + " " + code.get(2).getToken());
-//                    }else {
-//                        System.out.println("Unexpected number of tokens");
-//                        for(int i=0; i < code.size();i++){
-//                            System.out.print(code.get(i).getToken() + " ");
-//                        }
-//                        System.out.println();
-//                    }
-                    InitAssign.assign(code);
-                }
-                //System.out.println("expression init");
-            }
+                    for(int i=0; i < code.size();i++){
+                        System.out.print(code.get(i).getTokenType() + " ");
+                    }
+                    System.out.println();
+                    InitAssign.addToVector(code);
 
-        }else{
-            System.out.println("Not a Declaration/Initialization");
+                }else if(code.get(0).getToken().equals("remove")){
+                    System.out.println("Vector Op Found! : remove");
+                    InitAssign.removeFromVector(code);
+                }
+                break;
+            default:
+                throw new IllegalStateException("Not a Declaration/Initialization");
+
         }
 
-
     }
+
 }
