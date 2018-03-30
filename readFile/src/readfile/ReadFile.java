@@ -18,6 +18,7 @@ import parser.selection;
 import parser.subprogram;
 import readfile.pointers;
 import readfile.tokenizer.Token;
+import readfile.tokenizer.TokenType;
 import readfile.tokenizer.Tokenizer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -111,7 +112,7 @@ public class ReadFile {
                         System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());//+"\n---------------------"
 
                     }
-                Parser p = new Parser(tkStream);
+                //Parser p = new Parser(tkStream);
 
                 program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
 
@@ -129,9 +130,9 @@ public class ReadFile {
 			}
             //LINE EXECUTION
             LineExecution lineExec = new LineExecution(tkStream);
-			//For Loop to go through all token streams
-            ArrayList<Token> x = (ArrayList<Token>) bigBoard.get(0,"vn1");
-            System.out.print("Value of numbers vn1(level 0): (");
+
+            ArrayList<Token> x = (ArrayList<Token>) bigBoard.get(IFstack.peek().getLevel(),"x");
+            System.out.print("Value of numbers x(level "+IFstack.peek().getLevel()+"): (");
             for(int i=0; i  < x.size();i++){
                 System.out.print(" "+x.get(i).getToken());
                 if(i+1 < x.size()){
@@ -140,28 +141,28 @@ public class ReadFile {
             }
             System.out.print(" )\n");
 
-            x = (ArrayList<Token>) bigBoard.get(0,"vn2");
-            System.out.print("Value of numbers vn2(level 0): (");
-            for(int i=0; i  < x.size();i++){
-                System.out.print(" "+x.get(i).getToken());
-                if(i+1 < x.size()){
-                    System.out.print(",");
-                }
-            }
-            System.out.print(" )\n");
-
-            x = (ArrayList<Token>) bigBoard.get(0,"vn3");
-            System.out.print("Value of numbers vn3(level 0): (");
-            for(int i=0; i  < x.size();i++){
-                System.out.print(" "+x.get(i).getToken());
-                if(i+1 < x.size()){
-                    System.out.print(",");
-                }
-            }
-            System.out.print(" )\n");
-//            System.out.println("Value of numbers x(level 0): "+bigBoard.get(0,"y"));
-//            System.out.println("Value of numbers x(level 0): "+bigBoard.get(0,"z"));
-//            System.out.println("Value of number a(level 0): "+bigBoard.get(0,"a"));
+//            x = (ArrayList<Token>) bigBoard.get(0,"vn2");
+//            System.out.print("Value of numbers vn2(level 0): (");
+//            for(int i=0; i  < x.size();i++){
+//                System.out.print(" "+x.get(i).getToken());
+//                if(i+1 < x.size()){
+//                    System.out.print(",");
+//                }
+//            }
+//            System.out.print(" )\n");
+//
+//            x = (ArrayList<Token>) bigBoard.get(0,"vn3");
+//            System.out.print("Value of numbers vn3(level 0): (");
+//            for(int i=0; i  < x.size();i++){
+//                System.out.print(" "+x.get(i).getToken());
+//                if(i+1 < x.size()){
+//                    System.out.print(",");
+//                }
+//            }
+//            System.out.print(" )\n");
+//            System.out.println("Value of number x(level IFstack.peek().getLevel()): "+bigBoard.get(IFstack.peek().getLevel(),"x"));
+//            System.out.println("Value of numbers x(level IFstack.peek().getLevel()): "+bigBoard.get(IFstack.peek().getLevel(),"z"));
+            System.out.println("Value of number a(level 0): "+bigBoard.get(IFstack.peek().getLevel(),"a"));
 //            System.out.println("Value of word b(level 0): "+bigBoard.get(0,"b"));
 //            System.out.println("Value of truth c(level 0): "+bigBoard.get(0,"c"));
 //            System.out.println("Value of n1(level 0): "+bigBoard.get(0,"n1"));

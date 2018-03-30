@@ -34,7 +34,7 @@ public class InitAssign {
             case "number":
             case "word":
             case "truth":
-                if(code.size() == 2){
+                if(code.size() == 2){ //null init
 
                     Token is = new Token("is",TokenType.KEYWORD);
                     Token defaultToken;
@@ -136,7 +136,7 @@ public class InitAssign {
                             x++;
                         }
                         System.out.println();
-                        if(code.get(x).getToken().equals("(")){
+                        if(x < code.size() && code.get(x).getToken().equals("(")){
                             boolean error = false;
                             for(int i = x+1; i < code.size() && !code.get(x).getToken().equals(")"); i+=2){
                                 switch (code.get(i).getTokenType()) {
@@ -186,7 +186,7 @@ public class InitAssign {
                     }
                     break;
             default:
-                System.out.println("Invalid Syntax: No such Data Type INIT");
+                throw new IllegalStateException("Invalid Syntax: No such Data Type INIT");
 
         }
 
@@ -271,6 +271,14 @@ public class InitAssign {
             case "numbers":
             case "words":
             case "truths":
+                TokenType typeForVectorToBeInitialized = TokenType.EMPTY;
+                if(code.get(0).getToken().equals("numbers")){
+                    typeForVectorToBeInitialized = TokenType.NUMBER_LITERAL;
+                }else if(code.get(0).getToken().equals("words")){
+                    typeForVectorToBeInitialized = TokenType.STRING_LITERAL;
+                }else if(code.get(0).getToken().equals("truths")){
+                    typeForVectorToBeInitialized = TokenType.BOOLEAN_LITERAL;
+                }
                 ArrayList<Token> vectorTok = new ArrayList<Token>();
                 //System.out.println("values:");
                 int i=0;
@@ -291,7 +299,7 @@ public class InitAssign {
                 }
                 if(!isInitialized(code.get(1).getToken())){
                     System.out.println(values);
-                    bigBoard.put(IFstack.peek().getLevel(), code.get(1).getToken(), new memory(vectorTok, code.get(3).getTokenType()));
+                    bigBoard.put(IFstack.peek().getLevel(), code.get(1).getToken(), new memory(vectorTok, typeForVectorToBeInitialized));
                 }else{
                     System.out.println(code.get(1).getToken()+" has already been initialized");
                 }
@@ -346,15 +354,15 @@ public class InitAssign {
 
                         }else{
                             if (isInitialized(variable) == false) {
-                                System.out.println("Assignment Error: variable " + variable + " is not Initialized");
+                                throw new IllegalStateException("Assignment Error: variable " + variable + " is not Initialized");
                             }else if (isAccessible(variable) == false) {
-                                System.out.println("Assignment Error: variable " + variable + " is not Accessible in this Level");
+                                throw new IllegalStateException("Assignment Error: variable " + variable + " is not Accessible in this Level");
                             }else if (bigBoard.getTokenType(levelOfVariable,variable) != code.get(2).getTokenType())
-                                System.out.println("Assignment Error: Data Type Mismatch. Not a "+bigBoard.getTokenType(levelOfVariable,variable));
+                                throw new IllegalStateException("Assignment Error: Data Type Mismatch. Not a "+bigBoard.getTokenType(levelOfVariable,variable));
                         }
                         break;
                     default:
-                        System.out.println("Invalid Syntax: No such data type DECL");
+                        throw new IllegalStateException("Invalid Syntax: No such data type DECL");
                 }
 
             }else if (code.get(1).getTokenType() == TokenType.KEYWORD
@@ -375,11 +383,11 @@ public class InitAssign {
                 }else{
 
                     if (isInitialized(variable) == false)
-                        System.out.println("Assignment Error: variable "+variable+" is not Initialized");
+                        throw new IllegalStateException("Assignment Error: variable "+variable+" is not Initialized");
                     else if (isAccessible(variable) == false)
-                        System.out.println("Assignment Error: variable "+variable+" is not Accessible in this Level");
+                        throw new IllegalStateException("Assignment Error: variable "+variable+" is not Accessible in this Level");
                     else if (bigBoard.getTokenType(levelOfAssignee,assignee) != bigBoard.getTokenType(levelOfVariable,variable))
-                        System.out.println("Assignment Error: Data Type Mismatch. Not a "+bigBoard.getTokenType(levelOfAssignee,assignee));
+                        throw new IllegalStateException("Assignment Error: Data Type Mismatch. Not a "+bigBoard.getTokenType(levelOfAssignee,assignee));
 
                 }
 
@@ -389,8 +397,24 @@ public class InitAssign {
                 System.out.println("Invalid Syntax: not an assignment");
             }
 
+        }else if(code.get(0).getTokenType().equals(TokenType.ORDINAL)){ //if an ordinal of a vector is assign a new value
+            int indexOfVector = Integer.parseInt(code.get(0).getToken().substring(0,1)) - 1;
+            if(isInitialized(code.get(2).getToken()) && isAccessible(code.get(2).getToken()) &&
+                    bigBoard.get(IFstack.peek().getLevel(),code.get(2).getToken()) instanceof ArrayList){
+                ArrayList<Token> vector = (ArrayList<Token>) bigBoard.get(IFstack.peek().getLevel(),code.get(2).getToken());
+                if(code.get(4).getTokenType() == vector.get(indexOfVector).getTokenType()){
+
+                    vector.remove(indexOfVector);
+                    vector.add(indexOfVector,new Token(code.get(4).getToken(),code.get(4).getTokenType()));
+                    System.out.println(vector.get(indexOfVector).getToken());
+                    bigBoard.put(IFstack.peek().getLevel(), code.get(1).getToken(), new memory(vector, code.get(3).getTokenType()));
+
+                }
+                System.out.println(code.get(4).getToken());
+
+            }
         }else{
-            System.out.println("Invalid Syntax: no variable name");
+            throw new IllegalStateException("Invalid Syntax: no variable name");
         }
 
     }
@@ -442,6 +466,57 @@ public class InitAssign {
         }
         if( bigBoard.containsKeys(ctr, token) ){ val = true; }
         return ctr;
+    }
+
+    public static void addToVector(ArrayList<Token> code){
+        String vectorVariable = code.get(3).getToken();
+        if(isInitialized(vectorVariable) && isAccessible(vectorVariable)){
+            TokenType vectorTokenType = bigBoard.getTokenType(IFstack.peek().getLevel(),vectorVariable);
+            ArrayList<Token> vector = (ArrayList<Token>) bigBoard.get(IFstack.peek().getLevel(),vectorVariable);
+            if(vectorTokenType == code.get(1).getTokenType() && bigBoard.get(IFstack.peek().getLevel(),vectorVariable) instanceof ArrayList){
+                vector.add(code.get(1));
+                System.out.println("Value to be added to vector "+vectorVariable+": "+vector.get(vector.size()-1).getToken());
+                bigBoard.put(IFstack.peek().getLevel(), vectorVariable, new memory(vector, vectorTokenType));
+            }else{
+                if(vectorTokenType != code.get(1).getTokenType()){
+                    System.out.println(vectorVariable);
+                    throw new IllegalStateException("Error: Data Type Mismatch!");
+                }
+                if(!(bigBoard.get(IFstack.peek().getLevel(),vectorVariable) instanceof ArrayList)){
+                    throw new IllegalStateException("Error: Variable not a Vector");
+                }
+            }
+        }else{
+            if(!isInitialized(vectorVariable)){
+                System.out.println(vectorVariable);
+                throw new IllegalStateException("Error: Vector has not been initialized");
+            }
+            if(!isAccessible(vectorVariable)){
+                throw new IllegalStateException("Error: Illegal Access of Vector Variable");
+            }
+        }
+    }
+
+    public static void removeFromVector(ArrayList<Token> code){
+        String vectorVariable = code.get(3).getToken();
+        int ordinalToBeRemoved = Integer.parseInt(code.get(1).getToken().substring(0,1))-1;
+        if(isInitialized(vectorVariable) && isAccessible(vectorVariable)){
+            ArrayList<Token> vector = (ArrayList<Token>) bigBoard.get(IFstack.peek().getLevel(),vectorVariable);
+            TokenType vectorTokenType = bigBoard.getTokenType(IFstack.peek().getLevel(),vectorVariable);
+            if(bigBoard.get(IFstack.peek().getLevel(),vectorVariable) instanceof ArrayList && ordinalToBeRemoved < vector.size()){
+                vector.remove(ordinalToBeRemoved);
+                System.out.println("Removed "+code.get(1).getToken()+" of "+vectorVariable);
+                bigBoard.put(IFstack.peek().getLevel(), vectorVariable, new memory(vector, vectorTokenType));
+            }else{
+                if(!(bigBoard.get(IFstack.peek().getLevel(),vectorVariable) instanceof ArrayList)){
+                    throw new IllegalStateException("Error: Variable not a Vector");
+                }
+                if(ordinalToBeRemoved < vector.size()){
+                    System.out.println(vectorVariable);
+                    throw new IllegalStateException("Error: Data Type Mismatch!");
+                }
+            }
+        }
     }
 
     public boolean checkCondition(ArrayList<Token> code) throws ScriptException{

@@ -59,16 +59,21 @@ public class Tokenizer {
                 } else {
                     if(
                             token.equals("else")  ||
-                                    token.equals("orif")  ||
-                                    token.equals("if")    ||
-                                    token.equals("then")  ||
-                                    token.equals("end")   ||
-                                    token.equals("while") ||
-                                    token.equals("is")    ||
-                                    token.equals("and")   ||
-                                    token.equals("or")    ||
-                                    token.equals("using")
-                            ){
+                            token.equals("orif")  ||
+                            token.equals("if")    ||
+                            token.equals("then")  ||
+                            token.equals("end")   ||
+                            token.equals("while") ||
+                            token.equals("is")    ||
+                            token.equals("and")   ||
+                            token.equals("or")    ||
+                            token.equals("of")    ||
+                            token.equals("add")   ||
+                            token.equals("to")    ||
+                            token.equals("remove")||
+                            token.equals("of")    ||
+                            token.equals("using")
+                    ){
                         if(token.equals("and")){
                             return (lastToken = new Token("&&",TokenType.KEYWORD));
                         }else if(token.equals("or")){

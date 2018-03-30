@@ -1,3 +1,8 @@
-numbers vn1 
-numbers vn2 is (1)
-numbers vn3 is (1,2,3,4,5)
+numbers x is (2,4,6,8,10)
+number a is 3rd of x * 2 + 2
+add 12 to x 
+add a to x
+add 4th of x * 2 to x
+remove 1st of x
+remove 1st of x
+remove 1st of x
