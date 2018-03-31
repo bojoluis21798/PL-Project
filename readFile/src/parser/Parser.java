@@ -170,6 +170,8 @@ public class Parser {
             System.out.println("FUNCTION CALL!");
         }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\s<identifier>")){
             System.out.println("GROUP VARIABLE DECLARATION!");
+        }else if(lexeme.length == 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("group\\s<identifier>\\scontains")){
+            System.out.println("GROUP DECLARATION!");
         }else{
             throw new IllegalStateException("Wrong Syntax");
         }        
