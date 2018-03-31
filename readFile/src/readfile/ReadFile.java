@@ -75,7 +75,7 @@ public class ReadFile {
                 if(sCurrentLine.equals("")){
                     continue;
                 }
-                StringTokenizer st = new StringTokenizer(sCurrentLine, "\"+-/*<>= (),:", true);
+                StringTokenizer st = new StringTokenizer(sCurrentLine, "\"+-/*<>= (),:%", true);
                 String[] tokens = new String[st.countTokens()];
 
                 for(int i=0; i<tokens.length; i++){
@@ -84,13 +84,23 @@ public class ReadFile {
 
                 boolean group = false;
                 int k=0;
+                String lastToken = "";
                 while(st.hasMoreTokens()){
                     String token = st.nextToken();
-
+                    
+                    if(token.equals("/") && lastToken.equals("/")){
+                        throw new IllegalStateException("Wrong Syntax");
+                    }
+                    
+                    if(token.equals("=")&& lastToken.equals("not")){
+                        tokens[k-1] += token;
+                        continue;
+                    }
+                    
                     if(token.equals(" ") && !group){
                         continue;
                     }
-
+                    
                     if(group){
                         tokens[k] += token;
                     }else{
@@ -104,8 +114,10 @@ public class ReadFile {
                     if(!group){
                         k++;
                     }
+                    
+                    lastToken = token;
                 }
-
+                
 
                 for(int i = 0; i<tokens.length && !tokens[i].equals(""); i++){
                     System.out.println("\nToken->"+i+" "+tokens[i]); //added \n
@@ -121,7 +133,7 @@ public class ReadFile {
                     System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());//+"\n---------------------"
 
                 }
-                //Parser p = new Parser(tkStream);
+                Parser p = new Parser(tkStream);
                            
                                 
                 program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
