@@ -176,6 +176,8 @@ public class Parser {
             System.out.println("VECTOR ADD!");
         }else if(lexeme.length == 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("remove\\s<ordinal>\\sof\\s<identifier>")){
             System.out.println("VECTOR REMOVE!");
+        }else if(lexeme.length > 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("repeat\\swhile\\s\\(<expr>\\)")){
+            System.out.println("Pre test loop!");
         }else{
             throw new IllegalStateException("Wrong Syntax");
         }        
