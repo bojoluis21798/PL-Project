@@ -79,7 +79,8 @@ public class Tokenizer {
                             token.equals("=") ||
                             token.equals("group") ||
                             token.equals("contains") ||
-                            token.equals("job")
+                            token.equals("job") ||
+                            token.equals("outputs")
                     ){
                         if(token.equals("and")){
                             return (lastToken = new Token("&&",TokenType.OPERATION));
