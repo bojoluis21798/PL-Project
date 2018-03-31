@@ -64,24 +64,26 @@ public class Tokenizer {
                             token.equals("then")  ||
                             token.equals("end")   ||
                             token.equals("while") ||
+                            token.equals("add")   ||
                             token.equals("is")    ||
                             token.equals("and")   ||
                             token.equals("or")    ||
                             token.equals("of")    ||
-                            token.equals("add")   ||
                             token.equals("to")    ||
                             token.equals("remove")||
-                            token.equals("of")    ||
-                            token.equals("using")
+                            token.equals("using") ||
+                            token.equals("and") ||
+                            token.equals("not") ||
+                            token.equals("not=")
                     ){
                         if(token.equals("and")){
-                            return (lastToken = new Token("&&",TokenType.KEYWORD));
+                            return (lastToken = new Token("&&",TokenType.OPERATION));
                         }else if(token.equals("or")){
-                            return (lastToken = new Token("||",TokenType.KEYWORD));
+                            return (lastToken = new Token("||",TokenType.OPERATION));
                         }else if(token.equals("not")){
-                            return (lastToken = new Token("!",TokenType.KEYWORD));
+                            return (lastToken = new Token("!",TokenType.OPERATION));
                         }else if(token.equals("not=")){
-                            return (lastToken = new Token("!=",TokenType.KEYWORD)); //5+5
+                            return (lastToken = new Token("!=",TokenType.OPERATION)); //5+5
                         }
                         return (lastToken = new Token(token,TokenType.KEYWORD));
                     }else if(token.equals("number") || token.equals("word") || token.equals("truth") ||

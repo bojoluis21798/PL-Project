@@ -82,13 +82,18 @@ public class ReadFile {
 
                 boolean group = false;
                 int k=0;
+                String lastToken = "";
                 while(st.hasMoreTokens()){
                     String token = st.nextToken();
-
+                    
+                    if(token.equals("/") && lastToken.equals("/")){
+                        throw new IllegalStateException("Wrong Syntax");
+                    }
+                    
                     if(token.equals(" ") && !group){
                         continue;
                     }
-
+                    
                     if(group){
                         tokens[k] += token;
                     }else{
@@ -102,8 +107,10 @@ public class ReadFile {
                     if(!group){
                         k++;
                     }
+                    
+                    lastToken = token;
                 }
-
+                
 
                 for(int i = 0; i<tokens.length && !tokens[i].equals(""); i++){
                     System.out.println("\nToken->"+i+" "+tokens[i]); //added \n
