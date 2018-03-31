@@ -263,7 +263,7 @@ public class InitAssign {
 		code.get(3).getToken(),code.get(3).getTokenType()
 
     */
-    public static void initPlaceIntoMemory (ArrayList<Token> code){
+    public static void initPlaceIntoMemory (List<Token> code){
         switch (code.get(0).getToken()) {
             case "numbers":
             case "words":

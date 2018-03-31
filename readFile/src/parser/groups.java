@@ -11,6 +11,8 @@ import static readfile.ReadFile.groupDefinitions;
 
 //unused imports
 import java.util.Objects;
+import static readfile.ReadFile.IFstack;
+import static readfile.ReadFile.bigBoard;
 
 /**
  *
@@ -58,5 +60,15 @@ public class groups {
           return new ArrayList<>(ret);
     }
     
+    public static Object accessGroup(String identifier,String member){
+       ArrayList<member> temp;
+       
+       temp = (ArrayList<member>) bigBoard.get(IFstack.peek().getLevel(),identifier);
+       
+       int ctr=0;
+       for(; !temp.get(ctr).getMemberName().equals(member);ctr++){}
+       
+       return temp.get(ctr).getValue();
+   }
    
 }

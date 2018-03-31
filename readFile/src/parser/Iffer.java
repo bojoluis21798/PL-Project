@@ -8,6 +8,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
+import static parser.groups.accessGroup;
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
@@ -126,6 +127,15 @@ public class Iffer {
         String st = "";
         Object result;
         List<Token> arithmeticExpression;
+        System.out.println("showing you the tokens");
+                                for(int i=0; i < code.size();i++){
+                                    System.out.print(code.get(i).getToken() + " ");
+                                }
+                                System.out.println();
+                                for(int i=0; i < code.size();i++){
+                                    System.out.print(code.get(i).getTokenType() + " ");
+                                }
+                                System.out.println();
         if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
 
             arithmeticExpression = code.subList(3, code.size());
@@ -149,26 +159,27 @@ public class Iffer {
         }
         int indexOfVector = -1;
         for(int x=0; x < arithmeticExpression.size(); x++){
-            if(     arithmeticExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER) &&
-                    arithmeticExpression.get(x+1).getTokenType().equals(TokenType.KEYWORD) &&
+            if(arithmeticExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
+                
+                if(arithmeticExpression.get(x+1).getTokenType().equals(TokenType.KEYWORD) &&
                     arithmeticExpression.get(x+2).getTokenType().equals(TokenType.IDENTIFIER)){
-
-                System.out.println("Hi! I'm a group member in an expression (Kpop Band)");
-
-            }else if(arithmeticExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
-                String variable = arithmeticExpression.get(x).getToken();
-                if (InitAssign.isInitialized(variable) && InitAssign.isAccessible(variable)){
-                    int levelOfVariable = InitAssign.accessLevelOf(variable);
-                    String value;
-                    if(bigBoard.getTokenType(levelOfVariable,variable) == TokenType.STRING_LITERAL){
-                        value = "\""+bigBoard.get(levelOfVariable,variable).toString()+"\"";
-                    }else{
-                        value = bigBoard.get(levelOfVariable,variable).toString();
-                    }
-                    st+=" "+value;
+                    System.out.println("Hi! I'm a group member in an expression (Kpop Band)");
                 }else{
-                    throw new IllegalStateException("Error: Variable "+variable+" not in HashMap");
+                    String variable = arithmeticExpression.get(x).getToken();
+                    if (InitAssign.isInitialized(variable) && InitAssign.isAccessible(variable)){
+                        int levelOfVariable = InitAssign.accessLevelOf(variable);
+                        String value;
+                        if(bigBoard.getTokenType(levelOfVariable,variable) == TokenType.STRING_LITERAL){
+                            value = "\""+bigBoard.get(levelOfVariable,variable).toString()+"\"";
+                        }else{
+                            value = bigBoard.get(levelOfVariable,variable).toString();
+                        }
+                        st+=" "+value;
+                    }else{
+                        throw new IllegalStateException("Error: Variable "+variable+" not in HashMap");
+                    }
                 }
+                
             }else if(arithmeticExpression.get(x).getTokenType().equals(TokenType.STRING_LITERAL)){
                 st+=" "+"\""+arithmeticExpression.get(x).getToken()+"\"";
             }else if(arithmeticExpression.get(x).getTokenType().equals(TokenType.ORDINAL)){
@@ -250,10 +261,15 @@ public class Iffer {
                     //System.out.println("declaration");
 
                 //NULL INITIALIZATION
-                }else if(code.size() == 2 && code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+                }else if(code.size() == 2 && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
+                    
                     if(groups.isDefined(code.get(0).getToken())){
+                        System.out.println("FUCK YOU");
+                        
+                        code.get(0).setTokenType(TokenType.DATA_TYPE);
                         InitAssign.initPlaceIntoMemory(code);
                     }else{
+                        
                         InitAssign.initialize(code);
                     }
 
@@ -266,6 +282,7 @@ public class Iffer {
                 }else if(code.size() >= 4){
                     if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER) && code.get(1).getToken().equals("of")){//give value to one of the members
                         if(InitAssign.isInitialized(code.get(2).getToken())){
+                            System.out.println("FUCKING GOT IN");
                             assignMember(code);
                         }else{
                             System.out.println("Group variable undefined");
@@ -335,9 +352,24 @@ public class Iffer {
                         }else if(code.get(0).getToken().equals("print")){
                             print.printIt(code);
                         }else{
-
-                            System.out.println("New Init or Assign!");
-
+                            List<Token> expression;
+                            List<Token> objToSend;
+                            if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+                                expression = code.subList(3,code.size());
+                                Object retval = accessGroup(expression.get(2).getToken(),expression.get(0).getToken());
+                                objToSend = code.subList(0,3);
+                                Tokenizer tknObj = new Tokenizer(retval.toString());
+                                Token literal = tknObj.nextToken();
+                                objToSend.add((Token) literal);
+                                
+                                InitAssign.initPlaceIntoMemory( objToSend);
+                                System.out.println("SUCCESSFUL");
+                            }else if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
+                                expression = (ArrayList<Token>) code.subList(2,code.size());
+                            }else{
+                                System.out.println("New Init or Assign!");
+                            }
+                            
                         }
                     }
 
