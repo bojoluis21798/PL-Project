@@ -189,7 +189,7 @@ public class Iffer {
                 }
             }else{
                 st+=" "+arithmeticExpression.get(x).getToken();
-            }
+            } 
         }
 
         int origCodeSize = code.size();
@@ -258,8 +258,8 @@ public class Iffer {
 
                 //INITIALIZATION AND ASSIGNMENT WITH EXPRESSION, VECTOR INITIALIZATION, VECTOR ADD AND REMOVE
                 }else if(code.size() >= 4){
-                    if(code.get(1).getToken().equals("of") && code.size() == 5){//give value to one of the members
-
+                    if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER) && code.get(1).getToken().equals("of")){//give value to one of the members
+                            
                         if(InitAssign.isInitialized(code.get(2).getToken())){
                             assignMember(code);
                         }else{
