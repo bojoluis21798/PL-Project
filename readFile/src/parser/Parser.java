@@ -67,6 +67,9 @@ public class Parser {
                 case OPERATION:
                     s+="<operation>";
                     break;
+                case ORDINAL:
+                    s+="<ordinal>";
+                    break;
                 default:
                     s+=tkStream.get(i).getToken();
                     //System.out.println("--->"+tkStream.get(i).getToken()+" is "+tkStream.get(i).getTokenType());
@@ -138,7 +141,6 @@ public class Parser {
     }*/
     
      public void Start() throws ScriptException{
-        
         if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
             System.out.println("DECLARATION!");
         }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis")){
@@ -155,7 +157,8 @@ public class Parser {
         }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("else then")){ //else statement
             System.out.println("ELSE STATEMENT!");
         }else if(
-            lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis")
+            (lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis")) ||
+            (lexeme.length > 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("<ordinal>\\sof<identifier>\\sis"))
         ){ //assignment
             System.out.println("ASSIGNMENT!");
         }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){
@@ -165,6 +168,8 @@ public class Parser {
             (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("<identifier>\\susing\\s\\(<expr>\\)")
         ){ 
             System.out.println("FUNCTION CALL!");
+        }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\s<identifier>")){
+            System.out.println("GROUP VARIABLE DECLARATION!");
         }else{
             throw new IllegalStateException("Wrong Syntax");
         }        
