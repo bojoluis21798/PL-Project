@@ -119,7 +119,7 @@ public class ReadFile {
                     System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());//+"\n---------------------"
 
                 }
-                //Parser p = new Parser(tkStream);
+                Parser p = new Parser(tkStream);
                            
                                 
                 program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address

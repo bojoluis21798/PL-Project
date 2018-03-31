@@ -76,22 +76,45 @@ public class Parser {
         return s;
     }
     
-    private boolean isExpression(int start, int end){
+    /*private String parseExpression(int start, int end){
         String expr = "";
-        
-        if(start > end){
-            return true;
-        }
         
         for(int i=start; i<=end; i++){
             expr+=(lexeme[i].equals("<operation>"))?tkStream.get(i).getToken():lexeme[i];
-       }
+        }
+        return expr;
+    }
+    
+    private boolean isExpression(String expr){
         
         System.out.println("Expression: "+expr);
         
-        expr=expr.replaceAll("<string>", "0");
+        if(expr.contains("<identifier>using(")){
+            int opening = expr.indexOf("<identifier>using(");
+            opening+=17;
+            System.out.println("Char: "+expr.charAt(opening));
+            //parenthesis offset = 17
+            int closing = opening+1;
+            int open = -1;
+            String innerExp = "";
+            System.out.println("Length "+expr.length());
+            System.out.println("Opening "+opening);
+            for(; closing<expr.length() && !(expr.charAt(closing) == ')' && open == -1); closing++){
+                innerExp+=expr.charAt(closing);
+                if(expr.charAt(closing) == '(') open++;
+                else if(expr.charAt(closing) == ')')open--;
+            }
+            System.out.println("Close "+closing);
+            System.out.println("Inner Exp "+innerExp);
+            if(isExpression(innerExp)){
+                expr=expr.replaceAll("<identifier>using", "");
+            }else{
+                return false;
+            }
+        }
+        expr=expr.replaceAll("<string>", "\" \"");
         expr=expr.replaceAll("<number>","0");
-        expr=expr.replaceAll("<boolean>","0");
+        expr=expr.replaceAll("<bool>","true");
         //expr=expr.replaceAll("(<identifier>)\\s(using)\\s\\())\\)", "");
         expr=expr.replaceAll("<identifier>", "0");
         
@@ -112,38 +135,34 @@ public class Parser {
                type.equals("java.lang.Integer") || 
                type.equals("java.lang.Boolean") ||
                type.equals("java.lang.Double");
-    }
+    }*/
     
      public void Start() throws ScriptException{
         
         if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
             System.out.println("DECLARATION!");
-        }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis") && isExpression(3,lexeme.length-1)){
+        }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis")){
             System.out.println("INITIALIZATION!");
         }else if(
             lexeme.length >= 5 && 
-            (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("if\\s\\(<expr>\\)\\sthen") &&
-            isExpression(2,lexeme.length-3)
+            (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("if\\s\\(<expr>\\)\\sthen")
         ){ 
             System.out.println("IF STATEMENT!");
         }else if(lexeme.length >= 5 && 
-            (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("orif\\s\\(<expr>\\)\\sthen") &&
-            isExpression(2,lexeme.length-3)
-        ){ //orif statement
+            (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("orif\\s\\(<expr>\\)\\sthen"))
+        { //orif statement
             System.out.println("ORIF STATEMENT!");
         }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("else then")){ //else statement
             System.out.println("ELSE STATEMENT!");
         }else if(
-            lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis") &&
-            isExpression(2,lexeme.length-1)    
+            lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis")
         ){ //assignment
             System.out.println("ASSIGNMENT!");
         }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){
             System.out.println("END!");
         }else if(
             lexeme.length >= 4 && 
-            (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("<identifier>\\susing\\s\\(<expr>\\)") &&
-            isExpression(3,lexeme.length-2)
+            (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("<identifier>\\susing\\s\\(<expr>\\)")
         ){ 
             System.out.println("FUNCTION CALL!");
         }else{
