@@ -194,7 +194,7 @@ public class Parser {
             type = ("WHILE!");
         }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("job\\s<identifier>")){
             type = "JOB DECLARATION WITHOUT PARAMS AND RETURN TYPE!";
-        }else if(lexeme.length == 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("job\\s<identifier>\\soutputs\\s<type>")){
+        }else if(lexeme.length == 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("job\\s<identifier>\\soutputs\\s(<type>|<identifier>)")){
             type = "JOB DECLARATION WITHOUT PARAMS!";
         }else if(
             lexeme.length > 5 && 
@@ -203,7 +203,7 @@ public class Parser {
         ){
             type = "JOB DECLARATION WITHOUT RETURN TYPE!";
         }else if(
-            lexeme.length > 7 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]+" "+lexeme[4]+" "+lexeme[5]+"<declarations>"+lexeme[lexeme.length-1]).matches("job\\s<identifier>\\soutputs\\s<type>\\susing\\s\\(<declarations>\\)")
+            lexeme.length > 7 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]+" "+lexeme[4]+" "+lexeme[5]+"<declarations>"+lexeme[lexeme.length-1]).matches("job\\s<identifier>\\soutputs\\s(<type>|<identifier>)\\susing\\s\\(<declarations>\\)")
             && allDeclarations(lexeme,6,lexeme.length-2)
         ){
             type = "JOB DECLARATION!";
