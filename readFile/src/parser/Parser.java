@@ -34,15 +34,15 @@ public class Parser {
     List<pointers> program;
     ArrayList<Token> tkStream;
      public static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
-    String[] lexeme; 
+     
      
     public Parser(ArrayList<Token> tkStream) throws ScriptException{
         this.tkStream = tkStream;
         String line = stringify(); 
         System.out.println(line);
         
-        this.lexeme = line.split(" ");
-        Start();
+        String[] lexeme = line.split(" ");
+        Start(lexeme);
     }
     
     public String stringify(){
@@ -140,7 +140,16 @@ public class Parser {
                type.equals("java.lang.Double");
     }*/
     
-     public String Start() throws ScriptException{
+    private boolean allDeclarations(String[] lexeme, int start, int end) throws ScriptException{
+        String params = "";
+        for(int i=start; i<=end; i++){
+            params+=lexeme[i];
+        }
+        System.out.print(params);
+        return params.matches("((<type>)|(<identifier>))(<identifier>)(\\,((<type>)|(<identifier>))(<identifier>))*");
+    }
+    
+    public String Start(String[] lexeme) throws ScriptException{
         String type = "";
         if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
             type = "DECLARATION!";
@@ -183,8 +192,21 @@ public class Parser {
             type = ("DO!");
         }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-1]).matches("while\\s\\(<expr>\\)")){
             type = ("WHILE!");
-        }else if(lexeme.length == 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("(<identifier>)|(<type>)\\sjob\\s<identifier>")){
+        }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("job\\s<identifier>")){
+            type = "JOB DECLARATION WITHOUT PARAMS AND RETURN TYPE!";
+        }else if(lexeme.length == 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("job\\s<identifier>\\soutputs\\s<type>")){
             type = "JOB DECLARATION WITHOUT PARAMS!";
+        }else if(
+            lexeme.length > 5 && 
+            (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]+"<declarations>"+lexeme[lexeme.length-1]).matches("job\\s<identifier>\\susing\\s\\(<declarations>\\)")
+            && allDeclarations(lexeme,4,lexeme.length-2)
+        ){
+            type = "JOB DECLARATION WITHOUT RETURN TYPE!";
+        }else if(
+            lexeme.length > 7 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]+" "+lexeme[4]+" "+lexeme[5]+"<declarations>"+lexeme[lexeme.length-1]).matches("job\\s<identifier>\\soutputs\\s<type>\\susing\\s\\(<declarations>\\)")
+            && allDeclarations(lexeme,6,lexeme.length-2)
+        ){
+            type = "JOB DECLARATION!";
         }else{
             throw new IllegalStateException("Wrong Syntax");
         } 
