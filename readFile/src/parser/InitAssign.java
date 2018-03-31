@@ -8,9 +8,8 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
-import static readfile.ReadFile.IFctr;
-import static readfile.ReadFile.IFstack;
-import static readfile.ReadFile.bigBoard;
+
+import static readfile.ReadFile.*;
 
 public class InitAssign {
     //INITIALIZATION
@@ -303,7 +302,10 @@ public class InitAssign {
                 }
                 break;
             default:
-                if(!isInitialized(code.get(1).getToken())) {
+                if(groups.isDefined(code.get(0).getToken()) && code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+                    List<member> temp = groups.allocateMemory(code.get(0).getToken());
+                    bigBoard.put(IFstack.peek().getLevel(),code.get(1).getToken(),new memory(temp,TokenType.RECORD));
+                }else if(!isInitialized(code.get(1).getToken())) {
                     bigBoard.put(IFstack.peek().getLevel(), code.get(1).getToken(), new memory(code.get(3).getToken(), code.get(3).getTokenType()));
                 }else{
                     System.out.println(code.get(1).getToken()+" has already been initialized");

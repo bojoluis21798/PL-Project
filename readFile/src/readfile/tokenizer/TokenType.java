@@ -36,4 +36,6 @@ public enum TokenType {
     BOOLEAN_LITERAL,
     
     ORDINAL,
+
+    RECORD
 }
