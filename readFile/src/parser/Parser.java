@@ -168,7 +168,7 @@ public class Parser {
             System.out.println("ELSE STATEMENT!");
         }else if(
             (lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis")) ||
-            (lexeme.length > 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("<ordinal>\\sof<identifier>\\sis"))
+            (lexeme.length > 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("<ordinal>\\sof\\s<identifier>\\sis"))
         ){ //assignment
             type = ("ASSIGNMENT!");
         }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){
