@@ -7,21 +7,23 @@ package parser;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import readfile.tokenizer.Token;
-import readfile.tokenizer.TokenData;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import readfile.tokenizer.TokenType;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import readfile.pointers;
-import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
+
+//unused imports
+import java.util.Iterator;
+import java.util.LinkedList;
+import readfile.tokenizer.TokenData;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import readfile.tokenizer.TokenType;
+import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.program;
 import static readfile.ReadFile.q;
 
@@ -84,21 +86,16 @@ public class Parser {
         }
         
         for(int i=start; i<=end; i++){
-            switch(tkStream.get(i).getTokenType()){
-                case STRING_LITERAL:
-                    expr+="\"\"";
-                    break;
-                default:
-                    expr+=tkStream.get(i).getToken();
-            }
-            expr+=" ";
+            expr+=(lexeme[i].equals("<operation>"))?tkStream.get(i).getToken():lexeme[i];
        }
+        
         System.out.println("Expression: "+expr);
-        String identifier = "[a-zA-Z][a-zA-Z0-9]*";
-        String string = "\"[^\"]*\"";
-        expr=expr.replaceAll(string, "0");
-        expr=expr.replaceAll("([a-zA-Z][a-zA-Z0-9]*)\\s(using)", "");
-        expr=expr.replaceAll(identifier, "0");
+        
+        expr=expr.replaceAll("<string>", "0");
+        expr=expr.replaceAll("<number>","0");
+        expr=expr.replaceAll("<boolean>","0");
+        //expr=expr.replaceAll("(<identifier>)\\s(using)\\s\\())\\)", "");
+        expr=expr.replaceAll("<identifier>", "0");
         
         System.out.println("Expression: "+expr);
         ScriptEngineManager manager = new ScriptEngineManager();

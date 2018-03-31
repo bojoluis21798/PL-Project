@@ -8,26 +8,28 @@ package readfile;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import javax.script.ScriptException;
 import lineexecution.LineExecution;
 import parser.BiHashMap;
-import parser.Parser;
-import parser.selection;
 import parser.subprogram;
-import readfile.pointers;
 import readfile.tokenizer.Token;
-import readfile.tokenizer.TokenType;
 import readfile.tokenizer.Tokenizer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
-import javax.script.ScriptException;
 import parser.groups;
 import parser.grpInstance;
+
+//unused imports
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import parser.Parser;
+import parser.selection;
+import readfile.pointers;
+import readfile.tokenizer.TokenType;
+import javax.script.ScriptException;
 /**
  *
  * @author User

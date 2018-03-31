@@ -3,13 +3,11 @@ package parser;
 import readfile.tokenizer.Token;
 import readfile.tokenizer.TokenType;
 import readfile.tokenizer.Tokenizer;
-
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
-
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;

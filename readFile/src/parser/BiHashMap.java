@@ -7,8 +7,10 @@ package parser;
 
 import java.util.HashMap;
 import java.util.Map;
-import parser.memory;
 import readfile.tokenizer.TokenType;
+
+//unused imports
+import parser.memory;
 
 /**
  *

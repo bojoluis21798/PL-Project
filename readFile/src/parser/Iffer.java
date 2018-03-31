@@ -3,21 +3,21 @@ package parser;
 import readfile.tokenizer.Token;
 import readfile.tokenizer.TokenType;
 import readfile.tokenizer.Tokenizer;
-
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
-import static parser.groups.allocateMemory;
-import static parser.grpInstance.assignMember;
-import static parser.grpInstance.isInstanceDefined;
-
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
+
+//unused imports
 import static readfile.ReadFile.groupDefinitions;
 import static readfile.ReadFile.groupInstances;
+import static parser.groups.allocateMemory;
+import static parser.grpInstance.assignMember;
+import static parser.grpInstance.isInstanceDefined;
 
 public class Iffer {
     public static boolean ifSTMT(ArrayList<Token> code) throws ScriptException {
