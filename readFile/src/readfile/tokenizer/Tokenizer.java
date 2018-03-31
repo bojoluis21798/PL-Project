@@ -63,6 +63,7 @@ public class Tokenizer {
                             token.equals("if")    ||
                             token.equals("then")  ||
                             token.equals("end")   ||
+                            token.equals("repeat") ||
                             token.equals("while") ||
                             token.equals("add")   ||
                             token.equals("is")    ||
