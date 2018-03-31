@@ -68,11 +68,8 @@ public class grpInstance {
             if(token.getTokenType().equals(TokenType.IDENTIFIER)){
                
                if (InitAssign.isInitialized(variable) && InitAssign.isAccessible(variable)){
-                            
                             int levelOfVariable = InitAssign.accessLevelOf(variable);
                             variable= bigBoard.get(levelOfVariable,variable).toString();
-                            
-                            
                 }else{
                    if(!InitAssign.isInitialized(variable)){
                        throw new IllegalStateException("Error: Variable not Initialized");
@@ -93,12 +90,18 @@ public class grpInstance {
             
             List<member> temp = (ArrayList<member>) bigBoard.get(IFstack.peek().getLevel(),groupInstanceIdentifier);
             
+//            for(int ctr=0; ctr<temp.size();ctr++){
+//              System.out.println("HELLO"+temp.get(ctr).getMemberName());
+//            }
+            
             for(int ctr=0;ctr<temp.size();ctr++){
                if(temp.get(ctr).getMemberName().equals(member)){
                    temp.get(ctr).setValue(result);
                    break;
                }
             }
+            
+            
             
             bigBoard.put(IFstack.peek().getLevel(),groupInstanceIdentifier, new memory(temp,TokenType.RECORD));
      }

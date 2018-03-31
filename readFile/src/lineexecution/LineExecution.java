@@ -188,7 +188,8 @@ public class LineExecution {
                 if(levelsAndLines.isEmpty()){
                     //lineCount++;
                     //System.out.println("WTF");
-                    
+                    //IFstack.pop();
+                    //IFctr--;
                 }else{
                       if(program.get(lineCount).getCode().get(0).getToken().equals("if") && thisLevel == levelsAndLines.get(0).getLevel()){
                           lineCount++;
@@ -197,7 +198,7 @@ public class LineExecution {
                       }else if(program.get(lineCount).getCode().get(0).getToken().equals("orif")  && thisLevel != levelsAndLines.get(0).getLevel()){
                           lineCount++;
                           //insert code here for when end encounters an orif on a different level 
-                          System.out.println("SAKPAN");
+                          
                           
                           for(;!"end".equals(program.get(levelsAndLines.get(0).getLine()).getCode().get(0).getToken());){
                              levelsAndLines.remove(0);
@@ -233,12 +234,24 @@ public class LineExecution {
                    List<member> members = new ArrayList<>();
                    lineCount++;
                    for(;!program.get(lineCount).getCode().get(0).getToken().equals("end");lineCount++){
+                       
+                       
                        members.add(new member(null,program.get(lineCount).getCode().get(0).getToken(),program.get(lineCount).getCode().get(1).getToken()));
+                          
+                       
+                      
+                       
                    }
+                   
+                   
                    levelsAndLines.remove(0);
                    lineCount++;
-                   groupDefinitions.add(new groups(new ArrayList<>(members),groupIdentifier));
+                   groupDefinitions.add(new groups((ArrayList<member>) members,groupIdentifier));
                    
+//                   for(int ctr=0; ctr<groupDefinitions.get(0).getGrpMemory().size();ctr++){
+//                     System.out.println("WHY "+groupDefinitions.get(0).getGrpMemory().get(ctr).getMemberName());
+//                   }
+            
                }else{
                   Iffer.execute((ArrayList<Token>) program.get(lineCount).getCode());
                   lineCount++;

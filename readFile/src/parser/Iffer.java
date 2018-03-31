@@ -264,7 +264,7 @@ public class Iffer {
                 }else if(code.size() == 2 && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
                     
                     if(groups.isDefined(code.get(0).getToken())){
-                        System.out.println("FUCK YOU");
+                        
                         
                         code.get(0).setTokenType(TokenType.DATA_TYPE);
                         InitAssign.initPlaceIntoMemory(code);
@@ -282,7 +282,7 @@ public class Iffer {
                 }else if(code.size() >= 4){
                     if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER) && code.get(1).getToken().equals("of")){//give value to one of the members
                         if(InitAssign.isInitialized(code.get(2).getToken())){
-                            System.out.println("FUCKING GOT IN");
+                            
                             assignMember(code);
                         }else{
                             System.out.println("Group variable undefined");
@@ -365,7 +365,15 @@ public class Iffer {
                                 InitAssign.initPlaceIntoMemory( objToSend);
                                 System.out.println("SUCCESSFUL");
                             }else if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
-                                expression = (ArrayList<Token>) code.subList(2,code.size());
+                                expression =  code.subList(2,code.size());
+                                Object retval = accessGroup(expression.get(2).getToken(),expression.get(0).getToken());
+                                objToSend = code.subList(0,2);
+                                Tokenizer tknObj = new Tokenizer(retval.toString());
+                                Token literal = tknObj.nextToken();
+                                objToSend.add((Token) literal);
+                                
+                                InitAssign.initPlaceIntoMemory( objToSend);
+                                
                             }else{
                                 System.out.println("New Init or Assign!");
                             }
