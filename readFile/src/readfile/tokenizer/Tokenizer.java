@@ -34,7 +34,7 @@ public class Tokenizer {
        tokDatas.add(new TokenData("(false)|(true)",TokenType.BOOLEAN_LITERAL));
        tokDatas.add(new TokenData("\"[^\"]*\"",TokenType.STRING_LITERAL));
        tokDatas.add(new TokenData("[a-zA-Z][a-zA-Z0-9]*",TokenType.IDENTIFIER));
-       tokDatas.add(new TokenData("[+*-/<>=]",TokenType.OPERATION));
+       tokDatas.add(new TokenData("[+*-/<>%=]",TokenType.OPERATION));
        tokDatas.add(new TokenData("[-]?\\d*(\\.\\d*)?",TokenType.NUMBER_LITERAL));}
 
     public Token nextToken() throws ScriptException{
