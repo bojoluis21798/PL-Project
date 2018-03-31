@@ -207,6 +207,8 @@ public class Parser {
             && allDeclarations(lexeme,6,lexeme.length-2)
         ){
             type = "JOB DECLARATION!";
+        }else if(lexeme.length >= 2 && (lexeme[0]+" <expr>").matches("return\\s<expr>")){
+            type = "RETURN STATEMENT";
         }else{
             throw new IllegalStateException("Wrong Syntax");
         } 
