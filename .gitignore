@@ -3,6 +3,8 @@
 /readFile/build/
 /readFile/dist/
 source.txt
+/readFile/.idea/workspace.xml
+
 
 # Compiled class file
 *.class
