@@ -172,6 +172,8 @@ public class Parser {
             System.out.println("GROUP VARIABLE DECLARATION!");
         }else if(lexeme.length == 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("group\\s<identifier>\\scontains")){
             System.out.println("GROUP DECLARATION!");
+        }else if(lexeme.length > 3 && (lexeme[0]+" <expr> "+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("add\\s<expr>\\sto\\s<identifier>")){
+            System.out.println("VECTOR ADD!");
         }else{
             throw new IllegalStateException("Wrong Syntax");
         }        
