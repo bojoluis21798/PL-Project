@@ -179,6 +179,12 @@ public class Parser {
             type = ("VECTOR REMOVE!");
         }else if(lexeme.length > 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("repeat\\swhile\\s\\(<expr>\\)")){
             type = ("PRE TEST LOOP!");
+        }else if(lexeme.length == 1 && (lexeme[0]).matches("do")){
+            type = ("DO!");
+        }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-1]).matches("while\\s\\(<expr>\\)")){
+            type = ("WHILE!");
+        }else if(lexeme.length == 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("(<identifier>)|(<type>)\\sjob\\s<identifier>")){
+            type = "JOB DECLARATION WITHOUT PARAMS!";
         }else{
             throw new IllegalStateException("Wrong Syntax");
         } 
