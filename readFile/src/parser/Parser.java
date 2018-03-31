@@ -140,47 +140,50 @@ public class Parser {
                type.equals("java.lang.Double");
     }*/
     
-     public void Start() throws ScriptException{
+     public String Start() throws ScriptException{
+        String type = "";
         if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
-            System.out.println("DECLARATION!");
+            type = "DECLARATION!";
         }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis")){
-            System.out.println("INITIALIZATION!");
+            type = "INITIALIZATION!";
         }else if(
             lexeme.length >= 5 && 
             (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("if\\s\\(<expr>\\)\\sthen")
         ){ 
-            System.out.println("IF STATEMENT!");
+            type = "IF STATEMENT!";
         }else if(lexeme.length >= 5 && 
             (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("orif\\s\\(<expr>\\)\\sthen"))
         { //orif statement
-            System.out.println("ORIF STATEMENT!");
+            type = "ORIF STATEMENT!";
         }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("else then")){ //else statement
             System.out.println("ELSE STATEMENT!");
         }else if(
             (lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis")) ||
             (lexeme.length > 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("<ordinal>\\sof<identifier>\\sis"))
         ){ //assignment
-            System.out.println("ASSIGNMENT!");
+            type = ("ASSIGNMENT!");
         }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){
-            System.out.println("END!");
+            type = ("END!");
         }else if(
             lexeme.length >= 4 && 
             (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("<identifier>\\susing\\s\\(<expr>\\)")
         ){ 
-            System.out.println("FUNCTION CALL!");
+            type = ("FUNCTION CALL!");
         }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\s<identifier>")){
-            System.out.println("GROUP VARIABLE DECLARATION!");
+            type = ("GROUP VARIABLE DECLARATION!");
         }else if(lexeme.length == 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("group\\s<identifier>\\scontains")){
-            System.out.println("GROUP DECLARATION!");
+            type = ("GROUP DECLARATION!");
         }else if(lexeme.length > 3 && (lexeme[0]+" <expr> "+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("add\\s<expr>\\sto\\s<identifier>")){
-            System.out.println("VECTOR ADD!");
+            type = ("VECTOR ADD!");
         }else if(lexeme.length == 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("remove\\s<ordinal>\\sof\\s<identifier>")){
-            System.out.println("VECTOR REMOVE!");
+            type = ("VECTOR REMOVE!");
         }else if(lexeme.length > 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("repeat\\swhile\\s\\(<expr>\\)")){
-            System.out.println("Pre test loop!");
+            type = ("PRE TEST LOOP!");
         }else{
             throw new IllegalStateException("Wrong Syntax");
-        }        
+        } 
+        System.out.println(type);
+        return type;
     }
     
   public boolean isDeclared(String token){
