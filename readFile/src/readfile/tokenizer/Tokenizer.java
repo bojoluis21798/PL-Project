@@ -34,7 +34,7 @@ public class Tokenizer {
        tokDatas.add(new TokenData("(false)|(true)",TokenType.BOOLEAN_LITERAL));
        tokDatas.add(new TokenData("\"[^\"]*\"",TokenType.STRING_LITERAL));
        tokDatas.add(new TokenData("[a-zA-Z][a-zA-Z0-9]*",TokenType.IDENTIFIER));
-       tokDatas.add(new TokenData("[+*-/<>%=]",TokenType.OPERATION));
+       tokDatas.add(new TokenData("[+*-/<>%=]|(not)|(not=)|(or)|(and)",TokenType.OPERATION));
        tokDatas.add(new TokenData("[-]?\\d*(\\.\\d*)?",TokenType.NUMBER_LITERAL));}
 
     public Token nextToken() throws ScriptException{
@@ -74,7 +74,10 @@ public class Tokenizer {
                             token.equals("using") ||
                             token.equals("and") ||
                             token.equals("not") ||
-                            token.equals("not=")
+                            token.equals("not=") ||
+                            token.equals("=") ||
+                            token.equals("group") ||
+                            token.equals("contains") 
                     ){
                         if(token.equals("and")){
                             return (lastToken = new Token("&&",TokenType.OPERATION));
@@ -84,6 +87,8 @@ public class Tokenizer {
                             return (lastToken = new Token("!",TokenType.OPERATION));
                         }else if(token.equals("not=")){
                             return (lastToken = new Token("!=",TokenType.OPERATION)); //5+5
+                        }else if(token.equals("=")){
+                            return (lastToken = new Token("==",TokenType.OPERATION));
                         }
                         return (lastToken = new Token(token,TokenType.KEYWORD));
                     }else if(token.equals("number") || token.equals("word") || token.equals("truth") ||

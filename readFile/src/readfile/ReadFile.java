@@ -90,6 +90,11 @@ public class ReadFile {
                         throw new IllegalStateException("Wrong Syntax");
                     }
                     
+                    if(token.equals("=")&& lastToken.equals("not")){
+                        tokens[k-1] += token;
+                        continue;
+                    }
+                    
                     if(token.equals(" ") && !group){
                         continue;
                     }
