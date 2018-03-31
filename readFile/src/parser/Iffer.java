@@ -149,7 +149,13 @@ public class Iffer {
         }
         int indexOfVector = -1;
         for(int x=0; x < arithmeticExpression.size(); x++){
-            if (arithmeticExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
+            if(     arithmeticExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER) &&
+                    arithmeticExpression.get(x+1).getTokenType().equals(TokenType.KEYWORD) &&
+                    arithmeticExpression.get(x+2).getTokenType().equals(TokenType.IDENTIFIER)){
+
+                System.out.println("Hi! I'm a group member in an expression (Kpop Band)");
+
+            }else if(arithmeticExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
                 String variable = arithmeticExpression.get(x).getToken();
                 if (InitAssign.isInitialized(variable) && InitAssign.isAccessible(variable)){
                     int levelOfVariable = InitAssign.accessLevelOf(variable);
@@ -189,7 +195,7 @@ public class Iffer {
                 }
             }else{
                 st+=" "+arithmeticExpression.get(x).getToken();
-            }
+            } 
         }
 
         int origCodeSize = code.size();
@@ -258,13 +264,13 @@ public class Iffer {
 
                 //INITIALIZATION AND ASSIGNMENT WITH EXPRESSION, VECTOR INITIALIZATION, VECTOR ADD AND REMOVE
                 }else if(code.size() >= 4){
-                    if(code.get(1).getToken().equals("of") && code.size() == 5){//give value to one of the members
-
+                    if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER) && code.get(1).getToken().equals("of")){//give value to one of the members
                         if(InitAssign.isInitialized(code.get(2).getToken())){
                             assignMember(code);
                         }else{
                             System.out.println("Group variable undefined");
                         }
+
                     }else{
                         System.out.println("Complex Init,Assign,Op");
                         int x = 0;
@@ -326,6 +332,8 @@ public class Iffer {
                             }
                             System.out.println();
                             InitAssign.initialize(code);
+                        }else if(code.get(0).getToken().equals("print")){
+                            print.printIt(code);
                         }else{
 
                             System.out.println("New Init or Assign!");
@@ -366,6 +374,7 @@ public class Iffer {
                 }
                 break;
             default:
+
                 throw new IllegalStateException("Not a Declaration/Initialization");
 
 

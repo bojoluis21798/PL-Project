@@ -73,7 +73,6 @@ public class Tokenizer {
                             token.equals("add")   ||
                             token.equals("to")    ||
                             token.equals("remove")||
-                            token.equals("of")    ||
                             token.equals("using")
                     ){
                         if(token.equals("and")){
