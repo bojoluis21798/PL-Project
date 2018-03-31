@@ -6,10 +6,12 @@
 package readfile.tokenizer;
 
 import java.util.ArrayList;
+import javax.script.ScriptException;
+
+//unused imports
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.script.ScriptException;
 
 /**
  *

@@ -40,7 +40,12 @@ public class print {
                             
                             
                 }else{
-                            System.out.println("Error: Variable not in HashMap");
+                   if(!InitAssign.isInitialized(variable)){
+                       throw new IllegalStateException("Error: Variable not Initialized");
+                   }
+                   if(!InitAssign.isAccessible(variable)){
+                       throw new IllegalStateException("Error: Variable not Accessible in this Level");
+                   }
                 }
                 
             }

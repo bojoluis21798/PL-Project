@@ -7,21 +7,23 @@ package parser;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import readfile.tokenizer.Token;
-import readfile.tokenizer.TokenData;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import readfile.tokenizer.TokenType;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import readfile.pointers;
-import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
+
+//unused imports
+import java.util.Iterator;
+import java.util.LinkedList;
+import readfile.tokenizer.TokenData;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import readfile.tokenizer.TokenType;
+import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.program;
 import static readfile.ReadFile.q;
 

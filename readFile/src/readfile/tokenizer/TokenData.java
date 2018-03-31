@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package readfile.tokenizer;
-
+//unused imports
 import java.util.regex.Pattern;
 
 /**

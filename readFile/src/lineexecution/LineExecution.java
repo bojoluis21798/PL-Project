@@ -13,7 +13,7 @@ import static readfile.ReadFile.groupDefinitions;
 import static readfile.ReadFile.levelsAndLines;
 import readfile.tokenizer.TokenType;
 
-//Unused Imports TBD
+//unused imports
 import readfile.tokenizer.TokenData;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
