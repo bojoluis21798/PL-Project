@@ -8,6 +8,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
+import static parser.groups.accessGroup;
 
 import static readfile.ReadFile.*;
 
@@ -24,7 +25,7 @@ public class InitAssign {
 			-there is no variable identifier
 			-there is no such datatype
     */
-    public static void initialize(ArrayList<Token> code){
+    public static void initialize(ArrayList<Token> code) throws ScriptException{
 
         switch (code.get(0).getToken()) {
 
@@ -62,7 +63,7 @@ public class InitAssign {
                                 initPlaceIntoMemory(code);
                             }else{
                                 System.out.println(code.get(0).getToken());
-                                System.out.println("Error: Data Type Mismatch (Number)");
+                                throw new IllegalStateException("Error: Data Type Mismatch (Number)");
                             }
                             break;
                         case STRING_LITERAL:
@@ -70,7 +71,7 @@ public class InitAssign {
                             if(code.get(0).getToken().equals(alert)){
                                 initPlaceIntoMemory(code);
                             }else{
-                                System.out.println("Error: Data Type Mismatch (Word)");
+                                throw new IllegalStateException("Error: Data Type Mismatch (Word)");
                             }
                             break;
                         case BOOLEAN_LITERAL:
@@ -78,14 +79,14 @@ public class InitAssign {
                             if(code.get(0).getToken().equals(alert)){
                                 initPlaceIntoMemory(code);
                             }else{
-                                System.out.println("Error: Data Type Mismatch (Truth)");
+                                throw new IllegalStateException("Error: Data Type Mismatch (Truth)");
                             }
                             break;
                         case IDENTIFIER:
                             initWithVariable(code);
                             break;
                         default:
-                            System.out.println("Error: No such Data Type ");
+                            throw new IllegalStateException("Error: No such Data Type ");
 
                     }
 
@@ -170,7 +171,7 @@ public class InitAssign {
                                             System.out.println(code.get(i).getToken()+" fits dataType");
                                         } else {
                                             error = true;
-                                            System.out.println("Error: Data Type Mismatch ("+code.get(0).getToken().substring(0,code.get(0).getToken().length()-1)+" Required)");
+                                            throw new IllegalStateException("Error: Data Type Mismatch ("+code.get(0).getToken().substring(0,code.get(0).getToken().length()-1)+" Required)");
                                         }
                                         break;
                                     case STRING_LITERAL:
@@ -288,7 +289,7 @@ public class InitAssign {
 		code.get(3).getToken(),code.get(3).getTokenType()
 
     */
-    public static void initPlaceIntoMemory (List<Token> code){
+    public static void initPlaceIntoMemory (List<Token> code) throws ScriptException{
         switch (code.get(0).getToken()) {
             case "numbers":
             case "words":
@@ -327,10 +328,18 @@ public class InitAssign {
                 }
                 break;
             default:
+                
                 if(groups.isDefined(code.get(0).getToken()) && code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+                    
                     List<member> temp = groups.allocateMemory(code.get(0).getToken());
                     bigBoard.put(IFstack.peek().getLevel(),code.get(1).getToken(),new memory(temp,TokenType.RECORD));
+                }else if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER) && isInitialized(code.get(0).getToken())){
+                    
+                     System.out.println(code.get(1).getToken());
+
+                        assign(code);
                 }else if(!isInitialized(code.get(1).getToken())) {
+                    
                     bigBoard.put(IFstack.peek().getLevel(), code.get(1).getToken(), new memory(code.get(3).getToken(), code.get(3).getTokenType()));
                 }else{
                     System.out.println(code.get(1).getToken()+" has already been initialized");
@@ -358,7 +367,7 @@ public class InitAssign {
 			-the tokenTypes of the variables do not match
 
     */
-    public static void assign(ArrayList<Token> code){
+    public static void assign(List<Token> code){
         if(code.get(0).getTokenType() == TokenType.IDENTIFIER) {
 
             if (code.get(1).getTokenType() == TokenType.KEYWORD
@@ -419,7 +428,7 @@ public class InitAssign {
             }
             //else if(){} for vectors TBD
             else{
-                System.out.println("Invalid Syntax: not an assignment");
+                throw new IllegalStateException("Invalid Syntax: not an assignment");
             }
 
         }else if(code.get(0).getTokenType().equals(TokenType.ORDINAL)){ //if an ordinal of a vector is assign a new value

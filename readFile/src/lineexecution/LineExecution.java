@@ -53,8 +53,7 @@ public class LineExecution {
                      levelsAndLines.remove(0);
                     if (Iffer.ifSTMT((ArrayList<Token>) program.get(lineCount).getCode())){//check if the condition is true
                           //dequeue from the list so u can check up to which statement you will have to execute that isn't another selection statement
-
-
+                        
                          for(i = program.get(lineCount).getIndex();i < levelsAndLines.get(0).getLine();i++){//execute these lines of code  when condition is true
                              Iffer.execute((ArrayList<Token>) program.get(i).getCode());
                          }
@@ -67,7 +66,7 @@ public class LineExecution {
                              levelsAndLines.remove(0);
                              
                              for(; thisLevel == levelsAndLines.get(0).getLevel();){
-                                System.out.println(lineCount);
+                                //System.out.println(lineCount);
                                 if(!levelsAndLines.isEmpty()){
                                     lineCount = levelsAndLines.get(0).getLine();
                                 
@@ -81,7 +80,7 @@ public class LineExecution {
                              
                          }else if(program.get(lineCount).getCode().get(0).getToken().equals("else") && thisLevel == levelsAndLines.get(0).getLevel()){
                              for(; thisLevel == levelsAndLines.get(0).getLevel();){
-                                System.out.println(thisLevel+"=="+levelsAndLines.get(0).getLevel());
+                                //System.out.println(thisLevel+"=="+levelsAndLines.get(0).getLevel());
                                 levelsAndLines.remove(0);
                                 lineCount = levelsAndLines.get(0).getLine();
                                 if("end".equals(program.get(lineCount).getCode().get(0).getToken()) ){
@@ -102,14 +101,14 @@ public class LineExecution {
                           lineCount = levelsAndLines.get(ctr).getLine();
                           
                      }
-            }else if(program.get(lineCount).getCode().get(0).getToken().equals("orif") || program.get(lineCount).getCode().get(0).getToken().equals("else")){//hit an orif and else
+            }else if(program.get(lineCount).getCode().get(0).getToken().equals("orif") || program.get(lineCount).getCode().get(0).getToken().equals("else") ){//hit an orif and else
                
                 if(program.get(lineCount).getCode().get(0).getToken().equals("orif") ){//if it hits orif
                   
-                   
-                    if (Iffer.ifSTMT((ArrayList<Token>) program.get(lineCount).getCode()) ){//check if the orif condition is true
+                       System.out.println(thisLevel+"="+levelsAndLines.get(0).getLevel());
+                    if (Iffer.ifSTMT((ArrayList<Token>) program.get(lineCount).getCode()) && thisLevel == levelsAndLines.get(0).getLevel()){//check if the orif condition is true
                          levelsAndLines.remove(0); //dequeue from the list so u can check up to which statement you will have to execute that isn't another selection statement
-
+                         
                          int i=0;
                          for(i = program.get(lineCount).getIndex();i < levelsAndLines.get(0).getLine();i++){//execute these lines of code  when condition is true
                              Iffer.execute((ArrayList<Token>) program.get(i).getCode());
@@ -117,7 +116,7 @@ public class LineExecution {
 
                          lineCount = i;
                          
-                        if(program.get(lineCount).getCode().get(0).getToken().equals("orif") && thisLevel == levelsAndLines.get(0).getLevel()){
+                        if(program.get(lineCount).getCode().get(0).getToken().equals("orif")){
                              lineCount++;
                              levelsAndLines.remove(0);
                              
@@ -134,7 +133,7 @@ public class LineExecution {
                                 
                              }
                              
-                         }else if(program.get(lineCount).getCode().get(0).getToken().equals("else") && thisLevel == levelsAndLines.get(0).getLevel()){
+                         }else if(program.get(lineCount).getCode().get(0).getToken().equals("else") ){
                              for(; thisLevel == levelsAndLines.get(0).getLevel();){
                                 System.out.println(thisLevel+"=="+levelsAndLines.get(0).getLevel());
                                 levelsAndLines.remove(0);
@@ -147,22 +146,34 @@ public class LineExecution {
                         
                          
 
+                     }else if(Iffer.ifSTMT((ArrayList<Token>) program.get(lineCount).getCode()) && thisLevel != levelsAndLines.get(0).getLevel()){//jump to end
+                         thisLevel = levelsAndLines.get(0).getLevel(); 
+                         for(; thisLevel == levelsAndLines.get(0).getLevel() && !levelsAndLines.isEmpty();){
+                                System.out.println(thisLevel+"=="+levelsAndLines.get(0).getLevel());
+                                levelsAndLines.remove(0);
+                                lineCount = levelsAndLines.get(0).getLine();
+                                if("end".equals(program.get(lineCount).getCode().get(0).getToken()) ){
+                                    break;
+                                }
+                             }
                      }else{
-                           thisLevel = levelsAndLines.get(0).getLevel();
+                         System.out.println("FUCKKKK");
+                          thisLevel = levelsAndLines.get(0).getLevel();
                           levelsAndLines.remove(0);
                            
                           int ctr;
+                          System.out.println(thisLevel+"="+levelsAndLines.get(0).getLevel());
                           for(ctr=0;levelsAndLines.get(ctr).getLevel() != thisLevel ;){
                                System.out.println(levelsAndLines.get(ctr).getLevel());
                                 levelsAndLines.remove(ctr);
                           }
                           
                           lineCount = levelsAndLines.get(ctr).getLine();
-                          //System.out.println(lineCount);
+                          System.out.println(lineCount);
                           
                      }
-                }else if(program.get(lineCount).getCode().get(0).getToken().equals("else")){//execute 
-                     
+                }else if(program.get(lineCount).getCode().get(0).getToken().equals("else") /*&& thisLevel == levelsAndLines.get(0).getLevel()*/){//execute 
+                     System.out.println(thisLevel+"="+levelsAndLines.get(0).getLevel());
                      int i=0;
                      lineCount++;
                      levelsAndLines.remove(0); //dequeue from the list so u can check up to which statement you will have to execute that isn't another selection statement
@@ -179,7 +190,7 @@ public class LineExecution {
 
                 }
             }else if(program.get(lineCount).getCode().get(0).getToken().equals("end")){
-               
+
                 lineCount++;
                 levelsAndLines.remove(0);
                
@@ -188,7 +199,8 @@ public class LineExecution {
                 if(levelsAndLines.isEmpty()){
                     //lineCount++;
                     //System.out.println("WTF");
-                    
+                    //IFstack.pop();
+                    //IFctr--;
                 }else{
                       if(program.get(lineCount).getCode().get(0).getToken().equals("if") && thisLevel == levelsAndLines.get(0).getLevel()){
                           lineCount++;
@@ -197,7 +209,7 @@ public class LineExecution {
                       }else if(program.get(lineCount).getCode().get(0).getToken().equals("orif")  && thisLevel != levelsAndLines.get(0).getLevel()){
                           lineCount++;
                           //insert code here for when end encounters an orif on a different level 
-                          System.out.println("SAKPAN");
+                          
                           
                           for(;!"end".equals(program.get(levelsAndLines.get(0).getLine()).getCode().get(0).getToken());){
                              levelsAndLines.remove(0);
@@ -214,7 +226,7 @@ public class LineExecution {
                           }
                       }else{
                            
-                           System.out.println(levelsAndLines.get(0).getLevel());
+                           System.out.println("WHAT"+levelsAndLines.get(0).getLevel());
                            for(i = program.get(lineCount).getIndex();i < levelsAndLines.get(0).getLine();i++){//execute these lines of code  when condition is true
                              Iffer.execute((ArrayList<Token>) program.get(i).getCode());
                              lineCount++;
@@ -233,13 +245,26 @@ public class LineExecution {
                    List<member> members = new ArrayList<>();
                    lineCount++;
                    for(;!program.get(lineCount).getCode().get(0).getToken().equals("end");lineCount++){
+                       
+                       
                        members.add(new member(null,program.get(lineCount).getCode().get(0).getToken(),program.get(lineCount).getCode().get(1).getToken()));
+                          
+                       
+                      
+                       
                    }
+                   
+                   
                    levelsAndLines.remove(0);
                    lineCount++;
-                   groupDefinitions.add(new groups(new ArrayList<>(members),groupIdentifier));
+                   groupDefinitions.add(new groups((ArrayList<member>) members,groupIdentifier));
                    
+//                   for(int ctr=0; ctr<groupDefinitions.get(0).getGrpMemory().size();ctr++){
+//                     System.out.println("WHY "+groupDefinitions.get(0).getGrpMemory().get(ctr).getMemberName());
+//                   }
+            
                }else{
+                  //for(;;)
                   Iffer.execute((ArrayList<Token>) program.get(lineCount).getCode());
                   lineCount++;
                }
