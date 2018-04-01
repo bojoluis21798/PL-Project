@@ -71,7 +71,7 @@ public class ReadFile {
                         int level=0;
 			while ((sCurrentLine = br.readLine()) != null) {
 
-                System.out.println(sCurrentLine);
+               
                 if(sCurrentLine.equals("")){
                     continue;
                 }
@@ -120,17 +120,17 @@ public class ReadFile {
                 
 
                 for(int i = 0; i<tokens.length && !tokens[i].equals(""); i++){
-                    System.out.println("\nToken->"+i+" "+tokens[i]); //added \n
+                   
 
                     Tokenizer tknObj = new Tokenizer(tokens[i]);
 
-                    System.out.println(" Line"+ctr+":"); //\n
+                    
 
                     Token retVal = tknObj.nextToken();
 
                     tkStream.add(new Token(retVal.getToken(),retVal.getTokenType()));
                     tokGroup.add(new Token(retVal.getToken(),retVal.getTokenType()));
-                    System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());//+"\n---------------------"
+                  
 
                 }
                 //Parser p = new Parser(tkStream);
