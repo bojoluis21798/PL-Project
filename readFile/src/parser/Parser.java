@@ -36,7 +36,7 @@ public class Parser {
     List<pointers> program;
     ArrayList<Token> tkStream;
      public static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
-    String type;
+    public String type;
      
     public Parser(ArrayList<Token> tkStream) throws ScriptException{
         this.tkStream = tkStream;
@@ -142,7 +142,7 @@ public class Parser {
                type.equals("java.lang.Double");
     }*/
     
-    private static boolean allDeclarations(String[] lexeme, int start, int end) throws ScriptException{
+    private boolean allDeclarations(String[] lexeme, int start, int end) throws ScriptException{
         String params = "";
         for(int i=start; i<=end; i++){
             params+=lexeme[i];
@@ -151,7 +151,7 @@ public class Parser {
         return params.matches("((<type>)|(<identifier>))(<identifier>)(\\,((<type>)|(<identifier>))(<identifier>))*");
     }
     
-    public static String Start(String[] lexeme) throws ScriptException{
+    public String Start(String[] lexeme) throws ScriptException{
         if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
             type = "DECLARATION!";
         }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis")){
