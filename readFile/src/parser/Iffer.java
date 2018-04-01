@@ -67,10 +67,10 @@ public class Iffer {
             //EdCode end
         }else if (code.get(0).getToken().equals("repeat")) {
 
-            if (checkCondition(code)) {
+            if (checkConditionLoops(code)) {
 
-                // IFctr++;
-                // Fstack.push(new selection(true,IFctr));
+                IFctr++;
+                IFstack.push(new selection(true,IFctr));
                 retval = true;
 
             } else {
@@ -78,9 +78,7 @@ public class Iffer {
             }
 
         }
-
-
-
+        
         return retval;
     }
 
@@ -175,7 +173,7 @@ public class Iffer {
 
 
     // condition for Loops
-    public static boolean checkCondtionLoops(ArrayList<Token> code) {
+    public static boolean checkConditionLoops(ArrayList<Token> code) {
         String st = "";
         Object result;
         boolean retVal = false;
@@ -183,7 +181,7 @@ public class Iffer {
         List<Token> boolExpression = null;
         for(Token tok:boolE) {
             if (tok.getToken().equals(")")) {
-                boolExpression = boolE.subList(0, boolE.size() - 3);
+                boolExpression = boolE.subList(0, boolE.size() - 1);
                 break;
             }
         }
@@ -242,8 +240,6 @@ public class Iffer {
                 boolExpression.remove(i);
             }
         }
-
-
 
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
@@ -307,14 +303,14 @@ public class Iffer {
             arithmeticExpression = code.subList(1, x);
 
         }else{
-
+            
             arithmeticExpression = code.subList(2, code.size());
 
         }
         int indexOfVector = -1;
         for(int x=0; x < arithmeticExpression.size(); x++){
             if(arithmeticExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
-
+                   
                 String variable = arithmeticExpression.get(x).getToken();
                 if (InitAssign.isInitialized(variable) && InitAssign.isAccessible(variable)){
                     int levelOfVariable = InitAssign.accessLevelOf(variable);
@@ -326,6 +322,8 @@ public class Iffer {
                     }
                     st+=" "+value;
                 }else{
+                    System.out.println(InitAssign.isInitialized(variable));
+                    System.out.println(InitAssign.isAccessible(variable));
                     throw new IllegalStateException("Error: Variable "+variable+" not in HashMap");
                 }
                 
@@ -444,7 +442,7 @@ public class Iffer {
                         while(x < code.size() && !code.get(x).getToken().equals(",") &&
                                 !code.get(x).getTokenType().equals(TokenType.OPERATION) &&
                                 !code.get(x).getTokenType().equals(TokenType.ORDINAL)){ x++; }
-
+                        
                         if(!code.get(0).getToken().equals("print") && x < code.size() && (code.get(x).getTokenType().equals(TokenType.OPERATION) || code.get(x).getTokenType().equals(TokenType.ORDINAL))){ //OPERATOR FOUND IN LINE
                             Token literal = null;
                             try {
@@ -514,6 +512,7 @@ public class Iffer {
                                 InitAssign.initPlaceIntoMemory( objToSend);
                                 System.out.println("SUCCESSFUL");
                             }else if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
+                                
                                 expression =  code.subList(2,code.size());
                                 Object retval = accessGroup(expression.get(2).getToken(),expression.get(0).getToken());
                                 objToSend = code.subList(0,2);
@@ -568,7 +567,7 @@ public class Iffer {
 
 
         }
-
+        
     }
 
 }

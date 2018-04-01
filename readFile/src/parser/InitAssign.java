@@ -54,7 +54,7 @@ public class InitAssign {
                     initPlaceIntoMemory(code);
 
                 }else{
-
+                    
                     String alert;
                     switch (code.get(3).getTokenType()){
                         case NUMBER_LITERAL:
@@ -294,6 +294,7 @@ public class InitAssign {
             case "numbers":
             case "words":
             case "truths":
+                
                 TokenType typeForVectorToBeInitialized = TokenType.EMPTY;
                 if(code.get(0).getToken().equals("numbers")){
                     typeForVectorToBeInitialized = TokenType.NUMBER_LITERAL;
@@ -328,18 +329,13 @@ public class InitAssign {
                 }
                 break;
             default:
-                
                 if(groups.isDefined(code.get(0).getToken()) && code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
-                    
                     List<member> temp = groups.allocateMemory(code.get(0).getToken());
                     bigBoard.put(IFstack.peek().getLevel(),code.get(1).getToken(),new memory(temp,TokenType.RECORD));
                 }else if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER) && isInitialized(code.get(0).getToken())){
-                    
                      System.out.println(code.get(1).getToken());
-
                         assign(code);
                 }else if(!isInitialized(code.get(1).getToken())) {
-                    
                     bigBoard.put(IFstack.peek().getLevel(), code.get(1).getToken(), new memory(code.get(3).getToken(), code.get(3).getTokenType()));
                 }else{
                     System.out.println(code.get(1).getToken()+" has already been initialized");
@@ -458,11 +454,11 @@ public class InitAssign {
         for (int i=IFctr; i>=0; i--){
             if(bigBoard.containsKeys(i, token)){
                 val = true;
+                break;
             }else{
                 val = false;
             }
         }
-        //System.out.println("isInitialized() is : "+val);
         return val;
     }
 
