@@ -22,8 +22,8 @@ public class groups {
     private static List<member> groupMemory = new ArrayList<>();
     private static String groupName;
     
-    public groups(ArrayList groupMemory,String groupName){
-       this.groupMemory = (List<member>) groupMemory.clone();
+    public groups(ArrayList<member> groupMemory,String groupName){
+       this.groupMemory = groupMemory;
        this.groupName = groupName;
     }
     

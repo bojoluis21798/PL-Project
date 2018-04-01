@@ -191,7 +191,8 @@ public class ReadFile {
 //            System.out.print(" )\n");
 //            System.out.println("Value of number x(level IFstack.peek().getLevel()): "+bigBoard.get(IFstack.peek().getLevel(),"x"));
 //            System.out.println("Value of numbers x(level IFstack.peek().getLevel()): "+bigBoard.get(IFstack.peek().getLevel(),"z"));
-//            System.out.println("Value of number a(level 0): "+bigBoard.get(IFstack.peek().getLevel(),"a"));
+ //         System.out.println("Value of number a(level 0): "+bigBoard.get(IFstack.peek().getLevel(),"x"));
+
 //            System.out.println("Value of word b(level 0): "+bigBoard.get(0,"b"));
 //            System.out.println("Value of truth c(level 0): "+bigBoard.get(0,"c"));
 //            System.out.println("Value of n1(level 0): "+bigBoard.get(0,"n1"));

@@ -12,9 +12,9 @@ import readfile.tokenizer.TokenType;
  * @author User
  */
 public class member {
-    private static Object value;
-    private static String dataType;
-    private static String memberName;
+    private Object value;
+    private String dataType;
+    private  String memberName;
     
     public member(Object value,String dataType,String memberName){
         this.value = value;

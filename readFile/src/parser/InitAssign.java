@@ -8,6 +8,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
+import static parser.groups.accessGroup;
 
 import static readfile.ReadFile.*;
 
@@ -24,7 +25,7 @@ public class InitAssign {
 			-there is no variable identifier
 			-there is no such datatype
     */
-    public static void initialize(ArrayList<Token> code){
+    public static void initialize(ArrayList<Token> code) throws ScriptException{
 
         switch (code.get(0).getToken()) {
 
@@ -288,7 +289,7 @@ public class InitAssign {
 		code.get(3).getToken(),code.get(3).getTokenType()
 
     */
-    public static void initPlaceIntoMemory (List<Token> code){
+    public static void initPlaceIntoMemory (List<Token> code) throws ScriptException{
         switch (code.get(0).getToken()) {
             case "numbers":
             case "words":
@@ -327,10 +328,18 @@ public class InitAssign {
                 }
                 break;
             default:
+                
                 if(groups.isDefined(code.get(0).getToken()) && code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+                    
                     List<member> temp = groups.allocateMemory(code.get(0).getToken());
                     bigBoard.put(IFstack.peek().getLevel(),code.get(1).getToken(),new memory(temp,TokenType.RECORD));
+                }else if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER) && isInitialized(code.get(0).getToken())){
+                    
+                     System.out.println(code.get(1).getToken());
+
+                        assign(code);
                 }else if(!isInitialized(code.get(1).getToken())) {
+                    
                     bigBoard.put(IFstack.peek().getLevel(), code.get(1).getToken(), new memory(code.get(3).getToken(), code.get(3).getTokenType()));
                 }else{
                     System.out.println(code.get(1).getToken()+" has already been initialized");
@@ -358,7 +367,7 @@ public class InitAssign {
 			-the tokenTypes of the variables do not match
 
     */
-    public static void assign(ArrayList<Token> code){
+    public static void assign(List<Token> code){
         if(code.get(0).getTokenType() == TokenType.IDENTIFIER) {
 
             if (code.get(1).getTokenType() == TokenType.KEYWORD
