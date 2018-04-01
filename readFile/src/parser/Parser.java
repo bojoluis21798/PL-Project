@@ -36,7 +36,7 @@ public class Parser {
     List<pointers> program;
     ArrayList<Token> tkStream;
      public static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
-     
+    public String type;
      
     public Parser(ArrayList<Token> tkStream) throws ScriptException{
         this.tkStream = tkStream;
@@ -152,7 +152,6 @@ public class Parser {
     }
     
     public String Start(String[] lexeme) throws ScriptException{
-        String type = "";
         if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
             type = "DECLARATION!";
         }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis")){
@@ -167,10 +166,11 @@ public class Parser {
         { //orif statement
             type = "ORIF STATEMENT!";
         }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("else\\sthen")){ //else statement
-            System.out.println("ELSE STATEMENT!");
+            type = "ELSE STATEMENT!";
         }else if(
             (lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis")) ||
-            (lexeme.length > 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("<ordinal>\\sof\\s<identifier>\\sis"))
+            (lexeme.length > 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("<ordinal>\\sof\\s<identifier>\\sis")) ||
+            (lexeme.length >4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("<identifier>\\sof\\s<identifier>\\sis"))
         ){ //assignment
             type = ("ASSIGNMENT!");
         }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){

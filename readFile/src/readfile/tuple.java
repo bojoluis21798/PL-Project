@@ -12,10 +12,28 @@ package readfile;
 public class tuple {
     private int line;
     private int level;
+    private tuple ret;
     
     public tuple(int line,int level){
         this.line = line;
         this.level = level;
+        this.ret = null;
+    }
+    
+    public tuple(int line, int level, tuple ret){
+        this(line,level);
+        this.ret = ret;
+    }
+    
+    @Override
+    public boolean equals(Object v){
+        boolean ret = false;
+        
+        if(v instanceof tuple){
+            tuple t = (tuple) v;
+            ret = t.getLine() == this.getLine() && t.getLevel() == this.getLevel();
+        }
+        return ret;
     }
     
     public int getLine(){
@@ -24,5 +42,13 @@ public class tuple {
     
     public int getLevel(){
         return this.level;
+    }
+    
+    public tuple getRet(){
+        return this.ret;
+    }
+    
+    public void setRet(tuple ret){
+        this.ret = ret;
     }
 }

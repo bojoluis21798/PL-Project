@@ -11,6 +11,7 @@ import parser.groups;
 import parser.member;
 import static readfile.ReadFile.groupDefinitions;
 import static readfile.ReadFile.levelsAndLines;
+import static readfile.ReadFile.loopTracker;
 import readfile.tokenizer.TokenType;
 
 //unused imports
@@ -44,8 +45,7 @@ public class LineExecution {
     public void Start() throws ScriptException{
           int thisLevel=0;
           for(int lineCount=0;lineCount<program.size();){//loop through the pre-processed lines of code
-            
-                   
+
             if(program.get(lineCount).getCode().get(0).getToken().equals("if") ){//when you hit an if,else
                     int i=0;
                     
@@ -205,6 +205,71 @@ public class LineExecution {
 
 
                 }
+            }else if (program.get(lineCount).getCode().get(0).getToken().equals("repeat")) {
+                
+                thisLevel = loopTracker.get(0).getLevel();
+                loopTracker.remove(0);
+
+                if (Iffer.ifSTMT((ArrayList<Token>) program.get(lineCount).getCode())){//check if the condition is true
+                          //dequeue from the list so u can check up to which statement you will have to execute that isn't another selection statement
+                        
+                         // for(i = program.get(lineCount).getIndex();i < levelsAndLines.get(0).getLine();i++){//execute these lines of code  when condition is true
+                         //     Iffer.execute((ArrayList<Token>) program.get(i).getCode());
+                         // }
+
+                         // lineCount = i;
+                         
+                         // //insert code here to skip  orif and go to end when 
+                         // if(program.get(lineCount).getCode().get(0).getToken().equals("orif") && thisLevel == levelsAndLines.get(0).getLevel()){
+                         //     lineCount++;
+                         //     levelsAndLines.remove(0);
+                             
+                         //     for(; thisLevel == levelsAndLines.get(0).getLevel();){
+                         //        //System.out.println(lineCount);
+                         //        if(!levelsAndLines.isEmpty()){
+                         //            lineCount = levelsAndLines.get(0).getLine();
+                                
+                         //            if("end".equals(program.get(lineCount).getCode().get(0).getToken()) ){
+                         //                break;
+                         //            }
+                         //            levelsAndLines.remove(0);
+                         //        }
+                                
+                         //     }
+                             
+                         // }else if(program.get(lineCount).getCode().get(0).getToken().equals("else") && thisLevel == levelsAndLines.get(0).getLevel()){
+                         //     for(; thisLevel == levelsAndLines.get(0).getLevel();){
+                         //        //System.out.println(thisLevel+"=="+levelsAndLines.get(0).getLevel());
+                         //        levelsAndLines.remove(0);
+                         //        lineCount = levelsAndLines.get(0).getLine();
+                         //        if("end".equals(program.get(lineCount).getCode().get(0).getToken()) ){
+                         //            break;
+                         //        }
+                         //     }
+                         // }
+                        System.out.println("Twas true");
+                         
+                     }else{//if the if condition is false
+                         
+                         ////////////////////////////////// this block of code is used when if condition is false and so now u check orif 
+                          // int ctr;
+                          // // System.out.println(levelsAndLines.get(0).getLevel()+"!="+thisLevel);
+                          // for(ctr=0;levelsAndLines.get(ctr).getLevel() != thisLevel ;){
+                          //       levelsAndLines.remove(ctr);
+                          // }
+                          
+                          // lineCount = levelsAndLines.get(ctr).getLine();
+
+                        System.out.println("Twas false");
+                          
+                     }
+
+
+
+
+
+
+
             }else if(program.get(lineCount).getCode().get(0).getToken().equals("end")){
                 IFstack.pop();
               
@@ -275,6 +340,8 @@ public class LineExecution {
                    lineCount++;
                    groupDefinitions.add(new groups((ArrayList<member>) members,groupIdentifier));
             
+               }else if(program.get(lineCount).getCode().get(0).getToken().equals("job")){
+                   
                }else{
                   //for(;;)
                   Iffer.execute((ArrayList<Token>) program.get(lineCount).getCode());
