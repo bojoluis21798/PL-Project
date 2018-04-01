@@ -39,6 +39,7 @@ public class ReadFile {
     public static ArrayList<tuple> levelsAndLines = new ArrayList<tuple>();
     public static ArrayList<tuple> loopTracker = new ArrayList<tuple>();
     public static ArrayList<tuple> functionTrav = new ArrayList<tuple>();
+    public static ArrayList<tuple> callTrav = new ArrayList<tuple>();
     public static ArrayDeque<Integer> q = new ArrayDeque<Integer>();
     private static ArrayList<Token> tkStream = new ArrayList<Token>();
     public static List<pointers> program = new ArrayList<pointers>();
@@ -77,7 +78,7 @@ public class ReadFile {
                 if(sCurrentLine.equals("")){
                     continue;
                 }
-                StringTokenizer st = new StringTokenizer(sCurrentLine, "\"+-/*<>= (),:%", true);
+                StringTokenizer st = new StringTokenizer(sCurrentLine, "\t\"+-/*<>= (),:%", true);
                 String[] tokens = new String[st.countTokens()];
 
                 for(int i=0; i<tokens.length; i++){
@@ -99,7 +100,7 @@ public class ReadFile {
                         continue;
                     }
                     
-                    if(token.equals(" ") && !group){
+                    if((token.equals("\t") ||token.equals(" ")) && !group){
                         continue;
                     }
                     
@@ -151,24 +152,29 @@ public class ReadFile {
                     }
 
                 }else if(program.get(ctr).getCode().get(0).getToken().equals("end")) {
-
+                    System.out.println("Level: "+level);
                     boolean found = false;
-                    for (int x = ctr - 1; x >= 0 && found == false; x--) {
-
-                        if (program.get(x).getType().equals("IF STATEMENT!")
+                    for (int x = ctr - 1; x >= 0 && found == false;x--) {
+                        if ((program.get(x).getType().equals("IF STATEMENT!")
                             || program.get(x).getType().equals("ORIF STATEMENT!")
-                            || program.get(x).getType().equals("ELSE STATEMENT!")) {
-
+                            || program.get(x).getType().equals("ELSE STATEMENT!"))
+                            && (levelsAndLines.contains(new tuple(program.get(x).getIndex(),level)))
+                          ) {
+                            
                             levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level--));
                             found = true;
-                        } else if ((program.get(x).getType().equals("PRE TEST LOOP!"))) {
+                        } else if ((program.get(x).getType().equals("PRE TEST LOOP!"))
+                                && (loopTracker.contains(new tuple(x,level)))
+                        ) {
 
                             loopTracker.add(new tuple(program.get(ctr).getIndex(),level--));
                             found = true;
-                        } else if (program.get(x).getType().equals("JOB DECLARATION!")
-                                    || program.get(x).getType().equals("JOB DECLARATION WITHOUT PARAMS AND RETURN TYPE!")
-                                    || program.get(x).getType().equals("JOB DECLARATION WITHOUT PARAMS!")
-                                    || program.get(x).getType().equals("JOB DECLARATION WITHOUT RETURN TYPE!")) {
+                        } else if ((program.get(x).getType().equals("JOB DECLARATION!")
+                                || program.get(x).getType().equals("JOB DECLARATION WITHOUT PARAMS AND RETURN TYPE!")
+                                || program.get(x).getType().equals("JOB DECLARATION WITHOUT PARAMS!")
+                                || program.get(x).getType().equals("JOB DECLARATION WITHOUT RETURN TYPE!"))
+                                && (functionTrav.contains(new tuple(x,level)))
+                        ) {
                             
                             functionTrav.add(new tuple(program.get(ctr).getIndex(),level--));
                             found = true;
@@ -195,12 +201,21 @@ public class ReadFile {
                       ++level;
                       functionTrav.add(new tuple(program.get(ctr).getIndex(),level));
                 }else if(program.get(ctr).getType().equals("FUNCTION CALL!")){
-                      
+                      for(int i=0; i<functionTrav.size(); i++){
+                          if(program.get(functionTrav.get(i).getLine()).getType().equals("END!")){
+                              continue;
+                          }
+                          if(program.get(functionTrav.get(i).getLine()).getCode()
+                            .get(1).getToken().equals(program.get(ctr).getCode().get(0).getToken())){
+                            functionTrav.get(i).setRet(new tuple(ctr,level));
+                            callTrav.add(new tuple(ctr,level,new tuple(functionTrav.get(i).getLine(),1)));
+                          }
+                      }
                 }else if (program.get(ctr).getCode().get(0).getToken().equals("repeat")
                             || program.get(ctr).getCode().get(0).getToken().equals("do")
                             || program.get(ctr).getCode().get(0).getToken().equals("foreach")) {
 
-                    loopTracker.add(new tuple(program.get(ctr).getIndex(),level), ++level);
+                    loopTracker.add(new tuple(program.get(ctr).getIndex(), ++level));
                 }
 
                 tkStream.clear();
@@ -209,15 +224,33 @@ public class ReadFile {
             }
             System.out.println("Program and pointers");
             System.out.println("===============================");
-            int k = 0;
+            int ifs = 0;
+            int funcs = 0;
+            int loops = 0;
+            int calls = 0;
             for(int i=0; i<program.size();i++){
-                String line = "";
+                String line = "Line "+i+": ";
                 for(int j=0; j<program.get(i).getCode().size(); j++){
                    line+=(program.get(i).getCode().get(j).getToken())+" ";
                 }
-                if(k > 0 && levelsAndLines.get(k).getLine() == i){
-                    line+= "<--- Level "+levelsAndLines.get(k).getLevel();
-                    k++;
+                if(levelsAndLines.size() > ifs && levelsAndLines.get(ifs).getLine() == i){
+                    line+= "<--- if Level "+levelsAndLines.get(ifs).getLevel();
+                    ifs++;
+                }else if(functionTrav.size() > funcs && functionTrav.get(funcs).getLine() == i){
+                    line+= "<--- funcs Level "+functionTrav.get(funcs).getLevel();
+                    if(functionTrav.get(funcs).getRet()!=null){
+                        line+=" return at "+functionTrav.get(funcs).getRet().getLine();
+                    }
+                    funcs++;
+                }else if(loopTracker.size() > loops && loopTracker.get(loops).getLine() == i){
+                    line+= "<--- loop Level "+loopTracker.get(loops).getLevel();
+                    loops++;
+                }else if(callTrav.size() > calls && callTrav.get(calls).getLine() == i){
+                    line+= "<--- call Level "+callTrav.get(calls).getLevel();
+                    if(callTrav.get(calls).getRet() != null){
+                        line+=" call at "+callTrav.get(calls).getRet().getLine();
+                    }
+                    loops++;
                 }
                 System.out.println(line);
             }

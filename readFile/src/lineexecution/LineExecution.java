@@ -328,6 +328,8 @@ public class LineExecution {
 //                     System.out.println("WHY "+groupDefinitions.get(0).getGrpMemory().get(ctr).getMemberName());
 //                   }
             
+               }else if(program.get(lineCount).getCode().get(0).getToken().equals("job")){
+                   
                }else{
                   //for(;;)
                   Iffer.execute((ArrayList<Token>) program.get(lineCount).getCode());
