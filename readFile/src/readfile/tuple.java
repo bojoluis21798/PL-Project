@@ -18,6 +18,17 @@ public class tuple {
         this.level = level;
     }
     
+    @Override
+    public boolean equals(Object v){
+        boolean ret = false;
+        
+        if(v instanceof tuple){
+            tuple t = (tuple) v;
+            ret = t.getLine() == this.getLine() && t.getLevel() == this.getLevel();
+        }
+        return ret;
+    }
+    
     public int getLine(){
         return this.line;
     }

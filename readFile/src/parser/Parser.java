@@ -166,7 +166,7 @@ public class Parser {
         { //orif statement
             type = "ORIF STATEMENT!";
         }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("else\\sthen")){ //else statement
-            System.out.println("ELSE STATEMENT!");
+            type = "ELSE STATEMENT!";
         }else if(
             (lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis")) ||
             (lexeme.length > 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("<ordinal>\\sof\\s<identifier>\\sis")) ||
