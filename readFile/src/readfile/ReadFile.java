@@ -37,6 +37,7 @@ import javax.script.ScriptException;
 public class ReadFile {
 
     public static ArrayList<tuple> levelsAndLines = new ArrayList<tuple>();
+    public static ArrayList<tuple> loopTracker = new ArrayList<tuple>();
     public static ArrayList<tuple> functionTrav = new ArrayList<tuple>();
     public static ArrayDeque<Integer> q = new ArrayDeque<Integer>();
     private static ArrayList<Token> tkStream = new ArrayList<Token>();
@@ -149,9 +150,37 @@ public class ReadFile {
                         levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
                     }
 
-                }else if(program.get(ctr).getCode().get(0).getToken().equals("end")){
-                      levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
-                      --level;
+                }else if(program.get(ctr).getCode().get(0).getToken().equals("end")) {
+
+                    boolean found = false
+                    for (int x = ctr - 1; x >= 0 && found == false) {
+
+                        if (program.get(x).getType().equals.("IF STATEMENT!")
+                            || program.get(x).getType().equals.("ORIF STATEMENT!")
+                            || program.get(x).getType().equals.("ELSE STATEMENT!")) {
+
+                            levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level--));
+                            found = true;
+                        } else if ((program.get(x).getType().equals.("PRE TEST LOOP!")
+                                    || (program.get(x).getType().equals.("IF STATEMENT!")) {
+
+                            loopTracker.add(new tuple(program.get(ctr).getIndex(),level--));
+                            found = true;
+                        } else if (program.get(x).getType().equals.("JOB DECLARATION!")
+                                    || program.get(x).getType().equals.("JOB DECLARATION WITHOUT PARAMS AND RETURN TYPE!")
+                                    || program.get(x).getType().equals.("JOB DECLARATION WITHOUT PARAMS!")
+                                    || program.get(x).getType().equals.("JOB DECLARATION WITHOUT RETURN TYPE!")) {
+                            
+                            loopTracker.add(new tuple(program.get(ctr).getIndex(),level--));
+                            found = true;
+                        }
+
+                    }
+
+                }else if (program.get(ctr).getType().equals("GROUP DECLARATION!")) {
+
+                    level++;
+
                 }else if(program.get(ctr).getCode().get(0).getToken().equals("job")){
                       if(level != 0){
                           throw new IllegalStateException("Cannot define job here");
@@ -164,7 +193,7 @@ public class ReadFile {
                             || program.get(ctr).getCode().get(0).getToken().equals("do")
                             || program.get(ctr).getCode().get(0).getToken().equals("foreach")) {
 
-                    // morecode
+                    loopTracker.add(new tuple(program.get(ctr).getIndex(),level), ++level);
                 }
 
                 tkStream.clear();
