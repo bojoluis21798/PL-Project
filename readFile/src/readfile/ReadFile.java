@@ -136,7 +136,7 @@ public class ReadFile {
                 Parser p = new Parser(tkStream);
                            
                                 
-                program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
+                program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr, p.type));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
 
                 if(program.get(ctr).getCode().get(0).getToken().equals("if") || program.get(ctr).getCode().get(0).getToken().equals("else") || program.get(ctr).getCode().get(0).getToken().equals("orif")){//this  counts all ifs,else's,or's and end's then places them in a queue for tracking
 
