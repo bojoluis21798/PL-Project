@@ -36,7 +36,7 @@ public class Parser {
     List<pointers> program;
     ArrayList<Token> tkStream;
      public static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
-     
+    public String type;
      
     public Parser(ArrayList<Token> tkStream) throws ScriptException{
         this.tkStream = tkStream;
@@ -152,7 +152,6 @@ public class Parser {
     }
     
     public String Start(String[] lexeme) throws ScriptException{
-        String type = "";
         if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
             type = "DECLARATION!";
         }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis")){

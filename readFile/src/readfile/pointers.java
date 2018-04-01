@@ -17,10 +17,17 @@ public class pointers {
     //private String code;
     private List<Token> tokenStream = new ArrayList<Token>();
     private int index;
+    private String type;
     
     public pointers(ArrayList<Token> code,int index){
           this.tokenStream = code;
           this.index = index;
+    }
+    
+    public pointers(ArrayList<Token> code,int index, String type){
+          this.tokenStream = code;
+          this.index = index;
+          this.type = type;
     }
     
     public List<Token> getCode(){
@@ -29,5 +36,9 @@ public class pointers {
     
     public int getIndex(){
            return index; 
+    }
+    
+    public String getType(){
+        return type;
     }
 }

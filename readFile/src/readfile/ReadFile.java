@@ -136,7 +136,7 @@ public class ReadFile {
                 Parser p = new Parser(tkStream);
                            
                                 
-                program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
+                program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr, p.type));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
 
                 if(program.get(ctr).getCode().get(0).getToken().equals("if") || program.get(ctr).getCode().get(0).getToken().equals("else") || program.get(ctr).getCode().get(0).getToken().equals("orif")){//this  counts all ifs,else's,or's and end's then places them in a queue for tracking
 
@@ -151,12 +151,34 @@ public class ReadFile {
                 }else if(program.get(ctr).getCode().get(0).getToken().equals("end")){
                       levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
                       --level;
+                }else if(program.get(ctr).getCode().get(0).getToken().equals("job")){
+                      
+                        if(level != 0){
+                          throw new IllegalStateException("Cannot define job here");
+                      }
+                      ++level;
+                      levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
                 }
 
                 tkStream.clear();
                 ctr++;
                                
-			}
+            }
+            System.out.println("Program and pointers");
+            System.out.println("===============================");
+            int k = 0;
+            for(int i=0; i<program.size();i++){
+                String line = "";
+                for(int j=0; j<program.get(i).getCode().size(); j++){
+                   line+=(program.get(i).getCode().get(j).getToken())+" ";
+                }
+                if(levelsAndLines.get(k).getLine() == i){
+                    line+= "<--- Level "+levelsAndLines.get(k).getLevel();
+                    k++;
+                }
+                System.out.println(line);
+            }
+            
             //LINE EXECUTION
             LineExecution lineExec = new LineExecution(tkStream);
 
