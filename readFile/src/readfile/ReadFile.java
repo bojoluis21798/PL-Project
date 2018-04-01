@@ -53,7 +53,7 @@ public class ReadFile {
      * @param args the command line arguments
      */
 
-    private static final String FILENAME = "C:/Users/Tim/Desktop/PL/readFile/src/source.txt";
+    private static final String FILENAME = "../source.txt";
     public static void main(String[] args) throws ScriptException {
         // TODO code application logic here
         
@@ -136,7 +136,7 @@ public class ReadFile {
                   
 
                 }
-                //Parser p = new Parser(tkStream);
+                Parser p = new Parser(tkStream);
                            
                                 
                 program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr, p.type));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
