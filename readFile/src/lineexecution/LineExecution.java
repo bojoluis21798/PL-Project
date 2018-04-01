@@ -5,7 +5,6 @@ import javax.script.ScriptException;
 import java.util.Hashtable;
 import java.util.ArrayList;
 import readfile.tokenizer.Token;
-import static readfile.ReadFile.program;
 import java.util.List;
 import parser.groups;
 import parser.member;
@@ -28,6 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import parser.InitAssign;
 import parser.selection;
+import readfile.pointers;
 
 
 
@@ -35,13 +35,12 @@ public class LineExecution {
 
     ArrayList<Token> tkStream;
     public static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
+    List<pointers> program;
 
-
-    public LineExecution(ArrayList<Token> tkStream) throws ScriptException {
-
-        this.tkStream = tkStream;
+    
+    public LineExecution(List<pointers> program) throws ScriptException{
+        this.program = program;
         Start();
-
     }
 
     public void Start() throws ScriptException{

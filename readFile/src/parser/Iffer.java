@@ -12,7 +12,7 @@ import static parser.groups.accessGroup;
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
-
+import parser.job;
 //unused imports
 import static readfile.ReadFile.groupDefinitions;
 import static readfile.ReadFile.groupInstances;
@@ -401,8 +401,9 @@ public class Iffer {
                     InitAssign.assign(code);
                     //System.out.println("declaration");
 
-                //NULL INITIALIZATION
-                }else if(code.size() == 2 && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
+                
+                }//NULL INITIALIZATION
+                else if(code.size() == 2 && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
                     
                     if(groups.isDefined(code.get(0).getToken())){
                         
@@ -476,6 +477,10 @@ public class Iffer {
                             InitAssign.initialize(code);
                         }else if(code.get(0).getToken().equals("print")){
                             print.printIt(code);
+                        }else if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER) &&
+                            code.get(1).getToken().equals("using")
+                        ){
+                            job.call(code.get(0).getToken());
                         }else{
                           
                             List<Token> expression;

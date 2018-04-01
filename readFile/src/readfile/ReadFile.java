@@ -257,7 +257,7 @@ public class ReadFile {
             }
             
             //LINE EXECUTION
-            LineExecution lineExec = new LineExecution(tkStream);
+            LineExecution lineExec = new LineExecution(program);
 
 //            ArrayList<Token> x = (ArrayList<Token>) bigBoard.get(IFstack.peek().getLevel(),"b");
 //            System.out.print("Value of numbers b(level "+IFstack.peek().getLevel()+"): ("+IFctr);
