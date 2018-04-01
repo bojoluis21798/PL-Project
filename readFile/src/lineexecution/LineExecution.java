@@ -44,7 +44,7 @@ public class LineExecution {
     public void Start() throws ScriptException{
           int thisLevel=0;
           for(int lineCount=0;lineCount<program.size();){//loop through the pre-processed lines of code
-            System.out.println("HELLOOOOOO"+IFstack.peek().getLevel());
+            
                    
             if(program.get(lineCount).getCode().get(0).getToken().equals("if") ){//when you hit an if,else
                     int i=0;
@@ -75,7 +75,7 @@ public class LineExecution {
                                 
                                     if("end".equals(program.get(lineCount).getCode().get(0).getToken()) ){
                                         IFstack.pop();
-                                        IFctr--;
+//                                        IFctr--;
                                         break;
                                     }
                                     levelsAndLines.remove(0);
@@ -89,7 +89,7 @@ public class LineExecution {
                                 levelsAndLines.remove(0);
                                 lineCount = levelsAndLines.get(0).getLine();
                                 if("end".equals(program.get(lineCount).getCode().get(0).getToken()) ){
-                                    IFctr--;
+//                                    IFctr--;
                                     IFstack.pop();
                                     break;
                                 }
@@ -135,7 +135,7 @@ public class LineExecution {
                                 
                                     if("end".equals(program.get(lineCount).getCode().get(0).getToken()) ){
                                         IFstack.pop();
-                                        IFctr--;
+//                                        IFctr--;
                                         break;
                                     }
                                     levelsAndLines.remove(0);
@@ -151,7 +151,7 @@ public class LineExecution {
                                 lineCount = levelsAndLines.get(0).getLine();
                                 if("end".equals(program.get(lineCount).getCode().get(0).getToken()) ){
                                     IFstack.pop();
-                                        IFctr--;
+//                                        IFctr--;
                                     break;
                                 }
                              }
@@ -169,7 +169,7 @@ public class LineExecution {
                                 lineCount = levelsAndLines.get(0).getLine();
                                 if("end".equals(program.get(lineCount).getCode().get(0).getToken()) ){
                                     IFstack.pop();
-                                        IFctr--;
+//                                        IFctr--;
                                     break;
                                 }
                              }
@@ -207,8 +207,8 @@ public class LineExecution {
 
                 }
             }else if(program.get(lineCount).getCode().get(0).getToken().equals("end")){
-//                IFstack.pop();
-//                IFctr--;
+                IFstack.pop();
+              
                 lineCount++;
                 levelsAndLines.remove(0);
                
@@ -217,7 +217,7 @@ public class LineExecution {
                 if(levelsAndLines.isEmpty()){
                     //lineCount++;
                     //System.out.println("WTF");
-                    //IFstack.pop();
+                    IFstack.pop();
                     //IFctr--;
                 }else{
                       if(program.get(lineCount).getCode().get(0).getToken().equals("if") && thisLevel == levelsAndLines.get(0).getLevel()){

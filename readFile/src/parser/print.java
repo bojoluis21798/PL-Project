@@ -93,6 +93,7 @@ public class print {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
         result = engine.eval(replace2);
-        System.out.println(result);
+        System.out.println(result+"HELLOOOOOO"+IFstack.peek().getLevel());
+        
     }
 }
