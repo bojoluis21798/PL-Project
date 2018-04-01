@@ -151,12 +151,19 @@ public class ReadFile {
                 }else if(program.get(ctr).getCode().get(0).getToken().equals("end")){
                       levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
                       --level;
+                }else if(program.get(ctr).getCode().get(0).getToken().equals("job")){
+                      
+                        if(level != 0){
+                          throw new IllegalStateException("Cannot define job here");
+                      }
+                      ++level;
+                      levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
                 }
 
                 tkStream.clear();
                 ctr++;
                                
-			}
+            }
             //LINE EXECUTION
             LineExecution lineExec = new LineExecution(tkStream);
 
