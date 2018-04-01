@@ -123,6 +123,33 @@ public class InitAssign {
                                 break;
                         }
                         initPlaceIntoMemory(code);
+                    } else if (code.size() == 4) { //numbers x is y (where y is a numbers variable)
+                        Token varToBeInitialized = code.get(1);
+                        if(     code.get(1).getTokenType().equals(TokenType.IDENTIFIER) &&
+                                !isInitialized(code.get(1).getToken())){
+
+                            Token varUsedtoInitialize = code.get(3);
+                            if(     code.get(3).getTokenType().equals(TokenType.IDENTIFIER) &&
+                                    isInitialized(code.get(3).getToken()) && isAccessible(code.get(3).getToken()) &&
+                                    bigBoard.get(IFstack.peek().getLevel(),code.get(3).getToken()) instanceof ArrayList){
+
+                                System.out.println("Vector initialization with vector variable possible!");
+                                initWithVariable(code);
+
+                            }else{
+                                if(!isInitialized(code.get(3).getToken()))
+                                    throw new IllegalStateException("Error: Variable "+code.get(3).getToken()+" not initialized");
+                                if(!isAccessible(code.get(3).getToken()))
+                                    throw new IllegalStateException("Error: Variable "+code.get(3).getToken()+" cannot be accessed in this level");
+                                if(!(bigBoard.get(IFstack.peek().getLevel(),code.get(3).getToken()) instanceof ArrayList))
+                                    throw new IllegalStateException("Error: Variable "+code.get(3).getToken()+" not a vector");
+                            }
+                        }else{
+                            if(!code.get(1).getTokenType().equals(TokenType.IDENTIFIER))
+                                throw new IllegalStateException("Error: Not a valid variable name");
+                            if(isInitialized(code.get(1).getToken()))
+                                throw new IllegalStateException("Error: Variable "+code.get(1).getToken()+" already initialized");
+                        }
                     } else {
 
                         String alert;
@@ -213,39 +240,37 @@ public class InitAssign {
         if(isInitialized(variable) && isAccessible(variable)){
             switch (bigBoard.getTokenType(levelOfVariable,variable)){
                 case STRING_LITERAL:
-                    if (dataTypeofInit.equals("word")){
+                    if(dataTypeofInit.equals("word") || dataTypeofInit.equals("words")){
                         System.out.println("this is an initialization with a variable");
                         bigBoard.put(levelOfVariable,code.get(1).getToken(),new memory(bigBoard.get(levelOfVariable,variable), (TokenType) bigBoard.getTokenType(levelOfVariable,variable)));
                     }else{
-                        System.out.println("Initialization Error: Data Type Mismatch. Not a Word");
+                        throw new IllegalStateException("Initialization Error: Data Type Mismatch. Not a Word literal");
                     }
                     break;
                 case NUMBER_LITERAL:
-                    if (dataTypeofInit.equals("number")){
+                    if(dataTypeofInit.equals("number") || dataTypeofInit.equals("numbers")){
                         System.out.println("this is an initialization with a variable");
                         bigBoard.put(levelOfVariable,code.get(1).getToken(),new memory(bigBoard.get(levelOfVariable,variable), (TokenType) bigBoard.getTokenType(levelOfVariable,variable)));
                     }else{
-                        System.out.println("Initialization Error: Data Type Mismatch. Not a Number");
+                        throw new IllegalStateException("Initialization Error: Data Type Mismatch. Not a Number literal");
                     }
                     break;
                 case BOOLEAN_LITERAL:
-                    if (dataTypeofInit.equals("truth")){
+                    if (dataTypeofInit.equals("truth") || dataTypeofInit.equals("truths")){
                         System.out.println("this is an initialization with a variable");
                         bigBoard.put(levelOfVariable,code.get(1).getToken(),new memory(bigBoard.get(levelOfVariable,variable), (TokenType) bigBoard.getTokenType(levelOfVariable,variable)));
                     }else{
-                        System.out.println("Initialization Error: Data Type Mismatch. Not a Truth");
+                        throw new IllegalStateException("Initialization Error: Data Type Mismatch. Not a Truth literal");
                     }
                     break;
                 default:
-                    System.out.println("Error: Uknown Literal");
+                    throw new IllegalStateException("Error: Unknown Literal");
             }
         }else{
             if (isInitialized(variable) == false)
-                System.out.println("Error: variable "+variable+" is not Initialized");
+                throw new IllegalStateException("Error: variable "+variable+" is not Initialized");
             else if (isAccessible(variable) == false)
-                System.out.println("Error: variable "+variable+" is not Accessible in this Level");
-            else if (bigBoard.getTokenType(levelOfVariable,variable) != TokenType.NUMBER_LITERAL)
-                System.out.println("Error: Data Type Mismatch. Not a Number");
+                throw new IllegalStateException("Error: variable "+variable+" is not Accessible in this Level");
         }
     }
 
