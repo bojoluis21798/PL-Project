@@ -65,6 +65,18 @@ public class Iffer {
             retval = true;
 
             //EdCode end
+        }else if (code.get(0).getToken().equals("repeat")) {
+
+            if (checkCondition(code)) {
+
+                // IFctr++;
+                // Fstack.push(new selection(true,IFctr));
+                retval = true;
+
+            } else {
+                retval - false;
+            }
+
         }
 
 
@@ -159,6 +171,100 @@ public class Iffer {
 
         return retVal;
     }
+
+
+
+    // condition for Loops
+    public static boolean checkCondtionLoops(ArrayList<Token> code) {
+        String st = "";
+        Object result;
+        boolean retVal = false;
+        List<Token> boolE = code.subList(3, code.size());
+        List<Token> boolExpression = null;
+        for(Token tok:boolE) {
+            if (tok.getToken().equals(")")) {
+                boolExpression = boolE.subList(0, boolE.size() - 3);
+                break;
+            }
+        }
+
+        int indexOfVector = -1;
+        for(int x = 0; x < boolExpression.size(); x++){
+            if (boolExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
+                String variable = boolExpression.get(x).getToken();
+                if (InitAssign.isInitialized(variable) && InitAssign.isAccessible(variable)){
+                    int levelOfVariable = InitAssign.accessLevelOf(variable);
+                    String value;
+                    if(bigBoard.getTokenType(levelOfVariable,variable) == TokenType.STRING_LITERAL){
+                        value = "\""+bigBoard.get(levelOfVariable,variable).toString()+"\"";
+                    }else{
+                        value = bigBoard.get(levelOfVariable,variable).toString();
+                    }
+                    st+=" "+value;
+                }else{
+                    throw new IllegalStateException("Error: Variable "+variable+" not in HashMap");
+                }
+            }else if(boolExpression.get(x).getTokenType().equals(TokenType.STRING_LITERAL)){
+                st+=" "+"\""+boolExpression.get(x).getToken()+"\"";
+            }else if(boolExpression.get(x).getTokenType().equals(TokenType.ORDINAL)){
+                indexOfVector = Integer.parseInt(boolExpression.get(x).getToken().substring(0,1))-1;
+                String vectorVariable = boolExpression.get(x+2).getToken();
+                if(     InitAssign.isInitialized(vectorVariable) &&
+                        InitAssign.isAccessible(vectorVariable) &&
+                        bigBoard.get(IFstack.peek().getLevel(),vectorVariable) instanceof ArrayList){
+                    ArrayList<Token> vector = (ArrayList<Token>)bigBoard.get(IFstack.peek().getLevel(),vectorVariable);
+                    if(indexOfVector < vector.size()){
+                        st+=" "+vector.get(indexOfVector).getToken();
+                        x += 2;
+                    }else{
+                        throw new IllegalStateException("Error: vector has no "+boolExpression.get(x).getToken()+" ordinal");
+                    }
+                }else{
+                    if(!InitAssign.isInitialized(vectorVariable))
+                        throw new IllegalStateException("Error: variable not initialized");
+                    if(!InitAssign.isAccessible(vectorVariable))
+                        throw new IllegalStateException("Error: variable cannot be accessed in level");
+                    if(!(bigBoard.get(IFstack.peek().getLevel(),vectorVariable) instanceof ArrayList)){
+                        throw new IllegalStateException("Error: variable is not a vector");
+                    }
+                }
+            }else{
+                st+=" "+boolExpression.get(x).getToken();
+            }
+        }
+
+        for(int i=0; i < boolExpression.size(); i++){
+            if (boolExpression.get(i).getTokenType().equals(TokenType.DATA_TYPE)){    //removing identifiers in Primitive initialization
+                boolExpression.remove(i);
+            }else if(boolExpression.get(i).getTokenType().equals(TokenType.IDENTIFIER)){  //removing identifiers in Primitive Assignment
+                boolExpression.remove(i);
+            }else if(boolExpression.get(0).getTokenType().equals(TokenType.ORDINAL)){ //removing identifiers in Ordinal Assignment
+                boolExpression.remove(i);
+            }
+        }
+
+
+
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("JavaScript");
+        try{
+            result = engine.eval(st);
+        }catch (ScriptException e){
+            throw new IllegalStateException("Error: Wrong Syntax in if condition");
+        }
+        if(result.getClass().getTypeName().equals("java.lang.Boolean")){
+            if(result.equals(true)){
+                retVal =  true;
+            }
+        }else{
+            throw new IllegalStateException("Error: Condition does not yield boolean value");
+        }
+        System.out.println(result);
+
+        return retVal;
+    }
+
+
 
     public boolean checkStack(){
         boolean retval = true;

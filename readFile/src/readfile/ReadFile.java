@@ -52,7 +52,7 @@ public class ReadFile {
      * @param args the command line arguments
      */
 
-    private static final String FILENAME = "../source.txt";
+    private static final String FILENAME = "C:/Users/Tim/Desktop/PL/readFile/src/source.txt";
     public static void main(String[] args) throws ScriptException {
         // TODO code application logic here
         
@@ -153,7 +153,7 @@ public class ReadFile {
                 }else if(program.get(ctr).getCode().get(0).getToken().equals("end")) {
 
                     boolean found = false;
-                    for (int x = ctr - 1; x >= 0 && found == falsel; x--) {
+                    for (int x = ctr - 1; x >= 0 && found == false; x--) {
 
                         if (program.get(x).getType().equals("IF STATEMENT!")
                             || program.get(x).getType().equals("ORIF STATEMENT!")
@@ -161,7 +161,7 @@ public class ReadFile {
 
                             levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level--));
                             found = true;
-                        } else if ((program.get(x).getType().equals.("PRE TEST LOOP!")) {
+                        } else if ((program.get(x).getType().equals("PRE TEST LOOP!"))) {
 
                             loopTracker.add(new tuple(program.get(ctr).getIndex(),level--));
                             found = true;
@@ -182,11 +182,11 @@ public class ReadFile {
 
                 }else if (program.get(ctr).getCode().get(0).getToken().equals("do")) {
 
-                    loopTracker.add(new tuple(program.get(ctr).getIndex(), ++level))
+                    loopTracker.add(new tuple(program.get(ctr).getIndex(), ++level));
 
                 }else if (program.get(ctr).getType().equals("WHILE!")) {
 
-                    loopTracker.add(new tuple(program.get(ctr).getIndex(), level--))
+                    loopTracker.add(new tuple(program.get(ctr).getIndex(), level--));
 
                 }else if(program.get(ctr).getCode().get(0).getToken().equals("job")){
                       if(level != 0){
