@@ -365,11 +365,11 @@ public class InitAssign {
     */
     public static void assign(List<Token> code){
         if(code.get(0).getTokenType() == TokenType.IDENTIFIER) {
-
+            
             if (code.get(1).getTokenType() == TokenType.KEYWORD
                     && code.get(1).getToken().equals("is")
                         && code.get(2).getTokenType() != TokenType.IDENTIFIER) { //FOR LITERALS
-
+                
                 switch (code.get(2).getTokenType()) {
                     case NUMBER_LITERAL:
                     case STRING_LITERAL:
@@ -398,10 +398,14 @@ public class InitAssign {
             }else if (code.get(1).getTokenType() == TokenType.KEYWORD
                         && code.get(1).getToken().equals("is")
                             && code.get(2).getTokenType() == TokenType.IDENTIFIER) { //FOR VARIABLES
-
+                
+                
+                
                 String assignee = code.get(0).getToken();
                 int levelOfAssignee = accessLevelOf(assignee);
-
+                
+                
+                
                 String variable = code.get(2).getToken();
                 int levelOfVariable = accessLevelOf(variable);
 

@@ -13,6 +13,8 @@ import static readfile.ReadFile.groupDefinitions;
 import static readfile.ReadFile.levelsAndLines;
 import static readfile.ReadFile.loopTracker;
 import readfile.tokenizer.TokenType;
+import readfile.tuple;
+import java.util.Collections;
 
 //unused imports
 import readfile.tokenizer.TokenData;
@@ -195,22 +197,27 @@ public class LineExecution {
                 thisLevel = loopTracker.get(0).getLevel();
                 loopTracker.remove(0);
                 
-                
-
-                if (Iffer.ifSTMT((ArrayList<Token>) program.get(lineCount).getCode())){//check if the condition is true
+                ArrayList<Token> oldLine = (ArrayList<Token>) program.get(lineCount).getCode();
+                if (Iffer.ifSTMT(oldLine)){//check if the condition is true
                     //dequeue from the list so u can check up to which statement you will have to execute that isn't another selection statement
-                        
-                    for(i = program.get(lineCount).getIndex()+1;i < loopTracker.get(0).getLine(); i++){//execute these lines of code  when condition is true
-                        System.out.println(i);
-                        Iffer.execute((ArrayList<Token>) program.get(i).getCode());
+                    
+                    System.out.println("code after");
+                    for (Token t: (ArrayList<Token>) program.get(lineCount).getCode()) {
+                        System.out.println(t.getToken());
                     }
-                         
-                    lineCount++;     
+                    while (Iffer.checkConditionLoops((ArrayList<Token>) program.get(lineCount).getCode())) {
+                        for(i = program.get(lineCount).getIndex()+1;i < loopTracker.get(0).getLine(); i++){//execute these lines of code  when condition is true
+                            System.out.println(i);
+                            Iffer.execute((ArrayList<Token>) program.get(i).getCode());
+                        } 
+                        System.out.println("LOL");
+                    }
+                    
+                    
                 }else{//if the if condition is false
-                         
-                    lineCount++;     
+                    lineCount++;
                 }
-
+                
             }else if (program.get(lineCount).getCode().get(0).getToken().equals("do")){
                 int i = 0;
                 

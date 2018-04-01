@@ -41,4 +41,8 @@ public class pointers {
     public String getType(){
         return type;
     }
+    
+    public void setCode(List<Token> t) {
+        this.tokenStream = t;
+    }
 }

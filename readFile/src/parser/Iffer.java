@@ -138,7 +138,9 @@ public class Iffer {
                 st+=" "+boolExpression.get(x).getToken();
             }
         }
-
+        
+        
+        
         for(int i=0; i < boolExpression.size(); i++){
             if (boolExpression.get(i).getTokenType().equals(TokenType.DATA_TYPE)){    //removing identifiers in Primitive initialization
                 boolExpression.remove(i);
@@ -148,9 +150,8 @@ public class Iffer {
                 boolExpression.remove(i);
             }
         }
-
-
-
+        
+        
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
         try{
@@ -170,8 +171,6 @@ public class Iffer {
         return retVal;
     }
 
-
-
     // condition for Loops
     public static boolean checkConditionLoops(ArrayList<Token> code) {
         String st = "";
@@ -185,7 +184,7 @@ public class Iffer {
                 break;
             }
         }
-
+       
         int indexOfVector = -1;
         for(int x = 0; x < boolExpression.size(); x++){
             if (boolExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
@@ -199,6 +198,7 @@ public class Iffer {
                         value = bigBoard.get(levelOfVariable,variable).toString();
                     }
                     st+=" "+value;
+                    
                 }else{
                     throw new IllegalStateException("Error: Variable "+variable+" not in HashMap");
                 }
@@ -229,7 +229,10 @@ public class Iffer {
             }else{
                 st+=" "+boolExpression.get(x).getToken();
             }
+            
+            
         }
+        
 
         for(int i=0; i < boolExpression.size(); i++){
             if (boolExpression.get(i).getTokenType().equals(TokenType.DATA_TYPE)){    //removing identifiers in Primitive initialization
@@ -240,6 +243,16 @@ public class Iffer {
                 boolExpression.remove(i);
             }
         }
+        
+        for (Token t: boolExpression) {
+            System.out.println("After bool: "+t.getToken());
+        }
+        
+        for (Token t: code) {
+                System.out.println("before bool: "+t.getToken());
+            }
+        
+        System.out.println("Yooo: "+st);
 
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
@@ -286,6 +299,7 @@ public class Iffer {
                                     System.out.print(code.get(i).getTokenType() + " ");
                                 }
                                 System.out.println();
+                               
         if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
 
             arithmeticExpression = code.subList(3, code.size());
@@ -305,8 +319,9 @@ public class Iffer {
         }else{
             
             arithmeticExpression = code.subList(2, code.size());
-
+             
         }
+        
         int indexOfVector = -1;
         for(int x=0; x < arithmeticExpression.size(); x++){
             if(arithmeticExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
@@ -355,7 +370,8 @@ public class Iffer {
                 st+=" "+arithmeticExpression.get(x).getToken();
             } 
         }
-
+        
+        
         int origCodeSize = code.size();
         for(int i=0; i < origCodeSize; i++){
             if (code.size() != 3 && code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){    //removing identifiers in Primitive initialization
@@ -366,7 +382,7 @@ public class Iffer {
                 code.remove(4);
             }
         }
-
+        
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
         System.out.println("String to be evaled: "+st);
@@ -408,7 +424,7 @@ public class Iffer {
                     //System.out.println("declaration");
 
                 //NULL INITIALIZATION
-                }else if(code.size() == 2 && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
+                }else if(code.size() == 2 && code.get(0).getTokenType().equals(TokenType.IDENTIFIER) && !code.get(1).getTokenType().equals(TokenType.IDENTIFIER)){
                     
                     if(groups.isDefined(code.get(0).getToken())){
                         
@@ -567,7 +583,8 @@ public class Iffer {
 
 
         }
-        
     }
+    
+    
 
 }
