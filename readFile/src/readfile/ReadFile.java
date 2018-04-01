@@ -174,7 +174,7 @@ public class ReadFile {
                 for(int j=0; j<program.get(i).getCode().size(); j++){
                    line+=(program.get(i).getCode().get(j).getToken())+" ";
                 }
-                if(levelsAndLines.get(k).getLine() == i){
+                if(k > 0 && levelsAndLines.get(k).getLine() == i){
                     line+= "<--- Level "+levelsAndLines.get(k).getLevel();
                     k++;
                 }
