@@ -37,6 +37,7 @@ import javax.script.ScriptException;
 public class ReadFile {
 
     public static ArrayList<tuple> levelsAndLines = new ArrayList<tuple>();
+    public static ArrayList<tuple> functionTrav = new ArrayList<tuple>();
     public static ArrayDeque<Integer> q = new ArrayDeque<Integer>();
     private static ArrayList<Token> tkStream = new ArrayList<Token>();
     public static List<pointers> program = new ArrayList<pointers>();
@@ -152,12 +153,13 @@ public class ReadFile {
                       levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
                       --level;
                 }else if(program.get(ctr).getCode().get(0).getToken().equals("job")){
-                      
-                        if(level != 0){
+                      if(level != 0){
                           throw new IllegalStateException("Cannot define job here");
                       }
                       ++level;
-                      levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
+                      functionTrav.add(new tuple(program.get(ctr).getIndex(),level));
+                }else if(program.get(ctr).getType().equals("FUNCTION CALL!")){
+                      
                 }
 
                 tkStream.clear();
