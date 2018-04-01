@@ -160,6 +160,11 @@ public class ReadFile {
                       functionTrav.add(new tuple(program.get(ctr).getIndex(),level));
                 }else if(program.get(ctr).getType().equals("FUNCTION CALL!")){
                       
+                }else if (program.get(ctr).getCode().get(0).getToken().equals("repeat")
+                            || program.get(ctr).getCode().get(0).getToken().equals("do")
+                            || program.get(ctr).getCode().get(0).getToken().equals("foreach")) {
+
+                    // morecode
                 }
 
                 tkStream.clear();
