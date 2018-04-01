@@ -19,8 +19,8 @@ import static readfile.ReadFile.bigBoard;
  * @author User
  */
 public class groups {
-    private static List<member> groupMemory = new ArrayList<>();
-    private static String groupName;
+    private List<member> groupMemory = new ArrayList<>();
+    private String groupName;
     
     public groups(ArrayList<member> groupMemory,String groupName){
        this.groupMemory = groupMemory;

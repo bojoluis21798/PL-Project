@@ -56,6 +56,7 @@ public class grpInstance {
      }
      
      public static void assignMember(ArrayList<Token> code) throws ScriptException{
+         
           String groupInstanceIdentifier = code.get(2).getToken();
           String member = code.get(0).getToken();
           List<Token> expression = code.subList(4,code.size());
@@ -104,5 +105,6 @@ public class grpInstance {
             
             
             bigBoard.put(IFstack.peek().getLevel(),groupInstanceIdentifier, new memory(temp,TokenType.RECORD));
+            
      }
 }

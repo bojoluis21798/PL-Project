@@ -124,6 +124,7 @@ public class InitAssign {
                         }
                         initPlaceIntoMemory(code);
                     } else if (code.size() == 4) { //numbers x is y (where y is a numbers variable)
+                        System.out.println("WTFFF");
                         Token varToBeInitialized = code.get(1);
                         if(     code.get(1).getTokenType().equals(TokenType.IDENTIFIER) &&
                                 !isInitialized(code.get(1).getToken())){
