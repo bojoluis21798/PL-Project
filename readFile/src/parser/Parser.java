@@ -36,15 +36,15 @@ public class Parser {
     List<pointers> program;
     ArrayList<Token> tkStream;
      public static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
-    String[] lexeme; 
+     
      
     public Parser(ArrayList<Token> tkStream) throws ScriptException{
         this.tkStream = tkStream;
         String line = stringify(); 
         System.out.println(line);
         
-        this.lexeme = line.split(" ");
-        Start();
+        String[] lexeme = line.split(" ");
+        Start(lexeme);
     }
     
     public String stringify(){
@@ -69,6 +69,9 @@ public class Parser {
                 case OPERATION:
                     s+="<operation>";
                     break;
+                case ORDINAL:
+                    s+="<ordinal>";
+                    break;
                 default:
                     s+=tkStream.get(i).getToken();
                     //System.out.println("--->"+tkStream.get(i).getToken()+" is "+tkStream.get(i).getTokenType());
@@ -78,22 +81,45 @@ public class Parser {
         return s;
     }
     
-    private boolean isExpression(int start, int end){
+    /*private String parseExpression(int start, int end){
         String expr = "";
-        
-        if(start > end){
-            return true;
-        }
         
         for(int i=start; i<=end; i++){
             expr+=(lexeme[i].equals("<operation>"))?tkStream.get(i).getToken():lexeme[i];
-       }
+        }
+        return expr;
+    }
+    
+    private boolean isExpression(String expr){
         
         System.out.println("Expression: "+expr);
         
-        expr=expr.replaceAll("<string>", "0");
+        if(expr.contains("<identifier>using(")){
+            int opening = expr.indexOf("<identifier>using(");
+            opening+=17;
+            System.out.println("Char: "+expr.charAt(opening));
+            //parenthesis offset = 17
+            int closing = opening+1;
+            int open = -1;
+            String innerExp = "";
+            System.out.println("Length "+expr.length());
+            System.out.println("Opening "+opening);
+            for(; closing<expr.length() && !(expr.charAt(closing) == ')' && open == -1); closing++){
+                innerExp+=expr.charAt(closing);
+                if(expr.charAt(closing) == '(') open++;
+                else if(expr.charAt(closing) == ')')open--;
+            }
+            System.out.println("Close "+closing);
+            System.out.println("Inner Exp "+innerExp);
+            if(isExpression(innerExp)){
+                expr=expr.replaceAll("<identifier>using", "");
+            }else{
+                return false;
+            }
+        }
+        expr=expr.replaceAll("<string>", "\" \"");
         expr=expr.replaceAll("<number>","0");
-        expr=expr.replaceAll("<boolean>","0");
+        expr=expr.replaceAll("<bool>","true");
         //expr=expr.replaceAll("(<identifier>)\\s(using)\\s\\())\\)", "");
         expr=expr.replaceAll("<identifier>", "0");
         
@@ -114,43 +140,82 @@ public class Parser {
                type.equals("java.lang.Integer") || 
                type.equals("java.lang.Boolean") ||
                type.equals("java.lang.Double");
+    }*/
+    
+    private boolean allDeclarations(String[] lexeme, int start, int end) throws ScriptException{
+        String params = "";
+        for(int i=start; i<=end; i++){
+            params+=lexeme[i];
+        }
+        System.out.print(params);
+        return params.matches("((<type>)|(<identifier>))(<identifier>)(\\,((<type>)|(<identifier>))(<identifier>))*");
     }
     
-     public void Start() throws ScriptException{
-        
+    public String Start(String[] lexeme) throws ScriptException{
+        String type = "";
         if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<type>\\s<identifier>")){
-            System.out.println("DECLARATION!");
-        }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis") && isExpression(3,lexeme.length-1)){
-            System.out.println("INITIALIZATION!");
+            type = "DECLARATION!";
+        }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("<type>\\s<identifier>\\sis")){
+            type = "INITIALIZATION!";
         }else if(
             lexeme.length >= 5 && 
-            (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("if\\s\\(<expr>\\)\\sthen") &&
-            isExpression(2,lexeme.length-3)
+            (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("if\\s\\(<expr>\\)\\sthen")
         ){ 
-            System.out.println("IF STATEMENT!");
+            type = "IF STATEMENT!";
         }else if(lexeme.length >= 5 && 
-            (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("orif\\s\\(<expr>\\)\\sthen") &&
-            isExpression(2,lexeme.length-3)
-        ){ //orif statement
-            System.out.println("ORIF STATEMENT!");
-        }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("else then")){ //else statement
+            (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("orif\\s\\(<expr>\\)\\sthen"))
+        { //orif statement
+            type = "ORIF STATEMENT!";
+        }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("else\\sthen")){ //else statement
             System.out.println("ELSE STATEMENT!");
         }else if(
-            lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis") &&
-            isExpression(2,lexeme.length-1)    
+            (lexeme.length > 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\sis")) ||
+            (lexeme.length > 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("<ordinal>\\sof\\s<identifier>\\sis"))
         ){ //assignment
-            System.out.println("ASSIGNMENT!");
+            type = ("ASSIGNMENT!");
         }else if(lexeme.length == 1 && (lexeme[0].matches("end"))){
-            System.out.println("END!");
+            type = ("END!");
         }else if(
             lexeme.length >= 4 && 
-            (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("<identifier>\\susing\\s\\(<expr>\\)") &&
-            isExpression(3,lexeme.length-2)
+            (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("<identifier>\\susing\\s\\(<expr>\\)")
         ){ 
-            System.out.println("FUNCTION CALL!");
+            type = ("FUNCTION CALL!");
+        }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("<identifier>\\s<identifier>")){
+            type = ("GROUP VARIABLE DECLARATION!");
+        }else if(lexeme.length == 3 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]).matches("group\\s<identifier>\\scontains")){
+            type = ("GROUP DECLARATION!");
+        }else if(lexeme.length > 3 && (lexeme[0]+" <expr> "+lexeme[lexeme.length-2]+" "+lexeme[lexeme.length-1]).matches("add\\s<expr>\\sto\\s<identifier>")){
+            type = ("VECTOR ADD!");
+        }else if(lexeme.length == 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("remove\\s<ordinal>\\sof\\s<identifier>")){
+            type = ("VECTOR REMOVE!");
+        }else if(lexeme.length > 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+"<expr>"+lexeme[lexeme.length-1]).matches("repeat\\swhile\\s\\(<expr>\\)")){
+            type = ("PRE TEST LOOP!");
+        }else if(lexeme.length == 1 && (lexeme[0]).matches("do")){
+            type = ("DO!");
+        }else if(lexeme.length > 3 && (lexeme[0]+" "+lexeme[1]+"<expr>"+lexeme[lexeme.length-1]).matches("while\\s\\(<expr>\\)")){
+            type = ("WHILE!");
+        }else if(lexeme.length == 2 && (lexeme[0]+" "+lexeme[1]).matches("job\\s<identifier>")){
+            type = "JOB DECLARATION WITHOUT PARAMS AND RETURN TYPE!";
+        }else if(lexeme.length == 4 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]).matches("job\\s<identifier>\\soutputs\\s(<type>|<identifier>)")){
+            type = "JOB DECLARATION WITHOUT PARAMS!";
+        }else if(
+            lexeme.length > 5 && 
+            (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]+"<declarations>"+lexeme[lexeme.length-1]).matches("job\\s<identifier>\\susing\\s\\(<declarations>\\)")
+            && allDeclarations(lexeme,4,lexeme.length-2)
+        ){
+            type = "JOB DECLARATION WITHOUT RETURN TYPE!";
+        }else if(
+            lexeme.length > 7 && (lexeme[0]+" "+lexeme[1]+" "+lexeme[2]+" "+lexeme[3]+" "+lexeme[4]+" "+lexeme[5]+"<declarations>"+lexeme[lexeme.length-1]).matches("job\\s<identifier>\\soutputs\\s(<type>|<identifier>)\\susing\\s\\(<declarations>\\)")
+            && allDeclarations(lexeme,6,lexeme.length-2)
+        ){
+            type = "JOB DECLARATION!";
+        }else if(lexeme.length >= 2 && (lexeme[0]+" <expr>").matches("return\\s<expr>")){
+            type = "RETURN STATEMENT";
         }else{
             throw new IllegalStateException("Wrong Syntax");
-        }        
+        } 
+        System.out.println(type);
+        return type;
     }
     
   public boolean isDeclared(String token){

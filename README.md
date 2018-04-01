@@ -5,7 +5,8 @@ BUG REPORT
 ### Programming Language made for educating children on how to code.
 
 # Stuff to do:
-### Array Initialization and Declarations
+### if condition should work for array ordinals and group members
+### Polish group initialization and declarations 
 ### Subprogram Initialization, Declarations, Operation
 
 # Bugs:

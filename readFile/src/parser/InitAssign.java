@@ -63,7 +63,7 @@ public class InitAssign {
                                 initPlaceIntoMemory(code);
                             }else{
                                 System.out.println(code.get(0).getToken());
-                                System.out.println("Error: Data Type Mismatch (Number)");
+                                throw new IllegalStateException("Error: Data Type Mismatch (Number)");
                             }
                             break;
                         case STRING_LITERAL:
@@ -71,7 +71,7 @@ public class InitAssign {
                             if(code.get(0).getToken().equals(alert)){
                                 initPlaceIntoMemory(code);
                             }else{
-                                System.out.println("Error: Data Type Mismatch (Word)");
+                                throw new IllegalStateException("Error: Data Type Mismatch (Word)");
                             }
                             break;
                         case BOOLEAN_LITERAL:
@@ -79,14 +79,14 @@ public class InitAssign {
                             if(code.get(0).getToken().equals(alert)){
                                 initPlaceIntoMemory(code);
                             }else{
-                                System.out.println("Error: Data Type Mismatch (Truth)");
+                                throw new IllegalStateException("Error: Data Type Mismatch (Truth)");
                             }
                             break;
                         case IDENTIFIER:
                             initWithVariable(code);
                             break;
                         default:
-                            System.out.println("Error: No such Data Type ");
+                            throw new IllegalStateException("Error: No such Data Type ");
 
                     }
 
@@ -171,7 +171,7 @@ public class InitAssign {
                                             System.out.println(code.get(i).getToken()+" fits dataType");
                                         } else {
                                             error = true;
-                                            System.out.println("Error: Data Type Mismatch ("+code.get(0).getToken().substring(0,code.get(0).getToken().length()-1)+" Required)");
+                                            throw new IllegalStateException("Error: Data Type Mismatch ("+code.get(0).getToken().substring(0,code.get(0).getToken().length()-1)+" Required)");
                                         }
                                         break;
                                     case STRING_LITERAL:
@@ -428,7 +428,7 @@ public class InitAssign {
             }
             //else if(){} for vectors TBD
             else{
-                System.out.println("Invalid Syntax: not an assignment");
+                throw new IllegalStateException("Invalid Syntax: not an assignment");
             }
 
         }else if(code.get(0).getTokenType().equals(TokenType.ORDINAL)){ //if an ordinal of a vector is assign a new value

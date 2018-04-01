@@ -36,7 +36,7 @@ public class Tokenizer {
        tokDatas.add(new TokenData("(false)|(true)",TokenType.BOOLEAN_LITERAL));
        tokDatas.add(new TokenData("\"[^\"]*\"",TokenType.STRING_LITERAL));
        tokDatas.add(new TokenData("[a-zA-Z][a-zA-Z0-9]*",TokenType.IDENTIFIER));
-       tokDatas.add(new TokenData("[+*-/<>=]",TokenType.OPERATION));
+       tokDatas.add(new TokenData("[+*-/<>%=]|(not)|(not=)|(or)|(and)",TokenType.OPERATION));
        tokDatas.add(new TokenData("[-]?\\d*(\\.\\d*)?",TokenType.NUMBER_LITERAL));}
 
     public Token nextToken() throws ScriptException{
@@ -65,24 +65,37 @@ public class Tokenizer {
                             token.equals("if")    ||
                             token.equals("then")  ||
                             token.equals("end")   ||
+                            token.equals("repeat") ||
                             token.equals("while") ||
+                            token.equals("add")   ||
                             token.equals("is")    ||
                             token.equals("and")   ||
                             token.equals("or")    ||
                             token.equals("of")    ||
-                            token.equals("add")   ||
                             token.equals("to")    ||
                             token.equals("remove")||
-                            token.equals("using")
+                            token.equals("using") ||
+                            token.equals("and") ||
+                            token.equals("not") ||
+                            token.equals("not=") ||
+                            token.equals("=") ||
+                            token.equals("group") ||
+                            token.equals("contains") ||
+                            token.equals("job") ||
+                            token.equals("outputs") ||
+                            token.equals("return") ||
+                            token.equals("do")
                     ){
                         if(token.equals("and")){
-                            return (lastToken = new Token("&&",TokenType.KEYWORD));
+                            return (lastToken = new Token("&&",TokenType.OPERATION));
                         }else if(token.equals("or")){
-                            return (lastToken = new Token("||",TokenType.KEYWORD));
+                            return (lastToken = new Token("||",TokenType.OPERATION));
                         }else if(token.equals("not")){
-                            return (lastToken = new Token("!",TokenType.KEYWORD));
+                            return (lastToken = new Token("!",TokenType.OPERATION));
                         }else if(token.equals("not=")){
-                            return (lastToken = new Token("!=",TokenType.KEYWORD)); //5+5
+                            return (lastToken = new Token("!=",TokenType.OPERATION)); //5+5
+                        }else if(token.equals("=")){
+                            return (lastToken = new Token("==",TokenType.OPERATION));
                         }
                         return (lastToken = new Token(token,TokenType.KEYWORD));
                     }else if(token.equals("number") || token.equals("word") || token.equals("truth") ||

@@ -75,7 +75,7 @@ public class ReadFile {
                 if(sCurrentLine.equals("")){
                     continue;
                 }
-                StringTokenizer st = new StringTokenizer(sCurrentLine, "\"+-/*<>= (),:", true);
+                StringTokenizer st = new StringTokenizer(sCurrentLine, "\"+-/*<>= (),:%", true);
                 String[] tokens = new String[st.countTokens()];
 
                 for(int i=0; i<tokens.length; i++){
@@ -84,13 +84,23 @@ public class ReadFile {
 
                 boolean group = false;
                 int k=0;
+                String lastToken = "";
                 while(st.hasMoreTokens()){
                     String token = st.nextToken();
-
+                    
+                    if(token.equals("/") && lastToken.equals("/")){
+                        throw new IllegalStateException("Wrong Syntax");
+                    }
+                    
+                    if(token.equals("=")&& lastToken.equals("not")){
+                        tokens[k-1] += token;
+                        continue;
+                    }
+                    
                     if(token.equals(" ") && !group){
                         continue;
                     }
-
+                    
                     if(group){
                         tokens[k] += token;
                     }else{
@@ -104,8 +114,10 @@ public class ReadFile {
                     if(!group){
                         k++;
                     }
+                    
+                    lastToken = token;
                 }
-
+                
 
                 for(int i = 0; i<tokens.length && !tokens[i].equals(""); i++){
                     System.out.println("\nToken->"+i+" "+tokens[i]); //added \n
@@ -121,7 +133,7 @@ public class ReadFile {
                     System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());//+"\n---------------------"
 
                 }
-                //Parser p = new Parser(tkStream);
+                Parser p = new Parser(tkStream);
                            
                                 
                 program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
@@ -148,25 +160,25 @@ public class ReadFile {
             //LINE EXECUTION
             LineExecution lineExec = new LineExecution(tkStream);
 
-            ArrayList<Token> x = (ArrayList<Token>) bigBoard.get(IFstack.peek().getLevel(),"vw1");
-            System.out.print("Value of words vw1(level "+IFstack.peek().getLevel()+"): (");
-            for(int i=0; i  < x.size();i++){
-                System.out.print(" "+x.get(i).getToken());
-                if(i+1 < x.size()){
-                    System.out.print(",");
-                }
-            }
-            System.out.print(" )\n");
-
-            x = (ArrayList<Token>) bigBoard.get(0,"vw2");
-            System.out.print("Value of numbers vw2(level 0): (");
-            for(int i=0; i  < x.size();i++){
-                System.out.print(" "+x.get(i).getToken());
-                if(i+1 < x.size()){
-                    System.out.print(",");
-                }
-            }
-            System.out.print(" )\n");
+//            ArrayList<Token> x = (ArrayList<Token>) bigBoard.get(IFstack.peek().getLevel(),"b");
+//            System.out.print("Value of numbers b(level "+IFstack.peek().getLevel()+"): ("+IFctr);
+//            for(int i=0; i  < x.size();i++){
+//                System.out.print(" "+x.get(i).getToken());
+//                if(i+1 < x.size()){
+//                    System.out.print(",");
+//                }
+//            }
+//            System.out.print(" )\n");
+//
+//            x = (ArrayList<Token>) bigBoard.get(0,"vw2");
+//            System.out.print("Value of numbers vw2(level 0): (");
+//            for(int i=0; i  < x.size();i++){
+//                System.out.print(" "+x.get(i).getToken());
+//                if(i+1 < x.size()){
+//                    System.out.print(",");
+//                }
+//            }
+//            System.out.print(" )\n");
 //
 //            x = (ArrayList<Token>) bigBoard.get(0,"vn3");
 //            System.out.print("Value of numbers vn3(level 0): (");
@@ -180,6 +192,7 @@ public class ReadFile {
 //            System.out.println("Value of number x(level IFstack.peek().getLevel()): "+bigBoard.get(IFstack.peek().getLevel(),"x"));
 //            System.out.println("Value of numbers x(level IFstack.peek().getLevel()): "+bigBoard.get(IFstack.peek().getLevel(),"z"));
  //         System.out.println("Value of number a(level 0): "+bigBoard.get(IFstack.peek().getLevel(),"x"));
+
 //            System.out.println("Value of word b(level 0): "+bigBoard.get(0,"b"));
 //            System.out.println("Value of truth c(level 0): "+bigBoard.get(0,"c"));
 //            System.out.println("Value of n1(level 0): "+bigBoard.get(0,"n1"));
