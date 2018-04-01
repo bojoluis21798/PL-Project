@@ -136,7 +136,7 @@ public class ReadFile {
                   
 
                 }
-                //Parser p = new Parser(tkStream);
+                Parser p = new Parser(tkStream);
                            
                                 
                 program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr, p.type));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address

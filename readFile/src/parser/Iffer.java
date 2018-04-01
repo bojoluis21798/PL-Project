@@ -74,7 +74,7 @@ public class Iffer {
                 retval = true;
 
             } else {
-                retval - false;
+                retval = false;
             }
 
         }
