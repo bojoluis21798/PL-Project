@@ -65,6 +65,18 @@ public class Iffer {
             retval = true;
 
             //EdCode end
+        }else if (code.get(0).getToken().equals("repeat")) {
+
+            if (checkCondition(code)) {
+
+                // IFctr++;
+                // Fstack.push(new selection(true,IFctr));
+                retval = true;
+
+            } else {
+                retval - false;
+            }
+
         }
 
 
@@ -155,10 +167,104 @@ public class Iffer {
         }else{
             throw new IllegalStateException("Error: Condition does not yield boolean value");
         }
+        
+
+        return retVal;
+    }
+
+
+
+    // condition for Loops
+    public static boolean checkCondtionLoops(ArrayList<Token> code) {
+        String st = "";
+        Object result;
+        boolean retVal = false;
+        List<Token> boolE = code.subList(3, code.size());
+        List<Token> boolExpression = null;
+        for(Token tok:boolE) {
+            if (tok.getToken().equals(")")) {
+                boolExpression = boolE.subList(0, boolE.size() - 3);
+                break;
+            }
+        }
+
+        int indexOfVector = -1;
+        for(int x = 0; x < boolExpression.size(); x++){
+            if (boolExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
+                String variable = boolExpression.get(x).getToken();
+                if (InitAssign.isInitialized(variable) && InitAssign.isAccessible(variable)){
+                    int levelOfVariable = InitAssign.accessLevelOf(variable);
+                    String value;
+                    if(bigBoard.getTokenType(levelOfVariable,variable) == TokenType.STRING_LITERAL){
+                        value = "\""+bigBoard.get(levelOfVariable,variable).toString()+"\"";
+                    }else{
+                        value = bigBoard.get(levelOfVariable,variable).toString();
+                    }
+                    st+=" "+value;
+                }else{
+                    throw new IllegalStateException("Error: Variable "+variable+" not in HashMap");
+                }
+            }else if(boolExpression.get(x).getTokenType().equals(TokenType.STRING_LITERAL)){
+                st+=" "+"\""+boolExpression.get(x).getToken()+"\"";
+            }else if(boolExpression.get(x).getTokenType().equals(TokenType.ORDINAL)){
+                indexOfVector = Integer.parseInt(boolExpression.get(x).getToken().substring(0,1))-1;
+                String vectorVariable = boolExpression.get(x+2).getToken();
+                if(     InitAssign.isInitialized(vectorVariable) &&
+                        InitAssign.isAccessible(vectorVariable) &&
+                        bigBoard.get(IFstack.peek().getLevel(),vectorVariable) instanceof ArrayList){
+                    ArrayList<Token> vector = (ArrayList<Token>)bigBoard.get(IFstack.peek().getLevel(),vectorVariable);
+                    if(indexOfVector < vector.size()){
+                        st+=" "+vector.get(indexOfVector).getToken();
+                        x += 2;
+                    }else{
+                        throw new IllegalStateException("Error: vector has no "+boolExpression.get(x).getToken()+" ordinal");
+                    }
+                }else{
+                    if(!InitAssign.isInitialized(vectorVariable))
+                        throw new IllegalStateException("Error: variable not initialized");
+                    if(!InitAssign.isAccessible(vectorVariable))
+                        throw new IllegalStateException("Error: variable cannot be accessed in level");
+                    if(!(bigBoard.get(IFstack.peek().getLevel(),vectorVariable) instanceof ArrayList)){
+                        throw new IllegalStateException("Error: variable is not a vector");
+                    }
+                }
+            }else{
+                st+=" "+boolExpression.get(x).getToken();
+            }
+        }
+
+        for(int i=0; i < boolExpression.size(); i++){
+            if (boolExpression.get(i).getTokenType().equals(TokenType.DATA_TYPE)){    //removing identifiers in Primitive initialization
+                boolExpression.remove(i);
+            }else if(boolExpression.get(i).getTokenType().equals(TokenType.IDENTIFIER)){  //removing identifiers in Primitive Assignment
+                boolExpression.remove(i);
+            }else if(boolExpression.get(0).getTokenType().equals(TokenType.ORDINAL)){ //removing identifiers in Ordinal Assignment
+                boolExpression.remove(i);
+            }
+        }
+
+
+
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("JavaScript");
+        try{
+            result = engine.eval(st);
+        }catch (ScriptException e){
+            throw new IllegalStateException("Error: Wrong Syntax in if condition");
+        }
+        if(result.getClass().getTypeName().equals("java.lang.Boolean")){
+            if(result.equals(true)){
+                retVal =  true;
+            }
+        }else{
+            throw new IllegalStateException("Error: Condition does not yield boolean value");
+        }
         System.out.println(result);
 
         return retVal;
     }
+
+
 
     public boolean checkStack(){
         boolean retval = true;
@@ -175,15 +281,8 @@ public class Iffer {
         String st = "";
         Object result;
         List<Token> arithmeticExpression;
-        System.out.println("showing you the tokens");
-                                for(int i=0; i < code.size();i++){
-                                    System.out.print(code.get(i).getToken() + " ");
-                                }
-                                System.out.println();
-                                for(int i=0; i < code.size();i++){
-                                    System.out.print(code.get(i).getTokenType() + " ");
-                                }
-                                System.out.println();
+       
+                                
         if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
 
             arithmeticExpression = code.subList(3, code.size());
@@ -279,8 +378,7 @@ public class Iffer {
         }
         Tokenizer tknObj = new Tokenizer(result.toString());
         Token literal = tknObj.nextToken();
-        System.out.println(literal.getToken());
-        System.out.println(literal.getTokenType());
+    
         return literal;
     }
 
@@ -332,7 +430,7 @@ public class Iffer {
                         }
 
                     }else{
-                        System.out.println("Complex Init,Assign,Op");
+                        //System.out.println("Complex Init,Assign,Op");
                         int x = 0;
 
                         while(x < code.size() && !code.get(x).getToken().equals(",") &&
@@ -342,30 +440,19 @@ public class Iffer {
                         if(!code.get(0).getToken().equals("print") && x < code.size() && (code.get(x).getTokenType().equals(TokenType.OPERATION) || code.get(x).getTokenType().equals(TokenType.ORDINAL))){ //OPERATOR FOUND IN LINE
                             Token literal = null;
                             try {
-                                System.out.println("showing you the tokens");
-                                for(int i=0; i < code.size();i++){
-                                    System.out.print(code.get(i).getToken() + " ");
-                                }
-                                System.out.println();
-                                for(int i=0; i < code.size();i++){
-                                    System.out.print(code.get(i).getTokenType() + " ");
-                                }
-                                System.out.println();
+                               
+                                
                                 literal = checkExpression(code);
                             } catch (ScriptException e) {
                                 e.printStackTrace();
                             }
                             code.add(literal);
-                            System.out.println("showing you the tokens after adding the literal");
+                           
 
-                            for(int i=0; i < code.size();i++){
-                                System.out.print(code.get(i).getToken() + " ");
-                            }
-                            System.out.println();
-                            for(int i=0; i < code.size();i++){
-                                System.out.print(code.get(i).getTokenType() + " ");
-                            }
-                            System.out.println();
+                           
+                          
+                           
+                            
                             //  AFTER EVALUATING EXPRESSION AND LITERAL IS ADDED TO CODE
                             if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
                                 InitAssign.initialize(code);
@@ -382,31 +469,32 @@ public class Iffer {
                                 InitAssign.assign(code);
                             }
                         }else if(x < code.size() && code.get(x).getToken().equals(",")){  //THERE IS A COMMA ENCOUNTERED IN THE LINE
-                            System.out.println("Vector init with multiple values");
-                            for(int i=0; i < code.size();i++){
-                                System.out.print(code.get(i).getToken() + " ");
-                            }
-                            System.out.println();
-                            for(int i=0; i < code.size();i++){
-                                System.out.print(code.get(i).getTokenType() + " ");
-                            }
-                            System.out.println();
+                           
+                          
+                        
+                        
                             InitAssign.initialize(code);
                         }else if(code.get(0).getToken().equals("print")){
                             print.printIt(code);
                         }else{
+                          
                             List<Token> expression;
                             List<Token> objToSend;
                             if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+                                
                                 expression = code.subList(3,code.size());
+                                
                                 Object retval = accessGroup(expression.get(2).getToken(),expression.get(0).getToken());
+                               
                                 objToSend = code.subList(0,3);
+                                  
                                 Tokenizer tknObj = new Tokenizer(retval.toString());
+                                
                                 Token literal = tknObj.nextToken();
                                 objToSend.add((Token) literal);
-                                
-                                InitAssign.initPlaceIntoMemory( objToSend);
-                                System.out.println("SUCCESSFUL");
+                              
+                                InitAssign.initPlaceIntoMemory(objToSend);
+                               
                             }else if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
                                 expression =  code.subList(2,code.size());
                                 Object retval = accessGroup(expression.get(2).getToken(),expression.get(0).getToken());
@@ -440,19 +528,12 @@ public class Iffer {
                         code.remove(1);
                     }
                     code.add(1,literal);
-                    System.out.println("showing you the tokens after adding the literal (add)");
-                    for(int i=0; i < code.size();i++){
-                        System.out.print(code.get(i).getToken() + " ");
-                    }
-                    System.out.println();
-                    for(int i=0; i < code.size();i++){
-                        System.out.print(code.get(i).getTokenType() + " ");
-                    }
-                    System.out.println();
+                  
+                  
                     InitAssign.addToVector(code);
 
                 }else if(code.get(0).getToken().equals("remove")){
-                    System.out.println("Vector Op Found! : remove");
+                   
                     InitAssign.removeFromVector(code);
                 }
                 break;
