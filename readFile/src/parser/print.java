@@ -10,6 +10,7 @@ import java.util.List;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import static parser.groups.accessGroup;
 
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
@@ -30,15 +31,17 @@ public class print {
 
         int indexOfVector = -1;
          for(int x = 0; x < thingToPrint.size(); x++){
-
-             if(thingToPrint.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
-
-                 String variable = thingToPrint.get(x).getToken();
+                //System.out.println(thingToPrint.get(2).getTokenType());
+             if(thingToPrint.get(0).getTokenType().equals(TokenType.TOKEN) && thingToPrint.get(1).getTokenType().equals(TokenType.IDENTIFIER) && thingToPrint.get(0).getTokenType().equals(TokenType.TOKEN)){
+                 
+                 String variable = thingToPrint.get(1).getToken();
                  if (InitAssign.isInitialized(variable) && InitAssign.isAccessible(variable)){
                      int levelOfVariable = InitAssign.accessLevelOf(variable);
                      String value;
                      if(bigBoard.getTokenType(levelOfVariable,variable) == TokenType.STRING_LITERAL){
+                         //System.out.println(bigBoard.get(levelOfVariable,variable));
                          value = "\""+bigBoard.get(levelOfVariable,variable).toString()+"\"";
+                         
                      }else{
                          value = bigBoard.get(levelOfVariable,variable).toString();
                      }
@@ -46,7 +49,7 @@ public class print {
                  }else{
                      throw new IllegalStateException("Error: Variable "+variable+" not in HashMap");
                  }
-
+                 x = thingToPrint.size();
              }else if(thingToPrint.get(x).getTokenType().equals(TokenType.STRING_LITERAL)){
                  st+=" "+"\""+thingToPrint.get(x).getToken()+"\"";
              }else if(thingToPrint.get(x).getTokenType().equals(TokenType.ORDINAL)){
@@ -72,7 +75,12 @@ public class print {
                          throw new IllegalStateException("Error: variable is not a vector : "+bigBoard.get(IFstack.peek().getLevel(),vectorVariable));
                      }
                  }
+             }else if(thingToPrint.get(1).getTokenType().equals(TokenType.IDENTIFIER) && thingToPrint.get(2).getToken().equals("of") && thingToPrint.get(3).getTokenType().equals(TokenType.IDENTIFIER)){
+                 st+=" "+accessGroup(thingToPrint.get(3).getToken(),thingToPrint.get(1).getToken());
+                 
+                 x = thingToPrint.size();
              }else{ //add an else if for group before this else
+                 
                  st+=" "+thingToPrint.get(x).getToken();
              }
          }

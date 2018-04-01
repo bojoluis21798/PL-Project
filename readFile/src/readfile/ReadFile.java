@@ -133,7 +133,7 @@ public class ReadFile {
                     System.out.println(retVal.getToken()+"=>"+retVal.getTokenType());//+"\n---------------------"
 
                 }
-                Parser p = new Parser(tkStream);
+                //Parser p = new Parser(tkStream);
                            
                                 
                 program.add(new pointers((ArrayList<Token>) tkStream.clone(),ctr));//this is the new program array kinda like cursor based cuz we have the tkStream containing the tokens form each line and the index kinda like our address
@@ -142,6 +142,7 @@ public class ReadFile {
 
                     if(program.get(ctr).getCode().get(0).getToken().equals("if")){
                         ++level;
+                        
                        levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
 
                     }else if(program.get(ctr).getCode().get(0).getToken().equals("else") || program.get(ctr).getCode().get(0).getToken().equals("orif")){
@@ -151,6 +152,9 @@ public class ReadFile {
                 }else if(program.get(ctr).getCode().get(0).getToken().equals("end")){
                       levelsAndLines.add(new tuple(program.get(ctr).getIndex(),level));
                       --level;
+                   
+                }else if(program.get(ctr).getCode().get(0).getToken().equals("group")){
+                     ++level;
                 }
 
                 tkStream.clear();

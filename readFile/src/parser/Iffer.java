@@ -395,17 +395,23 @@ public class Iffer {
                         }else if(code.get(0).getToken().equals("print")){
                             print.printIt(code);
                         }else{
+                            System.out.println("RICO");
                             List<Token> expression;
                             List<Token> objToSend;
                             if(code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
+                                
                                 expression = code.subList(3,code.size());
+                                
                                 Object retval = accessGroup(expression.get(2).getToken(),expression.get(0).getToken());
+                                System.out.println(retval);
                                 objToSend = code.subList(0,3);
+                                  
                                 Tokenizer tknObj = new Tokenizer(retval.toString());
+                                
                                 Token literal = tknObj.nextToken();
                                 objToSend.add((Token) literal);
-                                
-                                InitAssign.initPlaceIntoMemory( objToSend);
+                                System.out.println(objToSend.get(3).getToken());
+                                InitAssign.initPlaceIntoMemory(objToSend);
                                 System.out.println("SUCCESSFUL");
                             }else if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
                                 expression =  code.subList(2,code.size());
