@@ -22,6 +22,8 @@ import javax.script.ScriptException;
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
+import static readfile.ReadFile.functionTrav;
+import readfile.tuple;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import parser.InitAssign;
@@ -340,8 +342,15 @@ public class LineExecution {
                    lineCount++;
                    groupDefinitions.add(new groups((ArrayList<member>) members,groupIdentifier));
             
-               }else if(program.get(lineCount).getCode().get(0).getToken().equals("job")){
+               }else if(program.get(lineCount).getType().contains("JOB DECLARATION")){
+                   int open = functionTrav.indexOf(new tuple(lineCount,1));
+                   int endline;
                    
+                   if(functionTrav.get(open+1) == null || program.get(functionTrav.get(open+1).getLine()).getType().contains("JOB DECLARATION")){
+                       throw new IllegalStateException("Wrong syntax: Job Declaration not closed");
+                   }
+                    endline = functionTrav.get(open+1).getLine();
+                   lineCount = endline+1;
                }else{
                   //for(;;)
                   Iffer.execute((ArrayList<Token>) program.get(lineCount).getCode());
