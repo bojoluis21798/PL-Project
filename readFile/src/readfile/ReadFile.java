@@ -164,6 +164,21 @@ public class ReadFile {
                 ctr++;
                                
             }
+            System.out.println("Program and pointers");
+            System.out.println("===============================");
+            int k = 0;
+            for(int i=0; i<program.size();i++){
+                String line = "";
+                for(int j=0; j<program.get(i).getCode().size(); j++){
+                   line+=(program.get(i).getCode().get(j).getToken())+" ";
+                }
+                if(levelsAndLines.get(k).getLine() == i){
+                    line+= "<--- Level "+levelsAndLines.get(k).getLevel();
+                    k++;
+                }
+                System.out.println(line);
+            }
+            
             //LINE EXECUTION
             LineExecution lineExec = new LineExecution(tkStream);
 
