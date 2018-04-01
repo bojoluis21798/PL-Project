@@ -200,7 +200,15 @@ public class ReadFile {
                       ++level;
                       functionTrav.add(new tuple(program.get(ctr).getIndex(),level));
                 }else if(program.get(ctr).getType().equals("FUNCTION CALL!")){
-                      
+                      for(int i=0; i<functionTrav.size(); i++){
+                          if(program.get(functionTrav.get(i).getLine()).getType().equals("END!")){
+                              continue;
+                          }
+                          if(program.get(functionTrav.get(i).getLine()).getCode()
+                            .get(1).getToken().equals(program.get(ctr).getCode().get(0).getToken())){
+                            functionTrav.get(i).setRet(new tuple(ctr,level));
+                          }
+                      }
                 }else if (program.get(ctr).getCode().get(0).getToken().equals("repeat")
                             || program.get(ctr).getCode().get(0).getToken().equals("do")
                             || program.get(ctr).getCode().get(0).getToken().equals("foreach")) {
@@ -218,7 +226,7 @@ public class ReadFile {
             int funcs = 0;
             int loops = 0;
             for(int i=0; i<program.size();i++){
-                String line = "";
+                String line = "Line "+i+": ";
                 for(int j=0; j<program.get(i).getCode().size(); j++){
                    line+=(program.get(i).getCode().get(j).getToken())+" ";
                 }
@@ -227,6 +235,9 @@ public class ReadFile {
                     ifs++;
                 }else if(functionTrav.size() > funcs && functionTrav.get(funcs).getLine() == i){
                     line+= "<--- funcs Level "+functionTrav.get(funcs).getLevel();
+                    if(functionTrav.get(funcs).getRet()!=null){
+                        line+=" return at "+functionTrav.get(funcs).getRet().getLine();
+                    }
                     funcs++;
                 }else if(loopTracker.size() > loops && loopTracker.get(loops).getLine() == i){
                     line+= "<--- loop Level "+loopTracker.get(loops).getLevel();
