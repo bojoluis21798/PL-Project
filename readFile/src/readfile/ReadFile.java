@@ -39,6 +39,7 @@ public class ReadFile {
     public static ArrayList<tuple> levelsAndLines = new ArrayList<tuple>();
     public static ArrayList<tuple> loopTracker = new ArrayList<tuple>();
     public static ArrayList<tuple> functionTrav = new ArrayList<tuple>();
+    public static ArrayList<tuple> callTrav = new ArrayList<tuple>();
     public static ArrayDeque<Integer> q = new ArrayDeque<Integer>();
     private static ArrayList<Token> tkStream = new ArrayList<Token>();
     public static List<pointers> program = new ArrayList<pointers>();
@@ -207,6 +208,7 @@ public class ReadFile {
                           if(program.get(functionTrav.get(i).getLine()).getCode()
                             .get(1).getToken().equals(program.get(ctr).getCode().get(0).getToken())){
                             functionTrav.get(i).setRet(new tuple(ctr,level));
+                            callTrav.add(new tuple(ctr,level,new tuple(functionTrav.get(i).getLine(),1)));
                           }
                       }
                 }else if (program.get(ctr).getCode().get(0).getToken().equals("repeat")
@@ -225,6 +227,7 @@ public class ReadFile {
             int ifs = 0;
             int funcs = 0;
             int loops = 0;
+            int calls = 0;
             for(int i=0; i<program.size();i++){
                 String line = "Line "+i+": ";
                 for(int j=0; j<program.get(i).getCode().size(); j++){
@@ -241,6 +244,12 @@ public class ReadFile {
                     funcs++;
                 }else if(loopTracker.size() > loops && loopTracker.get(loops).getLine() == i){
                     line+= "<--- loop Level "+loopTracker.get(loops).getLevel();
+                    loops++;
+                }else if(callTrav.size() > calls && callTrav.get(calls).getLine() == i){
+                    line+= "<--- call Level "+callTrav.get(calls).getLevel();
+                    if(callTrav.get(calls).getRet() != null){
+                        line+=" call at "+callTrav.get(calls).getRet().getLine();
+                    }
                     loops++;
                 }
                 System.out.println(line);
