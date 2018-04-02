@@ -54,7 +54,7 @@ public class InitAssign {
                     initPlaceIntoMemory(code);
 
                 }else{
-
+                    
                     String alert;
                     switch (code.get(3).getTokenType()){
                         case NUMBER_LITERAL:
@@ -124,7 +124,7 @@ public class InitAssign {
                         }
                         initPlaceIntoMemory(code);
                     } else if (code.size() == 4) { //numbers x is y (where y is a numbers variable)
-                        //System.out.println("WTFFF");
+
                         Token varToBeInitialized = code.get(1);
                         if(     code.get(1).getTokenType().equals(TokenType.IDENTIFIER) &&
                                 !isInitialized(code.get(1).getToken())){
@@ -295,6 +295,7 @@ public class InitAssign {
             case "numbers":
             case "words":
             case "truths":
+                
                 TokenType typeForVectorToBeInitialized = TokenType.EMPTY;
                 if(code.get(0).getToken().equals("numbers")){
                     typeForVectorToBeInitialized = TokenType.NUMBER_LITERAL;
@@ -329,18 +330,13 @@ public class InitAssign {
                 }
                 break;
             default:
-                
                 if(groups.isDefined(code.get(0).getToken()) && code.get(0).getTokenType().equals(TokenType.DATA_TYPE)){
-                    
                     List<member> temp = groups.allocateMemory(code.get(0).getToken());
                     bigBoard.put(IFstack.peek().getLevel(),code.get(1).getToken(),new memory(temp,TokenType.RECORD));
                 }else if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER) && isInitialized(code.get(0).getToken())){
-                    
-                     //System.out.println(code.get(1).getToken());
 
                         assign(code);
                 }else if(!isInitialized(code.get(1).getToken())) {
-                    
                     bigBoard.put(IFstack.peek().getLevel(), code.get(1).getToken(), new memory(code.get(3).getToken(), code.get(3).getTokenType()));
                 }else{
                     //System.out.println(code.get(1).getToken()+" has already been initialized");
@@ -370,11 +366,11 @@ public class InitAssign {
     */
     public static void assign(List<Token> code){
         if(code.get(0).getTokenType() == TokenType.IDENTIFIER) {
-
+            
             if (code.get(1).getTokenType() == TokenType.KEYWORD
                     && code.get(1).getToken().equals("is")
                         && code.get(2).getTokenType() != TokenType.IDENTIFIER) { //FOR LITERALS
-
+                
                 switch (code.get(2).getTokenType()) {
                     case NUMBER_LITERAL:
                     case STRING_LITERAL:
@@ -403,10 +399,14 @@ public class InitAssign {
             }else if (code.get(1).getTokenType() == TokenType.KEYWORD
                         && code.get(1).getToken().equals("is")
                             && code.get(2).getTokenType() == TokenType.IDENTIFIER) { //FOR VARIABLES
-
+                
+                
+                
                 String assignee = code.get(0).getToken();
                 int levelOfAssignee = accessLevelOf(assignee);
-
+                
+                
+                
                 String variable = code.get(2).getToken();
                 int levelOfVariable = accessLevelOf(variable);
 
@@ -459,11 +459,12 @@ public class InitAssign {
         for (int i=IFctr; i>=0; i--){
             if(bigBoard.containsKeys(i, token)){
                 val = true;
+                break;
             }else{
                 val = false;
             }
         }
-        ////System.out.println("isInitialized() is : "+val);
+
         return val;
     }
 

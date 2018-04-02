@@ -215,7 +215,7 @@ public class ReadFile {
                 }else if (program.get(ctr).getCode().get(0).getToken().equals("repeat")
                             || program.get(ctr).getCode().get(0).getToken().equals("do")
                             || program.get(ctr).getCode().get(0).getToken().equals("foreach")) {
-
+                    
                     loopTracker.add(new tuple(program.get(ctr).getIndex(), ++level));
                 }
 
