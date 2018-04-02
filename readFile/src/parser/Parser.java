@@ -41,7 +41,7 @@ public class Parser {
     public Parser(ArrayList<Token> tkStream) throws ScriptException{
         this.tkStream = tkStream;
         String line = stringify(); 
-        System.out.println(line);
+        //println(line);
         
         String[] lexeme = line.split(" ");
         Start(lexeme);
@@ -74,7 +74,7 @@ public class Parser {
                     break;
                 default:
                     s+=tkStream.get(i).getToken();
-                    //System.out.println("--->"+tkStream.get(i).getToken()+" is "+tkStream.get(i).getTokenType());
+                    ////println("--->"+tkStream.get(i).getToken()+" is "+tkStream.get(i).getTokenType());
             }
             s+=(i==tkStream.size()-1)?"":" ";
         }
@@ -92,25 +92,25 @@ public class Parser {
     
     private boolean isExpression(String expr){
         
-        System.out.println("Expression: "+expr);
+        //println("Expression: "+expr);
         
         if(expr.contains("<identifier>using(")){
             int opening = expr.indexOf("<identifier>using(");
             opening+=17;
-            System.out.println("Char: "+expr.charAt(opening));
+            //println("Char: "+expr.charAt(opening));
             //parenthesis offset = 17
             int closing = opening+1;
             int open = -1;
             String innerExp = "";
-            System.out.println("Length "+expr.length());
-            System.out.println("Opening "+opening);
+            //println("Length "+expr.length());
+            //println("Opening "+opening);
             for(; closing<expr.length() && !(expr.charAt(closing) == ')' && open == -1); closing++){
                 innerExp+=expr.charAt(closing);
                 if(expr.charAt(closing) == '(') open++;
                 else if(expr.charAt(closing) == ')')open--;
             }
-            System.out.println("Close "+closing);
-            System.out.println("Inner Exp "+innerExp);
+            //println("Close "+closing);
+            //println("Inner Exp "+innerExp);
             if(isExpression(innerExp)){
                 expr=expr.replaceAll("<identifier>using", "");
             }else{
@@ -123,7 +123,7 @@ public class Parser {
         //expr=expr.replaceAll("(<identifier>)\\s(using)\\s\\())\\)", "");
         expr=expr.replaceAll("<identifier>", "0");
         
-        System.out.println("Expression: "+expr);
+        //println("Expression: "+expr);
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
         
@@ -134,7 +134,7 @@ public class Parser {
             return false;
         }
         String type = result.getClass().getTypeName();
-        System.out.println("Type: "+type);
+        //println("Type: "+type);
         
         return type.equals("java.lang.String") || 
                type.equals("java.lang.Integer") || 
@@ -147,7 +147,7 @@ public class Parser {
         for(int i=start; i<=end; i++){
             params+=lexeme[i];
         }
-        System.out.print(params);
+        //print(params);
         return params.matches("((<type>)|(<identifier>))(<identifier>)(\\,((<type>)|(<identifier>))(<identifier>))*");
     }
     
@@ -214,7 +214,7 @@ public class Parser {
         }else{
             throw new IllegalStateException("Wrong Syntax");
         } 
-        System.out.println(type);
+        //println(type);
         return type;
     }
     
