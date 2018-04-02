@@ -87,12 +87,12 @@ public class grpInstance {
             ScriptEngineManager manager = new ScriptEngineManager();
             ScriptEngine engine = manager.getEngineByName("JavaScript");
             result = engine.eval(st);
-            //System.out.println(result);
+            ////println(result);
             
             List<member> temp = (ArrayList<member>) bigBoard.get(IFstack.peek().getLevel(),groupInstanceIdentifier);
             
 //            for(int ctr=0; ctr<temp.size();ctr++){
-//              System.out.println("HELLO"+temp.get(ctr).getMemberName());
+//              //println("HELLO"+temp.get(ctr).getMemberName());
 //            }
             
             for(int ctr=0;ctr<temp.size();ctr++){

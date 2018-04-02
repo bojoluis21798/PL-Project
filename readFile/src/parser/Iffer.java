@@ -260,7 +260,7 @@ public class Iffer {
         }else{
             throw new IllegalStateException("Error: Condition does not yield boolean value");
         }
-        System.out.println(result);
+        //System.out.println(result);
 
         return retVal;
     }
@@ -365,7 +365,7 @@ public class Iffer {
 
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
-        System.out.println("String to be evaled: "+st);
+        //System.out.println("String to be evaled: "+st);
 
         try {
             result = engine.eval(st);
@@ -428,7 +428,7 @@ public class Iffer {
                             
                             assignMember(code);
                         }else{
-                            System.out.println("Group variable undefined");
+                            throw new IllegalStateException("Group variable undefined");
                         }
 
                     }else{
@@ -509,7 +509,7 @@ public class Iffer {
                                 InitAssign.initPlaceIntoMemory( objToSend);
                                 
                             }else{
-                                System.out.println("New Init or Assign!");
+                                //System.out.println("New Init or Assign!");
                             }
                             
                         }

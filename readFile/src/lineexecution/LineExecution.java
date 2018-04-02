@@ -248,7 +248,7 @@ public class LineExecution {
                          //        }
                          //     }
                          // }
-                        System.out.println("Twas true");
+                        //System.out.println("Twas true");
                          
                      }else{//if the if condition is false
                          
@@ -261,7 +261,7 @@ public class LineExecution {
                           
                           // lineCount = levelsAndLines.get(ctr).getLine();
 
-                        System.out.println("Twas false");
+                        //System.out.println("Twas false");
                           
                      }
 
@@ -333,7 +333,7 @@ public class LineExecution {
                        if(program.get(lineCount).getCode().get(0).getTokenType().equals(TokenType.DATA_TYPE) && program.get(lineCount).getCode().get(1).getTokenType().equals(TokenType.IDENTIFIER)){
                            members.add(new member(null,program.get(lineCount).getCode().get(0).getToken(),program.get(lineCount).getCode().get(1).getToken()));
                        }else{
-                          System.out.println("ERROR: wrong syntax within group definition");
+                          throw new IllegalStateException("ERROR: wrong syntax within group definition");
                           
                        }
                    }

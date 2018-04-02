@@ -34,25 +34,25 @@ public class job {
         }
         int open = callTrav.get(jobExists(identifier)).getRet().getLine();
         int close = functionTrav.get(functionTrav.indexOf(callTrav.get(jobExists(identifier)).getRet())+1).getLine();
-        System.out.println("Open: "+open);
-        System.out.println("Close: "+close);
+        //println("Open: "+open);
+        //println("Close: "+close);
         ArrayList<Token> dec = (ArrayList<Token>)program.get(callTrav.get(jobExists(identifier)).getRet().getLine()).getCode();
         String decType = program.get(callTrav.get(jobExists(identifier)).getRet().getLine()).getType();
         ArrayList<Token> call = (ArrayList<Token>)program.get(callTrav.get(jobExists(identifier)).getLine()).getCode();
         
-        System.out.println("Call");
+        //println("Call");
         String line = "";
         for(int i=0; i<call.size();i++){
             line += call.get(i).getToken();
         }
-        System.out.println(line);
+        //println(line);
         
-        System.out.println("DEC");
+        //println("DEC");
         line = "";
         for(int i=0; i<dec.size();i++){
             line += dec.get(i).getToken();
         }
-        System.out.println(line);
+        //println(line);
         
         ArrayList<Token> params = new ArrayList<Token>();
         
@@ -67,8 +67,8 @@ public class job {
             start = 4;
             end = dec.size()-2;
         }
-        System.out.println("start:"+start);
-        System.out.println("end:"+end);
+        //println("start:"+start);
+        //println("end:"+end);
         line = "";
         int j = 3;
         for(int i=start; i<=end; i++){
@@ -81,7 +81,7 @@ public class job {
                 }j++;
                 for(int k=0; k<params.size();k++){
                     line+=params.get(k).getToken();
-                }System.out.println(line);
+                }//println(line);
                 func.add(new pointers(params,i-start));
             }
         }
@@ -91,14 +91,14 @@ public class job {
             func.add(t);
         }
         line = "";
-        System.out.println(func.size());
-        System.out.println("Lines:");
+        //println(func.size());
+        //println("Lines:");
         for(int i=0;i<func.size();i++){
             line = "";
             for(int k=0;k<func.get(i).getCode().size(); k++){
                 line+=func.get(i).getCode().get(k).getToken();
             }
-            System.out.println(line);
+            //println(line);
         }
         
         for(int i=0;i<func.size();i++){
