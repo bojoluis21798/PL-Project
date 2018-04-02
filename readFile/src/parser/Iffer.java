@@ -12,7 +12,7 @@ import static parser.groups.accessGroup;
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
-
+import parser.job;
 //unused imports
 import static readfile.ReadFile.groupDefinitions;
 import static readfile.ReadFile.groupInstances;
@@ -21,6 +21,7 @@ import static parser.grpInstance.assignMember;
 import static parser.grpInstance.isInstanceDefined;
 
 public class Iffer {
+    public static ArrayList<Token> ret = null;
     public static boolean ifSTMT(ArrayList<Token> code) throws ScriptException {
 
         //System.out.println("tkStream.get(0).getToken() : "+tkStream.get(0).getToken());
@@ -259,7 +260,7 @@ public class Iffer {
         }else{
             throw new IllegalStateException("Error: Condition does not yield boolean value");
         }
-        System.out.println(result);
+        //System.out.println(result);
 
         return retVal;
     }
@@ -364,7 +365,7 @@ public class Iffer {
 
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
-        System.out.println("String to be evaled: "+st);
+        //System.out.println("String to be evaled: "+st);
 
         try {
             result = engine.eval(st);
@@ -401,6 +402,7 @@ public class Iffer {
                     InitAssign.assign(code);
                     //System.out.println("declaration");
 
+
                 //NULL INITIALIZATION
                 }else if(code.size() == 2 && !code.get(1).getTokenType().equals(TokenType.IDENTIFIER) && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
                     
@@ -430,7 +432,7 @@ public class Iffer {
                             
                             assignMember(code);
                         }else{
-                            System.out.println("Group variable undefined");
+                            throw new IllegalStateException("Group variable undefined");
                         }
 
                     }else{
@@ -475,12 +477,13 @@ public class Iffer {
                             }
                         }else if(x < code.size() && code.get(x).getToken().equals(",")){  //THERE IS A COMMA ENCOUNTERED IN THE LINE
                            
-                          
-                        
-                        
                             InitAssign.initialize(code);
                         }else if(code.get(0).getToken().equals("print")){
                             print.printIt(code);
+                        }else if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER) &&
+                            code.get(1).getToken().equals("using")
+                        ){
+                            job.call(code.get(0).getToken());
                         }else{
                           
                             List<Token> expression;
@@ -511,7 +514,7 @@ public class Iffer {
                                 InitAssign.initPlaceIntoMemory( objToSend);
                                 
                             }else{
-                                System.out.println("New Init or Assign!");
+                                //System.out.println("New Init or Assign!");
                             }
                             
                         }
@@ -538,8 +541,11 @@ public class Iffer {
                     InitAssign.addToVector(code);
 
                 }else if(code.get(0).getToken().equals("remove")){
-                   
                     InitAssign.removeFromVector(code);
+                }else if(code.get(0).getToken().equals("return")){
+                    for(int i=1; i<code.size(); i++){
+                        ret.add(code.get(i));
+                    }
                 }
                 break;
             default:

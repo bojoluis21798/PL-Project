@@ -5,7 +5,6 @@ import javax.script.ScriptException;
 import java.util.Hashtable;
 import java.util.ArrayList;
 import readfile.tokenizer.Token;
-import static readfile.ReadFile.program;
 import java.util.List;
 import parser.groups;
 import parser.member;
@@ -22,10 +21,13 @@ import javax.script.ScriptException;
 import static readfile.ReadFile.IFctr;
 import static readfile.ReadFile.IFstack;
 import static readfile.ReadFile.bigBoard;
+import static readfile.ReadFile.functionTrav;
+import readfile.tuple;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import parser.InitAssign;
 import parser.selection;
+import readfile.pointers;
 
 
 
@@ -33,13 +35,12 @@ public class LineExecution {
 
     ArrayList<Token> tkStream;
     public static Hashtable<Object, Object> varList= new Hashtable<Object, Object>();
+    List<pointers> program;
 
-
-    public LineExecution(ArrayList<Token> tkStream) throws ScriptException {
-
-        this.tkStream = tkStream;
+    
+    public LineExecution(List<pointers> program) throws ScriptException{
+        this.program = program;
         Start();
-
     }
 
     public void Start() throws ScriptException{
@@ -247,7 +248,7 @@ public class LineExecution {
                          //        }
                          //     }
                          // }
-                        System.out.println("Twas true");
+                        //System.out.println("Twas true");
                          
                      }else{//if the if condition is false
                          
@@ -260,7 +261,7 @@ public class LineExecution {
                           
                           // lineCount = levelsAndLines.get(ctr).getLine();
 
-                        System.out.println("Twas false");
+                        //System.out.println("Twas false");
                           
                      }
 
@@ -332,7 +333,7 @@ public class LineExecution {
                        if(program.get(lineCount).getCode().get(0).getTokenType().equals(TokenType.DATA_TYPE) && program.get(lineCount).getCode().get(1).getTokenType().equals(TokenType.IDENTIFIER)){
                            members.add(new member(null,program.get(lineCount).getCode().get(0).getToken(),program.get(lineCount).getCode().get(1).getToken()));
                        }else{
-                          System.out.println("ERROR: wrong syntax within group definition");
+                          throw new IllegalStateException("ERROR: wrong syntax within group definition");
                           
                        }
                    }
@@ -340,8 +341,15 @@ public class LineExecution {
                    lineCount++;
                    groupDefinitions.add(new groups((ArrayList<member>) members,groupIdentifier));
             
-               }else if(program.get(lineCount).getCode().get(0).getToken().equals("job")){
+               }else if(program.get(lineCount).getType().contains("JOB DECLARATION")){
+                   int open = functionTrav.indexOf(new tuple(lineCount,1));
+                   int endline;
                    
+                   if(functionTrav.get(open+1) == null || program.get(functionTrav.get(open+1).getLine()).getType().contains("JOB DECLARATION")){
+                       throw new IllegalStateException("Wrong syntax: Job Declaration not closed");
+                   }
+                    endline = functionTrav.get(open+1).getLine();
+                   lineCount = endline+1;
                }else{
                   //for(;;)
                   Iffer.execute((ArrayList<Token>) program.get(lineCount).getCode());

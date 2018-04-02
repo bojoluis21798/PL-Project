@@ -153,7 +153,7 @@ public class ReadFile {
                     }
 
                 }else if(program.get(ctr).getCode().get(0).getToken().equals("end")) {
-                    System.out.println("Level: "+level);
+                    //println("Level: "+level);
                     boolean found = false;
                     for (int x = ctr - 1; x >= 0 && found == false;x--) {
                         if ((program.get(x).getType().equals("IF STATEMENT!")
@@ -223,8 +223,8 @@ public class ReadFile {
                 ctr++;
                                
             }
-            System.out.println("Program and pointers");
-            System.out.println("===============================");
+            //println("Program and pointers");
+            //println("===============================");
             int ifs = 0;
             int funcs = 0;
             int loops = 0;
@@ -251,61 +251,61 @@ public class ReadFile {
                     if(callTrav.get(calls).getRet() != null){
                         line+=" call at "+callTrav.get(calls).getRet().getLine();
                     }
-                    loops++;
+                    calls++;
                 }
-                System.out.println(line);
+                //println(line);
             }
             
             //LINE EXECUTION
-            LineExecution lineExec = new LineExecution(tkStream);
+            LineExecution lineExec = new LineExecution(program);
 
 //            ArrayList<Token> x = (ArrayList<Token>) bigBoard.get(IFstack.peek().getLevel(),"b");
-//            System.out.print("Value of numbers b(level "+IFstack.peek().getLevel()+"): ("+IFctr);
+//            //print("Value of numbers b(level "+IFstack.peek().getLevel()+"): ("+IFctr);
 //            for(int i=0; i  < x.size();i++){
-//                System.out.print(" "+x.get(i).getToken());
+//                //print(" "+x.get(i).getToken());
 //                if(i+1 < x.size()){
-//                    System.out.print(",");
+//                    //print(",");
 //                }
 //            }
-//            System.out.print(" )\n");
+//            //print(" )\n");
 //
 //            x = (ArrayList<Token>) bigBoard.get(0,"vw2");
-//            System.out.print("Value of numbers vw2(level 0): (");
+//            //print("Value of numbers vw2(level 0): (");
 //            for(int i=0; i  < x.size();i++){
-//                System.out.print(" "+x.get(i).getToken());
+//                //print(" "+x.get(i).getToken());
 //                if(i+1 < x.size()){
-//                    System.out.print(",");
+//                    //print(",");
 //                }
 //            }
-//            System.out.print(" )\n");
+//            //print(" )\n");
 //
 //            x = (ArrayList<Token>) bigBoard.get(0,"vn3");
-//            System.out.print("Value of numbers vn3(level 0): (");
+//            //print("Value of numbers vn3(level 0): (");
 //            for(int i=0; i  < x.size();i++){
-//                System.out.print(" "+x.get(i).getToken());
+//                //print(" "+x.get(i).getToken());
 //                if(i+1 < x.size()){
-//                    System.out.print(",");
+//                    //print(",");
 //                }
 //            }
-//            System.out.print(" )\n");
-//            System.out.println("Value of number x(level IFstack.peek().getLevel()): "+bigBoard.get(IFstack.peek().getLevel(),"x"));
-//            System.out.println("Value of numbers x(level IFstack.peek().getLevel()): "+bigBoard.get(IFstack.peek().getLevel(),"z"));
- //         System.out.println("Value of number a(level 0): "+bigBoard.get(IFstack.peek().getLevel(),"x"));
+//            //print(" )\n");
+//            //println("Value of number x(level IFstack.peek().getLevel()): "+bigBoard.get(IFstack.peek().getLevel(),"x"));
+//            //println("Value of numbers x(level IFstack.peek().getLevel()): "+bigBoard.get(IFstack.peek().getLevel(),"z"));
+ //         //println("Value of number a(level 0): "+bigBoard.get(IFstack.peek().getLevel(),"x"));
 
-//            System.out.println("Value of word b(level 0): "+bigBoard.get(0,"b"));
-//            System.out.println("Value of truth c(level 0): "+bigBoard.get(0,"c"));
-//            System.out.println("Value of n1(level 0): "+bigBoard.get(0,"n1"));
-//            System.out.println("Value of n2(level 0): "+bigBoard.get(0,"n2"));
-//            System.out.println("Value of n3(level 0): "+bigBoard.get(0,"n3"));
-//            System.out.println("Value of n4(level 0): "+bigBoard.get(0,"n4"));
-//            System.out.println("Value of w1(level 0): "+bigBoard.get(0,"w1"));
-//            System.out.println("Value of w2(level 0): "+bigBoard.get(0,"w2"));
-//            System.out.println("Value of w3(level 0): "+bigBoard.get(0,"w3"));
-//            System.out.println("Value of w4(level 0): "+bigBoard.get(0,"w4"));
-//            System.out.println("Value of t1(level 0): "+bigBoard.get(0,"t1"));
-//            System.out.println("Value of t2(level 0): "+bigBoard.get(0,"t2"));
-//            System.out.println("Value of t3(level 0): "+bigBoard.get(0,"t3"));
-//            System.out.println("Value of t4(level 0): "+bigBoard.get(0,"t4"));
+//            //println("Value of word b(level 0): "+bigBoard.get(0,"b"));
+//            //println("Value of truth c(level 0): "+bigBoard.get(0,"c"));
+//            //println("Value of n1(level 0): "+bigBoard.get(0,"n1"));
+//            //println("Value of n2(level 0): "+bigBoard.get(0,"n2"));
+//            //println("Value of n3(level 0): "+bigBoard.get(0,"n3"));
+//            //println("Value of n4(level 0): "+bigBoard.get(0,"n4"));
+//            //println("Value of w1(level 0): "+bigBoard.get(0,"w1"));
+//            //println("Value of w2(level 0): "+bigBoard.get(0,"w2"));
+//            //println("Value of w3(level 0): "+bigBoard.get(0,"w3"));
+//            //println("Value of w4(level 0): "+bigBoard.get(0,"w4"));
+//            //println("Value of t1(level 0): "+bigBoard.get(0,"t1"));
+//            //println("Value of t2(level 0): "+bigBoard.get(0,"t2"));
+//            //println("Value of t3(level 0): "+bigBoard.get(0,"t3"));
+//            //println("Value of t4(level 0): "+bigBoard.get(0,"t4"));
 		} catch (IOException e) {
 
 			e.printStackTrace();

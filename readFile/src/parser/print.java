@@ -55,7 +55,7 @@ public class print {
              }else if(thingToPrint.get(x).getTokenType().equals(TokenType.ORDINAL)){
                  indexOfVector = Integer.parseInt(thingToPrint.get(x).getToken().substring(0,1))-1;
                  String vectorVariable = thingToPrint.get(x+2).getToken();
-                 System.out.println("vectorVariable: "+vectorVariable);
+                 //System.out.println("vectorVariable: "+vectorVariable);
                  if(     InitAssign.isInitialized(vectorVariable) &&
                          InitAssign.isAccessible(vectorVariable) &&
                          bigBoard.get(IFstack.peek().getLevel(),vectorVariable) instanceof ArrayList){
