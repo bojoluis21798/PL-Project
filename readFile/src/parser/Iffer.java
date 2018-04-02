@@ -402,9 +402,9 @@ public class Iffer {
                     InitAssign.assign(code);
                     //System.out.println("declaration");
 
-                
-                }//NULL INITIALIZATION
-                else if(code.size() == 2 && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
+
+                //NULL INITIALIZATION
+                }else if(code.size() == 2 && !code.get(1).getTokenType().equals(TokenType.IDENTIFIER) && code.get(0).getTokenType().equals(TokenType.IDENTIFIER)){
                     
                     if(groups.isDefined(code.get(0).getToken())){
                         
@@ -412,7 +412,11 @@ public class Iffer {
                         code.get(0).setTokenType(TokenType.DATA_TYPE);
                         InitAssign.initPlaceIntoMemory(code);
                     }else{
-                        
+                        System.out.println("Showing youuuu tokens\n");
+                        for(int i=0; i < code.size();i++){
+                            System.out.print(code.get(i).getToken() + " ");
+                        }
+                        System.out.println();
                         InitAssign.initialize(code);
                     }
 
@@ -441,9 +445,10 @@ public class Iffer {
 
                         if(!code.get(0).getToken().equals("print") && x < code.size() && (code.get(x).getTokenType().equals(TokenType.OPERATION) || code.get(x).getTokenType().equals(TokenType.ORDINAL))){ //OPERATOR FOUND IN LINE
                             Token literal = null;
+                            System.out.println("went in print!!!!!!!!!!!");
                             try {
                                
-                                
+
                                 literal = checkExpression(code);
                             } catch (ScriptException e) {
                                 e.printStackTrace();
