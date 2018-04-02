@@ -251,7 +251,7 @@ public class ReadFile {
                     if(callTrav.get(calls).getRet() != null){
                         line+=" call at "+callTrav.get(calls).getRet().getLine();
                     }
-                    loops++;
+                    calls++;
                 }
                 System.out.println(line);
             }

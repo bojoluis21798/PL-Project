@@ -21,6 +21,7 @@ import static parser.grpInstance.assignMember;
 import static parser.grpInstance.isInstanceDefined;
 
 public class Iffer {
+    public static ArrayList<Token> ret = null;
     public static boolean ifSTMT(ArrayList<Token> code) throws ScriptException {
 
         //System.out.println("tkStream.get(0).getToken() : "+tkStream.get(0).getToken());
@@ -471,9 +472,6 @@ public class Iffer {
                             }
                         }else if(x < code.size() && code.get(x).getToken().equals(",")){  //THERE IS A COMMA ENCOUNTERED IN THE LINE
                            
-                          
-                        
-                        
                             InitAssign.initialize(code);
                         }else if(code.get(0).getToken().equals("print")){
                             print.printIt(code);
@@ -538,8 +536,11 @@ public class Iffer {
                     InitAssign.addToVector(code);
 
                 }else if(code.get(0).getToken().equals("remove")){
-                   
                     InitAssign.removeFromVector(code);
+                }else if(code.get(0).getToken().equals("return")){
+                    for(int i=1; i<code.size(); i++){
+                        ret.add(code.get(i));
+                    }
                 }
                 break;
             default:
