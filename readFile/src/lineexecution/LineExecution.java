@@ -209,7 +209,7 @@ public class LineExecution {
 
                 }
             }else if (program.get(lineCount).getCode().get(0).getToken().equals("repeat")) {
-                System.out.println("Top@");
+                //println("Top@");
                 int i = 0;
                 thisLevel = loopTracker.get(0).getLevel();
                 loopTracker.remove(0);
@@ -217,20 +217,20 @@ public class LineExecution {
                 if (Iffer.ifSTMT((ArrayList<Token>) program.get(lineCount).getCode())){//check if the condition is true
                     //dequeue from the list so u can check up to which statement you will have to execute that isn't another selection statement
                     
-                    System.out.println("code after");
+                    //println("code after");
                     for (Token t: (ArrayList<Token>) program.get(lineCount).getCode()) {
-                        System.out.println(t.getToken());
+                        //println(t.getToken());
                     }
                     
                     while (Iffer.checkConditionLoops((ArrayList<Token>) program.get(lineCount).getCode())) {
                         
                         for(i = program.get(lineCount).getIndex()+1;i < loopTracker.get(0).getLine(); i++){//execute these lines of code  when condition is true
-                            System.out.println("Line is on: " + i);
+                            //println("Line is on: " + i);
                             
                             Iffer.execute((ArrayList<Token>) program.get(i).getCode());
                         } 
                         
-                        System.out.println("LOL");
+                        //println("LOL");
                     }
                     
                     lineCount = i++;
@@ -242,7 +242,7 @@ public class LineExecution {
                 int i = 0;
                 
                 for(i = program.get(lineCount).getIndex()+1;i < loopTracker.get(0).getLine(); i++){//execute these lines of code  when condition is true
-                    System.out.println(i);
+                    //println(i);
                     Iffer.execute((ArrayList<Token>) program.get(i).getCode());
                 }
             
@@ -272,7 +272,7 @@ public class LineExecution {
                     int i=0;
                     if(levelsAndLines.isEmpty()){
                         //lineCount++;
-                        //System.out.println("WTF");
+                        ////println("WTF");
                         //IFstack.pop();
                         //IFctr--;a
                     }else{
@@ -301,11 +301,11 @@ public class LineExecution {
                               }
                           }else{
 
-                               //System.out.println("WHAT"+levelsAndLines.get(0).getLevel());
+                               ////println("WHAT"+levelsAndLines.get(0).getLevel());
                                for(i = program.get(lineCount).getIndex();i < levelsAndLines.get(0).getLine();i++){//execute these lines of code  when condition is true
                                  Iffer.execute((ArrayList<Token>) program.get(i).getCode());
                                  lineCount++;
-                                 System.out.println(lineCount);
+                                 //println(lineCount);
                                }
                           }
                     }
