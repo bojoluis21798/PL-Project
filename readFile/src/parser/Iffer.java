@@ -19,6 +19,7 @@ import static readfile.ReadFile.groupInstances;
 import static parser.groups.allocateMemory;
 import static parser.grpInstance.assignMember;
 import static parser.grpInstance.isInstanceDefined;
+import static readfile.ReadFile.program;
 
 public class Iffer {
     public static boolean ifSTMT(ArrayList<Token> code) throws ScriptException {
@@ -176,7 +177,8 @@ public class Iffer {
         String st = "";
         Object result;
         boolean retVal = false;
-        List<Token> boolE = code.subList(3, code.size());
+        ArrayList<Token> codeCopy = new ArrayList<Token>(code);
+        List<Token> boolE = codeCopy.subList(3, codeCopy.size());
         List<Token> boolExpression = null;
         for(Token tok:boolE) {
             if (tok.getToken().equals(")")) {
@@ -185,10 +187,11 @@ public class Iffer {
             }
         }
        
+        ArrayList<Token> boolEvalList = new ArrayList<Token>(boolExpression);
         int indexOfVector = -1;
-        for(int x = 0; x < boolExpression.size(); x++){
-            if (boolExpression.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
-                String variable = boolExpression.get(x).getToken();
+        for(int x = 0; x < boolEvalList.size(); x++){
+            if (boolEvalList.get(x).getTokenType().equals(TokenType.IDENTIFIER)){
+                String variable = boolEvalList.get(x).getToken();
                 if (InitAssign.isInitialized(variable) && InitAssign.isAccessible(variable)){
                     int levelOfVariable = InitAssign.accessLevelOf(variable);
                     String value;
@@ -202,11 +205,11 @@ public class Iffer {
                 }else{
                     throw new IllegalStateException("Error: Variable "+variable+" not in HashMap");
                 }
-            }else if(boolExpression.get(x).getTokenType().equals(TokenType.STRING_LITERAL)){
-                st+=" "+"\""+boolExpression.get(x).getToken()+"\"";
-            }else if(boolExpression.get(x).getTokenType().equals(TokenType.ORDINAL)){
-                indexOfVector = Integer.parseInt(boolExpression.get(x).getToken().substring(0,1))-1;
-                String vectorVariable = boolExpression.get(x+2).getToken();
+            }else if(boolEvalList.get(x).getTokenType().equals(TokenType.STRING_LITERAL)){
+                st+=" "+"\""+boolEvalList.get(x).getToken()+"\"";
+            }else if(boolEvalList.get(x).getTokenType().equals(TokenType.ORDINAL)){
+                indexOfVector = Integer.parseInt(boolEvalList.get(x).getToken().substring(0,1))-1;
+                String vectorVariable = boolEvalList.get(x+2).getToken();
                 if(     InitAssign.isInitialized(vectorVariable) &&
                         InitAssign.isAccessible(vectorVariable) &&
                         bigBoard.get(IFstack.peek().getLevel(),vectorVariable) instanceof ArrayList){
@@ -227,32 +230,23 @@ public class Iffer {
                     }
                 }
             }else{
-                st+=" "+boolExpression.get(x).getToken();
+                st+=" "+boolEvalList.get(x).getToken();
             }
             
             
         }
         
 
-        for(int i=0; i < boolExpression.size(); i++){
-            if (boolExpression.get(i).getTokenType().equals(TokenType.DATA_TYPE)){    //removing identifiers in Primitive initialization
-                boolExpression.remove(i);
-            }else if(boolExpression.get(i).getTokenType().equals(TokenType.IDENTIFIER)){  //removing identifiers in Primitive Assignment
-                boolExpression.remove(i);
-            }else if(boolExpression.get(0).getTokenType().equals(TokenType.ORDINAL)){ //removing identifiers in Ordinal Assignment
-                boolExpression.remove(i);
+        for(int i=0; i < boolEvalList.size(); i++){
+            if (boolEvalList.get(i).getTokenType().equals(TokenType.DATA_TYPE)){    //removing identifiers in Primitive initialization
+                boolEvalList.remove(i);
+            }else if(boolEvalList.get(i).getTokenType().equals(TokenType.IDENTIFIER)){  //removing identifiers in Primitive Assignment
+                boolEvalList.remove(i);
+            }else if(boolEvalList.get(0).getTokenType().equals(TokenType.ORDINAL)){ //removing identifiers in Ordinal Assignment
+                boolEvalList.remove(i);
             }
         }
         
-        for (Token t: boolExpression) {
-            System.out.println("After bool: "+t.getToken());
-        }
-        
-        for (Token t: code) {
-                System.out.println("before bool: "+t.getToken());
-            }
-        
-        System.out.println("Yooo: "+st);
 
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
@@ -404,8 +398,10 @@ public class Iffer {
         return literal;
     }
 
-    public static void execute(ArrayList<Token> code) throws ScriptException{
-
+    public static void execute(ArrayList<Token> codeOrig) throws ScriptException{
+        
+        ArrayList<Token> code = new ArrayList<Token>(codeOrig);
+        
         switch(code.get(0).getTokenType()){
             case DATA_TYPE:
             case IDENTIFIER:
@@ -443,6 +439,10 @@ public class Iffer {
 
                 //INITIALIZATION AND ASSIGNMENT WITH EXPRESSION, VECTOR INITIALIZATION, VECTOR ADD AND REMOVE
                 }else if(code.size() >= 4){
+                    
+                     for (Token t : code) {
+                        System.out.println("Code: "+t.getToken());
+                     }
                     if(code.get(0).getTokenType().equals(TokenType.IDENTIFIER) && code.get(1).getToken().equals("of")){//give value to one of the members
                         if(InitAssign.isInitialized(code.get(2).getToken())){
                             
